@@ -1,0 +1,62 @@
+
+//
+// condor_config.local for red worker nodes
+//
+
+// if > 2GB/core memory
+# slightly overload the Nehalem boxen
+NUM_CPUS = 12
+
+<%= Float(memorysize.split(/ /)[0]).round / 2 -%>
+
+##  When is this machine willing to start a job? 
+# dedicate 4/12 slots to T3 users only
+
+START = ((SlotID <= 8) || ((SlotID > 8) && (TARGET.IsT3User == TRUE)))
+
+
+##  When to suspend a job?
+
+SUSPEND = FALSE
+
+
+##  When to nicely stop a job?
+##  (as opposed to killing it instantaneously)
+
+PREEMPT = FALSE
+
+
+##  When to instantaneously kill a preempting job
+##  (e.g. if a job is in the pre-empting stage for too long)
+
+KILL = FALSE
+MAXJOBRETIREMENTTIME = $(HOUR) * 24 * 2
+CLAIM_WORKLIFE = 3600
+
+
+##  This macro determines what daemons the condor_master will start and keep its watchful eyes on.
+##  The list is a comma or space separated list of subsystem names
+
+DAEMON_LIST = MASTER, STARTD
+
+
+
+## Condor-G and CredD can use MyProxy to refresh GSI proxies which are
+## about to expire.
+
+MYPROXY_GET_DELEGATION = /opt/osg/osg-1.2/globus/bin/myproxy-get-delegation
+DELEGATE_JOB_GSI_CREDENTIALS = False
+# for nfslite
+USER_JOB_WRAPPER = /opt/osg/osg-wn-source/condor_nfslite_job_wrapper.sh
+
+
+<%= name %>
+
+processorcount = <%= processorcount %>
+
+<% if processorcount == '4' %>
+	Proc count 4, do this
+<% end -%>
+
+blah
+This would be the end!
