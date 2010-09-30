@@ -1,3 +1,16 @@
+# Class: hosts
+#
+# This class maintains /etc/hosts
+#
+# Parameters:
+#
+# Actions:
+#
+# Requires:
+#
+# Sample Usage:
+#
+
 
 class hosts {
 
@@ -9,4 +22,4 @@ class hosts {
 		ensure => present,
 	}
 
-}
+} # class hosts

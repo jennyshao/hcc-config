@@ -75,7 +75,7 @@ Defaults    env_keep = "COLORS DISPLAY HOSTNAME HISTSIZE INPUTRC KDEDIR \
 ## Allow root to run any commands anywhere 
 root	ALL=(ALL) 	ALL
 
-nrpe  ALL=(ALL)       NOPASSWD: /usr/lib64/nagios/plugins/check_ide_smart, /opt/kickstart/nagios/check_red_mounts, /opt/kickstart/nagios/remount_hadoop.sh, /usr/lib64/nagios/plugins/check_dual_datanode, /usr/bin/xrdcp_probe.py
+nrpe  ALL=(ALL)       NOPASSWD: /usr/lib64/nagios/plugins/check_ide_smart, /opt/kickstart/nagios/check_red_mounts, /opt/kickstart/nagios/remount_hadoop.sh, /usr/lib64/nagios/plugins/check_dual_datanode, /usr/bin/xrdcp_probe.py, /usr/lib64/nagios/plugins/check_megaraid_sas
 
 
 ## Allows members of the 'sys' group to run networking, software, 
