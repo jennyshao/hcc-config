@@ -1,7 +1,7 @@
 
 class hadoop {
 
-	file { "/etc/hadoop/hadoop-metrics.properites":
+	file { "/etc/hadoop/hadoop-metrics.properties":
 		owner   => "root",
 		group   => "root",
 		mode    => "644",
