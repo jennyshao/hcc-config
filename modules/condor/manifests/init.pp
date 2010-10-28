@@ -1,7 +1,7 @@
 
 class condor {
 
-	package { condor: ensure => latest }
+#	package { condor: ensure => latest }
 
 #	file { "/opt/condor/etc/condor/condor_config":
 #		owner   => "root",
