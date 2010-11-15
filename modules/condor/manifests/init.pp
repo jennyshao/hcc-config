@@ -17,11 +17,11 @@ class condor {
 #		source  => "puppet://red-man.unl.edu/modules/condor/condor_config.local",
 #	}
 
-	file { "/opt/condor/etc/condor/condor_test.conf":
-		owner   => "root",
-		group   => "root",
-		mode    => 644,
-		content => template("condor/condor_test.erb"),
-	}
+#	file { "/opt/condor/etc/condor/condor_test.conf":
+#		owner   => "root",
+#		group   => "root",
+#		mode    => 644,
+#		content => template("condor/condor_test.erb"),
+#	}
 }
 
