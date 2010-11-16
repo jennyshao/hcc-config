@@ -1,3 +1,12 @@
+##############################################################################
+##############################################################################
+#
+#	DO NOT EDIT - file is being maintained by puppet
+#
+##############################################################################
+##############################################################################
+
+
 # Do not remove the following line, or various programs
 # that require network functionality will fail.
 127.0.0.1       localhost.localdomain localhost 
@@ -8,7 +17,6 @@
 #-----------------------------------------#
 #--- big scary master hostfile for red ---#
 #---    everything should use this!    ---#
-#--- IF YOU CHANGE THIS - SYNC IT !!!  ---#
 #-----------------------------------------#
 
 10.147.100.217    pf-util
