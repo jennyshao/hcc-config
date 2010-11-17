@@ -30,7 +30,7 @@ class fetch-crl {
 	service { "fetch-crl-boot":
 		enable => true,
 		ensure => running,
-		requirer => Package["fetch-crl"],
+		require => Package["fetch-crl"],
 	}
 
 	service { "fetch-crl-cron":
