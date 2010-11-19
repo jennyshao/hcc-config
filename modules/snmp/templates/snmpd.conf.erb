@@ -16,7 +16,7 @@
 
 #       sec.name       source           community
 com2sec localMonUser   localhost        redcom
-<% for source in @snmpSources %>
+<% for source in @snmpSources -%>
 com2sec redMonUser     <%= source %>     redcom
 <% end %>
 

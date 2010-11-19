@@ -14,7 +14,7 @@ node red-worker inherits basenode {
 ##############################################################################
 
 
-node 'node001' inherits red-worker { }
+node 'node001' inherits red-worker { include snmp }
 node 'node002' inherits red-worker { }
 node 'node003' inherits red-worker { }
 node 'node004' inherits red-worker { }
