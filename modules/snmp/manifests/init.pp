@@ -29,6 +29,14 @@ class snmp {
 		require => Package["net-snmp"],
 	} # file
 
+	file { "/etc/sysconfig/snmpd.options":
+		owner  => "root",
+		group  => "root",
+		mode   => 644,
+		source => "puppet://red-man.unl.edu/modules/snmp/snmpd.options",
+		notify => Service["snmpd"],
+	} # file
+
 	service { "snmpd":
 		enable => true,
 		ensure => running,
