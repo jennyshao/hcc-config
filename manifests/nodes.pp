@@ -2,6 +2,7 @@
 node basenode {
 	include hosts
 	include ntp
+	include snmp
 	include sudo
 }
 
@@ -14,7 +15,7 @@ node red-worker inherits basenode {
 ##############################################################################
 
 
-node 'node001' inherits red-worker { include snmp }
+node 'node001' inherits red-worker { }
 node 'node002' inherits red-worker { }
 node 'node003' inherits red-worker { }
 node 'node004' inherits red-worker { }
