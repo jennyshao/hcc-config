@@ -8,7 +8,7 @@ node basenode {
 
 node red-worker inherits basenode {
 	include condor
-	include hadoop
+#	include hadoop
 	include fetch-crl
 }
 
