@@ -24,6 +24,14 @@
 10.147.100.201    workfs
 10.147.200.1      homefs
 
+
+172.16.0.1        red-net1-int
+172.16.0.2        red-net2-int
+172.16.0.3        red-net1-mgmt
+172.16.0.4        red-net2-mgmt
+172.16.0.5        red-nat
+
+
 172.16.200.3      red-mon-int
 172.16.200.5		redkick
 
