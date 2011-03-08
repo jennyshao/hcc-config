@@ -8,13 +8,23 @@ node basenode {
 
 node red-worker inherits basenode {
 	include condor
-#	include hadoop
+	include fetch-crl
+}
+
+node red-gatekeeper inherits basenode {
+	include condor
 	include fetch-crl
 }
 
 ##############################################################################
 
 
+### red gatekeepers
+node 'red-gw1.unl.edu' inherits red-gatekeeper { }
+node 'red-gw2.unl.edu' inherits red-gatekeeper { }
+
+
+### red worker nodes
 node 'node001' inherits red-worker { }
 node 'node002' inherits red-worker { }
 node 'node003' inherits red-worker { }
