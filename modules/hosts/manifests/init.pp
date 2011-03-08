@@ -2,24 +2,17 @@
 #
 # This class maintains /etc/hosts
 #
-# Parameters:
-#
-# Actions:
-#
-# Requires:
-#
-# Sample Usage:
-#
-
 
 class hosts {
 
 	file { "/etc/hosts":
-		owner  => "root",
-		group  => "root",
-		mode   => 644,
-		source => "puppet://red-man.unl.edu/modules/hosts/hosts",
-		ensure => present,
+		ensure  => present,
+		owner   => "root",
+		group   => "root",
+		mode    => 644,
+		content => template("hosts/hosts.erb"),
 	}
+
+	if $my_project { include "hosts::${my_project}" }
 
 } # class hosts
