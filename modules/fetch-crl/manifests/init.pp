@@ -19,13 +19,12 @@ class fetch-crl {
         ensure => present,
     }
 
-    service { "fetch-crl":
+    service { "fetch-crl-cron":
         name       => "${fetch-crl::params::servicename}",
         ensure     => running,
         enable     => true,
         hasrestart => true,
         hasstatus  => "${fetch-crl::params::hasstatus}",
-        pattern    => "${fetch-crl::params::processname}",
         require    => Package["fetch-crl"],
         subscribe  => File["fetch-crl.conf"],
     }
