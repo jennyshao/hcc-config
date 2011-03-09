@@ -37,7 +37,7 @@ class fetch-crl {
         ensure  => present,
         require => Package["fetch-crl"],
         notify  => Service["fetch-crl"],
-        # content => template("fetch-crl/fetch-crl.conf.erb"),
+        content => template("fetch-crl/fetch-crl.conf.erb"),
     }
 
     # Include OS specific subclasses, if necessary
