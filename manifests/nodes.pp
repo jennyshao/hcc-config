@@ -12,8 +12,8 @@ node red-worker inherits basenode {
 }
 
 node red-gatekeeper inherits basenode {
-	include condor
-	include fetch-crl
+#	include condor
+#	include fetch-crl
 }
 
 ##############################################################################
