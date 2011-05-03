@@ -12,8 +12,7 @@ node red-worker inherits basenode {
 }
 
 node red-gatekeeper inherits basenode {
-#	include condor
-#	include fetch-crl
+	$ntp_server_local = "yes"
 }
 
 ##############################################################################

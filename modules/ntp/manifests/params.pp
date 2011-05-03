@@ -18,6 +18,14 @@ class ntp::params  {
 ## EXTRA MODULE INTERNAL VARIABLES
 #(add here module specific internal variables)
 
+	# is node a ntp server?
+	$server_local = $ntp_server_local ? {
+		yes     => "yes",
+		true    => "yes",
+		"true"  => "yes",
+		default => "no",
+	}
+
 
 
 ## MODULE INTERNAL VARIABLES
