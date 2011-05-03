@@ -5,11 +5,12 @@
 
 class hosts {
 
-	file { "/etc/hosts":
+	file { "hosts":
 		ensure  => present,
 		owner   => "root",
 		group   => "root",
 		mode    => 644,
+		path    => "/etc/hosts",
 		content => template("hosts/hosts.erb"),
 	}
 

@@ -13,3 +13,6 @@ $snmpLocation = 'Schorr 02'
 $snmpContactName = 'Garhan Attebury'
 $snmpContactEmail = 'attebury@cse.unl.edu'
 $snmpSources = ['red-mon.unl.edu', '172.16.200.3']
+
+$my_project = "red"
+$debug = "yes"
