@@ -16,3 +16,4 @@ $snmpSources = ['red-mon.unl.edu', '172.16.200.3']
 
 $my_project = "red"
 $debug = "yes"
+$ntp_server = 'pool.ntp.org'
