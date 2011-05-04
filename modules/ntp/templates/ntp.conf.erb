@@ -18,13 +18,23 @@ restrict -6 default kod nomodify notrap nopeer noquery
 restrict 127.0.0.1 
 restrict -6 ::1
 
-# Hosts on local network are less restricted.
-#restrict 192.168.1.0 mask 255.255.255.0 nomodify notrap
+<% if scope.lookupvar('ntp::params::server_local') == true -%>
+# acting as a server, listening on our local networks
+restrict 129.93.239.128 mask 255.255.255.192 nomodify notrap
+restrict 172.16.0.0 mask 255.255.0.0 nomodify notrap
+<% else %>
+# acting as a client only, not listening on any network
+<% end -%>
 
-# Use public servers from the pool.ntp.org project.
-# Please consider joining the pool (http://www.pool.ntp.org/join.html).
-<% scope.lookupvar('ntp::params::ntp_server').each do |ntp| %>server <%= ntp %>
-<% end %>
+<% if scope.lookupvar('ntp::params::server_local') == true -%>
+# using public servers
+<% scope.lookupvar('ntp::params::ntpServersPublic').each do |ntp| %>server <%= ntp %>
+<% end -%>
+<% else %>
+# using local servers
+<% scope.lookupvar('ntp::params::ntpServersLocal').each do |ntp| %>server <%= ntp %> iburst
+<% end -%>
+<% end -%>
 
 #broadcast 192.168.1.255 key 42		# broadcast server
 #broadcastclient			# broadcast client

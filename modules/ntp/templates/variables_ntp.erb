@@ -4,9 +4,18 @@ These are the variables used by the module ntp
 
 User variables (unfiltered):
 # $ntp_server = <%= scope.lookupvar('ntp_server') %>
+# $server_local = <%= scope.lookupvar('server_local') %>
+# $ntp_server_local = <%= scope.lookupvar('ntp_server_local') %>
+# $ntpServersPublic = <%= scope.lookupvar('ntpServersPublic') %>
+# $ntpServersLocal = <%= scope.lookupvar('ntpServersLocal') %>
+
 
 User variables (after params.pp filter):
 # $ntp::params::server = <%= scope.lookupvar('ntp::params::server') %>
+# $ntp::params::server_local = <%= scope.lookupvar('ntp::params::server_local') %>
+# $ntp::params::ntp_server_local = <%= scope.lookupvar('ntp::params::ntp_server_local') %>
+# $ntp::params::ntpServersPublic = <%= scope.lookupvar('ntp::params::ntpServersPublic') %>
+# $ntp::params::ntpServersLocal = <%= scope.lookupvar('ntp::params::ntpServersLocal') %>
 
 General internal variables:
 $ntp::params::packagename = <%= scope.lookupvar('ntp::params::packagename') %>
