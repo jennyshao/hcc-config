@@ -9,6 +9,7 @@ class general {
 
 	# modules that everything should use
 	include ntp
+	include timezone
 
 	# role specific classes are included here
 	if ( $role ) { include "role_$role" }

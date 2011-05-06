@@ -17,6 +17,9 @@ node basenode {
 	$debug = "yes"
 
 	# site wide variables
+	$domain = "unl.edu"
+	$dns_servers = [ '129.93.5.53', '129.93.5.69', '129.93.6.143', '129.93.6.189' ]
+
 	$snmpLocation = 'Schorr 02'
 	$snmpContactName = 'Garhan Attebury'
 	$snmpContactEmail = 'attebury@cse.unl.edu'
@@ -24,6 +27,7 @@ node basenode {
 
 	$ntpServersPublic = [ '0.us.pool.ntp.org', '1.us.pool.ntp.org', '2.us.pool.ntp.org', '3.us.pool.ntp.org' ]
 	$ntpServersLocal = [ 'red.unl.edu', 'gpn-husker.unl.edu', 't3.unl.edu' ]
+	$timezone = "America/Chicago"
 
 }
 

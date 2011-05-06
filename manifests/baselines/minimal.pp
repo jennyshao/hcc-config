@@ -4,7 +4,7 @@ class minimal {
 
 	# networking
 	include hosts
-	# include resolver
+	include resolver
 
 	# puppet settings possibly
 

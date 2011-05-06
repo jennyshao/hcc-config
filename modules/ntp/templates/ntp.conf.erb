@@ -22,8 +22,6 @@ restrict -6 ::1
 # acting as a server, listening on our local networks
 restrict 129.93.239.128 mask 255.255.255.192 nomodify notrap
 restrict 172.16.0.0 mask 255.255.0.0 nomodify notrap
-<% else %>
-# acting as a client only, not listening on any network
 <% end -%>
 
 <% if scope.lookupvar('ntp::params::server_local') == true -%>
@@ -31,7 +29,7 @@ restrict 172.16.0.0 mask 255.255.0.0 nomodify notrap
 <% scope.lookupvar('ntp::params::ntpServersPublic').each do |ntp| %>server <%= ntp %>
 <% end -%>
 <% else %>
-# using local servers
+# using local servers, not listening on any network
 <% scope.lookupvar('ntp::params::ntpServersLocal').each do |ntp| %>server <%= ntp %> iburst
 <% end -%>
 <% end -%>
