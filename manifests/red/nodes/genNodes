@@ -1,9 +1,19 @@
 #!/usr/bin/env python
 
-for node in range(1,32):
+def doNode(hostname):
 
-	print "node 'node%0*d' inherits red-private {" % (3, node)
+	print "node '%s' inherits red-private {" % hostname
 	print "\t$role = \"red-worker\""
 	print "\tinclude general"
 	print "}"
 	print ""
+
+
+for node in range(1, 255):
+	doNode("node%03d" % node)
+
+for node in range(1, 21):
+	doNode("red-d8n%d" % node)
+
+for node in range(1, 21):
+	doNode("red-d9n%d" % node)

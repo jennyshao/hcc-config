@@ -1,24 +1,41 @@
-
+#
+# Class: autofs
+#
+# manages autofs (master and maps)
+#
 class autofs {
 
-	package { autofs: ensure => latest }
-	package { autofs: ensure => running }
+	package { autofs: name => "autofs", ensure => present }
 
-	file { "/etc/auto.t3":
-		owner    => "root",
-		group    => "root",
-		mode     => 644,
-		source   => "puppet:///modules/autofs/auto.t3",
-		requires => Package["autofs"],
+	service { "autofs":
+		name       => "autofs",
+		ensure     => running,
+		enable     => true,
+		hasrestart => true,
+		hasstatus  => true,
+		require    => Package["autofs"],
+		subscribe  => File["autofs.master"],
 	}
 
-	file { "/etc/auto.master":
-		owner    => "root",
-		group    => "root",
-		mode     => 644,
-#		source   => "puppet:///modules/autofs/auto.master",
-		content  => template("autofs/auto.master.erb"),
-		requires => Package["autofs"],
+	file { "autofs.master":
+		path    => "/etc/auto.master",
+		mode    => 644,
+		owner   => "root",
+		group   => "root",
+		content => template("autofs/auto.master.erb"),
+		require => Package[autofs],
+		ensure  => present,
 	}
+
+	file { "autofs.red":
+		path    => "/etc/auto.red",
+		mode    => 644,
+		owner   => "root",
+		group   => "root",
+		content => template("autofs/auto.red.erb"),
+		require => Package[autofs],
+		notify  => Service[autofs],
+		ensure  => present,
+	}
+
 }
-

@@ -1,0 +1,15 @@
+##############################################################################
+##############################################################################
+#
+#	DO NOT EDIT - file is being maintained by puppet
+#
+##############################################################################
+##############################################################################
+
+
+/opt/kickstart -ro,noatime,tcp,nolock,hard,intr,rsize=32768,wsize=32768 red-man.unl.edu:/opt/kickstart
+
+# tier3 automount
+/mnt/unl	-rw,noatime,tcp,nolock,hard,intr,rsize=32768,wsize=32768	172.16.200.24:/mnt/unl
+/mnt/ksu	-rw,noatime,tcp,nolock,hard,intr,rsize=32768,wsize=32768	172.16.200.24:/mnt/ksu
+/home/hep -rw,noatime,tcp,nolock,hard,intr,rsize=32768,wsize=32768 172.16.200.24:/mnt/unl/home
