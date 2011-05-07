@@ -8,6 +8,7 @@ node basenode {
 
 	# $my_project is used to autoload custom $project.pp classes in modules
 	$my_project = "red"
+	$operatingsystem = "CentOS"
 
 	# $my_project_onmodule allows you to keep custom project classes in
 	# an autonomous module (like /module/<project>/...)

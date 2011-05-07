@@ -11,12 +11,12 @@ class timezone {
 		group  => "root",
 		mode   => 644,
 		path   => $operatingsystem ? {
-			debian  => "/etc/timezone",
-			ubuntu  => "/etc/timezone",
-			redhat  => "/etc/sysconfig/clock",
-			centos  => "/etc/sysconfig/clock",
-			suse    => "/etc/sysconfig/clock",
-			freebsd => "/etc/timezone-puppet",
+			Debian  => "/etc/timezone",
+			Ubuntu  => "/etc/timezone",
+			RedHat  => "/etc/sysconfig/clock",
+			CentOS  => "/etc/sysconfig/clock",
+			SuSE    => "/etc/sysconfig/clock",
+			FreeBSD => "/etc/timezone-puppet",
 		},
 
 		content => $operatingsystem ? {
@@ -28,12 +28,12 @@ class timezone {
 
 	exec { "set-timezone":
 		command => $operatingsystem ? {
-			debian  => "dpkg-reconfigure -f noninteractive tzdata",
-			ubuntu  => "dpkg-reconfigure -f noninteractive tzdata",
-			redhat  => "tzdata-update",
-			centos  => "tzdata-update",
-			suse    => "FIX ME",
-			freebsd => "cp /usr/share/zoneinfo/${timezone} /etc/localtime && adjkerntz -a",
+			Debian  => "dpkg-reconfigure -f noninteractive tzdata",
+			Ubuntu  => "dpkg-reconfigure -f noninteractive tzdata",
+			RedHat  => "tzdata-update",
+			CentOS  => "tzdata-update",
+			SuSE    => "FIX ME",
+			FreeBSD => "cp /usr/share/zoneinfo/${timezone} /etc/localtime && adjkerntz -a",
 		},
 
 		require => File["timezone"],
