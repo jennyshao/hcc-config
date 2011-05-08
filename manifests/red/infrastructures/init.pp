@@ -8,7 +8,6 @@ node basenode {
 
 	# $my_project is used to autoload custom $project.pp classes in modules
 	$my_project = "red"
-	$operatingsystem = "CentOS"
 
 	# $my_project_onmodule allows you to keep custom project classes in
 	# an autonomous module (like /module/<project>/...)
@@ -24,7 +23,18 @@ node basenode {
 	$snmpLocation = 'Schorr 02'
 	$snmpContactName = 'Garhan Attebury'
 	$snmpContactEmail = 'attebury@cse.unl.edu'
-	$snmpSources = ['red-mon.unl.edu', '172.16.200.3']
+	$snmpSources = [ 'red-mon.unl.edu', '172.16.200.3' ]
+
+	$gangliaClusterName = 'red-infrastructure'
+	$gangliaClusterOwner = 'Holland Computing Center'
+	$gangliaClusterLatLong = 'N40.812957 W96.702991'
+	$gangliaClusterUrl = 'http://hcc.unl.edu/'
+	$gangliaHostLocation = 'Schorr 02'
+	$gangliaTCPAcceptChannel = '8650'  # port
+	$gangliaUDPSendChannel = [ 'red-mon.unl.edu', '8650' ]  # host, port
+	$gangliaUDPRecvChannel = '8650'  # port
+	$gangliaMulticast = false  # use multicast if true
+	$gangliaMulticastJoin = [ '239.2.11.71', '8650' ]  # multicast address, port
 
 	$ntpServersPublic = [ '0.us.pool.ntp.org', '1.us.pool.ntp.org', '2.us.pool.ntp.org', '3.us.pool.ntp.org' ]
 	$ntpServersLocal = [ 'red.unl.edu', 'gpn-husker.unl.edu', 't3.unl.edu' ]

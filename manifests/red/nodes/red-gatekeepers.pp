@@ -5,6 +5,7 @@ node 'red-gw1.unl.edu' inherits red-public {
 	$role = "red-gatekeeper"
 	include general
 	include autofs
+	include ganglia
 }
 
 node 'red-gw2.unl.edu' inherits red-public {
@@ -12,4 +13,5 @@ node 'red-gw2.unl.edu' inherits red-public {
 	$role = "red-gatekeeper"
 	include general
 	include autofs
+	include ganglia
 }
