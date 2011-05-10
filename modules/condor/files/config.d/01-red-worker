@@ -1,0 +1,58 @@
+##############################################################################
+##############################################################################
+#
+#	DO NOT EDIT - file is being maintained by puppet
+#
+##############################################################################
+##############################################################################
+
+
+# generic worker node config for T2_US_Nebraska
+# whole machine stuff now in 05-htpc
+
+
+##  When is this machine willing to start a job? 
+START = TRUE
+
+# Suspend the whole-machine job until single-core jobs finish.
+SUSPEND = FALSE
+
+CONTINUE = TRUE
+
+WANT_SUSPEND = $(SUSPEND)
+
+
+##  When to nicely stop a job?
+##  (as opposed to killing it instantaneously)
+PREEMPT = FALSE
+
+
+##  When to instantaneously kill a preempting job
+##  (e.g. if a job is in the pre-empting stage for too long)
+KILL = FALSE
+MAXJOBRETIREMENTTIME = $(HOUR) * 24 * 2
+CLAIM_WORKLIFE = 3600
+
+
+##  This macro determines what daemons the condor_master will start and keep its watchful eyes on.
+##  The list is a comma or space separated list of subsystem names
+DAEMON_LIST = MASTER, STARTD
+
+
+## Condor-G and CredD can use MyProxy to refresh GSI proxies which are
+## about to expire.
+MYPROXY_GET_DELEGATION = /opt/osg/osg-1.2/globus/bin/myproxy-get-delegation
+DELEGATE_JOB_GSI_CREDENTIALS = False
+
+
+# for nfslite
+USER_JOB_WRAPPER = /opt/osg/osg-wn-source/condor_nfslite_job_wrapper.sh
+
+
+# for VM stuff
+VM_MEMORY = 1536
+VM_TYPE = kvm
+VM_Networking = true
+VM_NETWORKING_TYPE = nat
+ENABLE_URL_TRANSFERS = FALSE
+FILETRANSFER_PLUGINS = /mnt/nfs04/opt/srm-plugin

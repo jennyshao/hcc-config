@@ -1,0 +1,127 @@
+##############################################################################
+##############################################################################
+#
+#	DO NOT EDIT - file is being maintained by puppet
+#
+##############################################################################
+##############################################################################
+
+
+QUEUE_SUPER_USERS = root, condor, gattebury, root
+
+START = False
+
+# preemption didn't work well, disabled
+#PREEMPTION_REQUIREMENTS = MY.RemoteOwner == "ligo@unl.edu"
+NEGOTIATOR_CONSIDER_PREEMPTION=False
+
+SEC_ENABLE_MATCH_PASSWORD_AUTHENTICATION=True
+
+# Negotiator should correctly account for whole machine jobs
+GROUP_DYNAMIC_MACH_CONSTRAINT = CAN_RUN_WHOLE_MACHINE =!= TRUE
+NEGOTIATOR_USE_SLOT_WEIGHTS = TRUE
+
+# half life of 12 hours
+PRIORITY_HALFLIFE = 43200
+
+
+GROUP_NAMES = group_cms_user, \
+              group_cms_prod, \
+              group_cms_prio, \
+              group_uscms_user, \
+              group_lcgadmin, \
+              group_t3_user, \
+              group_hcc, \
+              group_other, \
+              cms, \
+              cms.prod, \
+              cms.lcgadmin, \
+              cms.other, \
+              cms.other.prio, \
+              cms.other.user, \
+              cms.other.user.nonus, \
+              cms.other.user.us, \
+              cms.other.user.t3, \
+              other, \
+              other.hcc
+
+# --- condor group priorities ---
+# redid the priorities; BB, 4/26/2011
+# ~2000 cores - 144 owned by t3 ~= 1856 cores for alottment.
+# 144 cores owned by t3
+# of the 1856 cores owned by CMS T2, but only 1200 are pledged.
+# cms prod = 540 (about 45%)
+# lcgadmin = 2
+# Users/Prio = Remaining
+#     prio = 270
+#     uscms + cms = Remaining
+#          cms = 270
+#          uscms = Remaining
+# other = 10%
+#     HCC = 100
+GROUP_QUOTA_DYNAMIC_cms = .9
+GROUP_QUOTA_DYNAMIC_other = .1
+
+# CMS children
+GROUP_QUOTA_cms.prod = 540
+GROUP_QUOTA_cms.lcgadmin = 2
+GROUP_QUOTA_DYNAMIC_cms.other = 1
+
+GROUP_QUOTA_cms.other.prio = 270
+GROUP_QUOTA_DYNAMIC_cms.other.user = 1
+GROUP_QUOTA_cms.other.user.nonus   = 270
+GROUP_QUOTA_DYNAMIC_cms.other.user.t3 = 1
+GROUP_QUOTA_DYNAMIC_cms.other.user.us = .1
+
+# Other children
+GROUP_QUOTA_other.hcc = 100
+
+GROUP_QUOTA_group_cms_user = 200
+GROUP_QUOTA_group_cms_prio = 198
+GROUP_QUOTA_group_cms_prod = 400
+GROUP_QUOTA_group_uscms_user = 356
+GROUP_QUOTA_group_t3_user = 144
+GROUP_QUOTA_group_other = 100
+GROUP_QUOTA_group_hcc = 100
+GROUP_QUOTA_group_lcgadmin = 2
+GROUP_ACCEPT_SURPLUS = True
+
+# this is probably better, but I've no time to figure it out / test now
+# Groups with prio factor 1 are not expected to have users in it.
+GROUP_PRIO_FACTOR_cms = 1
+GROUP_PRIO_FACTOR_cms.prod = 100000000
+GROUP_PRIO_FACTOR_cms.lcgadmin = 2
+GROUP_PRIO_FACTOR_cms.other = 1
+GROUP_PRIO_FACTOR_cms.other.prio = 10000
+GROUP_PRIO_FACTOR_cms.other.user = 1
+GROUP_PRIO_FACTOR_cms.other.user.nonus = 1000000
+GROUP_PRIO_FACTOR_cms.other.user.us = 10000
+GROUP_PRIO_FACTOR_cms.other.user.t3 = 100
+
+GROUP_PRIO_FACTOR_group_cms_user = 1000000
+GROUP_PRIO_FACTOR_group_cms_prio = 10000
+GROUP_PRIO_FACTOR_group_cms_prod = 100000000
+GROUP_PRIO_FACTOR_group_uscms_user = 10000
+GROUP_PRIO_FACTOR_group_lcgadmin = 1
+GROUP_PRIO_FACTOR_group_t3_user = 100
+GROUP_PRIO_FACTOR_group_hcc = 50000000
+GROUP_PRIO_FACTOR_group_other = 10000000000
+
+# This line should limit the number of Checksum jobs.
+isChecksum_LIMIT = 50
+
+# event log
+EVENT_LOG=$(LOG)/EventLog
+EVENT_LOG_USE_XML=True
+EVENT_LOG_JOB_AD_INFORMATION_ATTRS=Owner,CurrentHosts,x509userproxysubject,AccountingGroup,GlobalJobId,QDate,JobSt
+
+MAX_HISTORY_LOG=524288000
+MAX_HISTORY_ROTATIONS=5
+
+
+DAEMON_LIST   = MASTER, COLLECTOR, NEGOTIATOR
+
+
+COLLECTOR_QUERY_WORKERS = 16
+
+

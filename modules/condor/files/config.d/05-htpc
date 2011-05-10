@@ -1,0 +1,135 @@
+##############################################################################
+##############################################################################
+#
+#	DO NOT EDIT - file is being maintained by puppet
+#
+##############################################################################
+##############################################################################
+
+
+# WholeMachineSlot config for T2_US_Nebraska
+# https://condor-wiki.cs.wisc.edu/index.cgi/wiki?p=WholeMachineSlots
+
+# This should only be present on nodes which will accept whole machine jobs
+
+
+# double-allocate resources (half for 'normal' slots, other half for whole machine)
+NUM_CPUS = $(DETECTED_CORES)*2
+MEMORY = $(DETECTED_MEMORY)*2
+
+# single-core slots get 1 core each
+SLOT_TYPE_1 = cpus=1
+NUM_SLOTS_TYPE_1 = $(DETECTED_CORES)
+
+# whole-machine slot gets as many cores and RAM as the machine has
+SLOT_TYPE_2 = cpus=$(DETECTED_CORES), mem=$(DETECTED_MEMORY)
+NUM_SLOTS_TYPE_2 = 1
+
+# macro specifying the slot id of the whole-machine slot
+WHOLE_MACHINE_SLOT = ($(DETECTED_CORES)+1)
+
+# ClassAd attribute that is True/False depending on whether this slot is
+# the whole-machine slot
+CAN_RUN_WHOLE_MACHINE = SlotID == $(WHOLE_MACHINE_SLOT)
+STARTD_EXPRS = $(STARTD_EXPRS) CAN_RUN_WHOLE_MACHINE
+
+# advertise when slots make state transitions as SlotX_EnteredCurrentState
+STARTD_SLOT_EXPRS = $(STARTD_SLOT_EXPRS) EnteredCurentState
+
+# macro for referencing EnteredCurrentState of the whole-machine slot
+WHOLE_MACHINE_SLOT_ENTERED_CURRENT_STATE = \
+  eval(strcat("Slot",$(WHOLE_MACHINE_SLOT),"_EnteredCurrentState"))
+
+# macro for referencing state of the whole-machine slot.
+WHOLE_MACHINE_SLOT_STATE = \
+  eval(strcat("Slot",$(WHOLE_MACHINE_SLOT),"_State"))
+
+# macro that is true if any single-core slots are claimed
+# must define more slots than we actually have
+# excess are harmless
+SINGLE_CORE_SLOTS_CLAIMED = \
+   ($(WHOLE_MACHINE_SLOT_STATE) =?= "Claimed") < \
+   (Slot1_State =?= "Claimed") + \
+   (Slot2_State =?= "Claimed") + \
+   (Slot3_State =?= "Claimed") + \
+   (Slot4_State =?= "Claimed") + \
+   (Slot5_State =?= "Claimed") + \
+   (Slot6_State =?= "Claimed") + \
+   (Slot7_State =?= "Claimed") + \
+   (Slot8_State =?= "Claimed") + \
+   (Slot9_State =?= "Claimed") + \
+   (Slot10_State =?= "Claimed") + \
+   (Slot11_State =?= "Claimed") + \
+   (Slot12_State =?= "Claimed") + \
+   (Slot13_State =?= "Claimed") + \
+   (Slot14_State =?= "Claimed") + \
+   (Slot15_State =?= "Claimed") + \
+   (Slot16_State =?= "Claimed") + \
+   (Slot17_State =?= "Claimed") + \
+   (Slot18_State =?= "Claimed") + \
+   (Slot19_State =?= "Claimed") + \
+   (Slot20_State =?= "Claimed") + \
+   (Slot21_State =?= "Claimed") + \
+   (Slot22_State =?= "Claimed") + \
+   (Slot23_State =?= "Claimed") + \
+   (Slot24_State =?= "Claimed") + \
+   (Slot25_State =?= "Claimed") + \
+   (Slot26_State =?= "Claimed") + \
+   (Slot27_State =?= "Claimed") + \
+   (Slot28_State =?= "Claimed") + \
+   (Slot29_State =?= "Claimed") + \
+   (Slot30_State =?= "Claimed") + \
+   (Slot31_State =?= "Claimed") + \
+   (Slot32_State =?= "Claimed") + \
+   (Slot33_State =?= "Claimed") + \
+   (Slot34_State =?= "Claimed") + \
+   (Slot35_State =?= "Claimed") + \
+   (Slot36_State =?= "Claimed") + \
+   (Slot37_State =?= "Claimed") + \
+   (Slot38_State =?= "Claimed") + \
+   (Slot39_State =?= "Claimed") + \
+   (Slot40_State =?= "Claimed") + \
+   (Slot41_State =?= "Claimed") + \
+   (Slot42_State =?= "Claimed") + \
+   (Slot43_State =?= "Claimed") + \
+   (Slot44_State =?= "Claimed") + \
+   (Slot45_State =?= "Claimed") + \
+   (Slot46_State =?= "Claimed") + \
+   (Slot47_State =?= "Claimed") + \
+   (Slot48_State =?= "Claimed") + \
+   (Slot49_State =?= "Claimed")
+
+# single-core jobs must run on single-core slots
+START_SINGLE_CORE_JOB = $\
+  TARGET.RequiresWholeMachine =!= True && MY.CAN_RUN_WHOLE_MACHINE == False && \
+  $(WHOLE_MACHINE_SLOT_STATE) =!= "Claimed"
+
+# the folllowing uses LastHeardFrom rather than CurrentTime
+# because the former is stable throughout a matchmaking cycle, whereas
+# the latter changes from moment to moment and therefore leads to
+# unexpected behavior
+START_SINGLE_CORE_JOB = $(START_SINGLE_CORE_JOB) && \
+  ( isUndefined($(WHOLE_MACHINE_SLOT_ENTERED_CURRENT_STATE)) || \
+    isUndefined(MY.LastHeardFrom) || \
+    MY.LastHeardFrom-$(WHOLE_MACHINE_SLOT_ENTERED_CURRENT_STATE) > 600 )
+
+# whole-machine jobs must run on the whole-machine slot
+START_WHOLE_MACHINE_JOB = \
+  TARGET.RequiresWholeMachine =?= True && MY.CAN_RUN_WHOLE_MACHINE
+
+# when is this machine willing to start a job? 
+START = ( \
+  ($(START_SINGLE_CORE_JOB)) || \
+  (($(START_WHOLE_MACHINE_JOB)) \
+  && (isUndefined(SubmitterGroupQuota) || isUndefined(SubmitterUserResourcesInUse) || (SubmitterGroupQuota - SubmitterUserResourcesInUse - SlotWeight) > 0)) \
+  )
+
+# suspend the whole-machine job until single-core jobs finish.
+SUSPEND = ($(SUSPEND)) || \
+  (MY.CAN_RUN_WHOLE_MACHINE && ($(SINGLE_CORE_SLOTS_CLAIMED)) )
+
+CONTINUE = ( $(SUSPEND) =!= True )
+
+WANT_SUSPEND = ($(WANT_SUSPEND)) || ($(SUSPEND))
+
+

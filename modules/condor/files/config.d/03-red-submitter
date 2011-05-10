@@ -1,0 +1,54 @@
+##############################################################################
+##############################################################################
+#
+#	DO NOT EDIT - file is being maintained by puppet
+#
+##############################################################################
+##############################################################################
+
+
+START = FALSE
+SUSPEND = FALSE
+PREEMPT = FALSE
+KILL = FALSE
+
+DAEMON_LIST = MASTER, SCHEDD
+
+
+# hold jobs using absurd amounts of disk (100+ GB)
+SYSTEM_PERIODIC_HOLD = \
+   (JobStatus == 1 || JobStatus == 2) && DiskUsage > 100000000
+
+# forceful removal of running after 2 days or 10 failed starts
+SYSTEM_PERIODIC_REMOVE = \
+   (JobStatus == 5 && CurrentTime - EnteredCurrentStatus > 3600*24*7) || \
+   (JobStatus == 2 && CurrentTime - EnteredCurrentStatus > 3600*24*2) || \
+   (JobStatus == 5 && JobRunCount >= 10)
+
+# Release from hold a few times
+# HoldReasonCode 13 and 14 have to do with failures to upload
+SYSTEM_PERIODIC_RELEASE = \
+  (   (HoldReasonCode =?= 12) \
+   || (HoldReasonCode =?= 13) \
+   || (HoldReasonCode =?= 14)) \
+   &&((CurrentTime - EnteredCurrentStatus > 5*60) \
+   && (JobRunCount < 10))
+
+EVENT_LOG = $(LOG)/EventLog
+EVENT_LOG_USE_XML = True
+EVENT_LOG_JOB_AD_INFORMATION_ATTRS=Owner,CurrentHosts,x509userproxysubject,AccountingGroup,GlobalJobId,QDate,JobStartDate,JobCurrentStartDate,JobFinishedHookDone,RemoteHost
+
+##  Maximum number of simultaneous downloads of output files from
+##  execute machines to the submit machine (limit applied per schedd).
+##  The value 0 means unlimited.
+MAX_CONCURRENT_DOWNLOADS = 50
+
+##  Maximum number of simultaneous uploads of input files from the
+##  submit machine to execute machines (limit applied per schedd).
+##  The value 0 means unlimited.
+MAX_CONCURRENT_UPLOADS = 50
+
+PER_JOB_HISTORY_DIR = /opt/osg/osg-1.2/gratia/var/data
+MAX_HISTORY_LOG = 104857600
+MAX_HISTORY_ROTATIONS = 10
+

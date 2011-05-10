@@ -1,0 +1,41 @@
+modules {
+	module {
+		name = "ganglia_ipmitemp"
+		language = "python"
+	}
+}
+
+collection_group {
+	collect_every = 30
+	time_threshold = 90
+	metric {
+		name = "cpu0_temp"
+		title = "CPU0 Temperature"
+		value_threshold = 80
+	}
+
+	metric {
+		name = "cpu1_temp"
+		title = "CPU1 Temperature"
+		value_threshold = 80
+	}
+
+	metric {
+		name = "ambient_front"
+		title = "Front Ambient Temperature"
+		value_threshold = 80
+	}
+
+	metric {
+		name = "ambient_back"
+		title = "Back Ambient Temperature"
+		value_threshold = 80
+	}
+
+	metric {
+		name = "cpu_avg"
+		title = "Average CPU Temperature"
+		value_threshold = 80
+	}
+}
+

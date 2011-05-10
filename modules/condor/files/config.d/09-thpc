@@ -1,0 +1,16 @@
+##############################################################################
+##############################################################################
+#
+#	DO NOT EDIT - file is being maintained by puppet
+#
+##############################################################################
+##############################################################################
+
+
+# for old thpc 1g/core nodes
+# prevent cms jobs from running (not enough RAM)
+# still allows uscms01 which is well behaved lcgadmin
+
+START = ((regexp("uscmsPool.*", TARGET.Owner) =!= TRUE) && \
+         (regexp("cmsprio.*", TARGET.Owner) =!= TRUE) && \
+         (regexp("cmsprod", TARGET.Owner) =!= TRUE)) && $(START)

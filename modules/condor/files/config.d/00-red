@@ -1,0 +1,31 @@
+##############################################################################
+##############################################################################
+#
+#	DO NOT EDIT - file is being maintained by puppet
+#
+##############################################################################
+##############################################################################
+
+
+# main condor config for T2_US_Nebraska
+# this should probably be on every node
+
+CONDOR_HOST		= red-condor.unl.edu
+COLLECTOR_NAME	= Nebraska T2
+CONDOR_ADMIN	= attebury@cse.unl.edu
+
+FLOCK_FROM				= red.unl.edu, gpn-husker.unl.edu, t3.unl.edu, red-gw1.unl.edu, red-gw2.unl.edu
+ALLOW_ADMINISTRATOR	= $(ALLOW_ADMINISTRATOR), red-man.unl.edu, 172.16.200.1
+ALLOW_WRITE				= $(ALLOW_WRITE), red.unl.edu, gpn-husker.unl.edu, t3.unl.edu, red-gw1.unl.edu, red-gw2.unl.edu, 172.16.200.24, 172.16.1.*, 172.16.3.*
+
+MAX_JOBS_RUNNING	= 50000
+
+UID_DOMAIN			= unl.edu
+TRUST_UID_DOMAIN	= True
+
+GLIDEIN_SERVER_URLS = $(GLIDEIN_SERVER_URLS) gsiftp://gridftp.cs.wisc.edu/p/condor/public/binaries/glidein
+
+DELEGATE_JOB_GSI_CREDENTIALS = False
+
+SHADOW_RENICE_INCREMENT	= 10
+
