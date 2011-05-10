@@ -25,6 +25,9 @@ node basenode {
 	$snmpContactEmail = 'attebury@cse.unl.edu'
 	$snmpSources = [ 'red-mon.unl.edu', '172.16.200.3' ]
 
+	# this lists all our CEs - used for config.ini generation
+	$osgCEList = [ 'red.unl.edu', 'red-gw1.unl.edu', 'red-gw2.unl.edu' ]
+
 	$gangliaClusterName = 'red-infrastructure'
 	$gangliaClusterOwner = 'Holland Computing Center'
 	$gangliaClusterLatLong = 'N40.812957 W96.702991'
