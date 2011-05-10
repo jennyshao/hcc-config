@@ -1,0 +1,22 @@
+##############################################################################
+##############################################################################
+#
+#	DO NOT EDIT - file is being maintained by puppet
+#
+##############################################################################
+##############################################################################
+
+
+# extended-attribute matching table
+# format: [perl regular expression] [group]
+# examples:
+
+# Role=cmssoft ImportantWork
+cmsprio cms.other.prio
+cmssoft cms.other.prio
+priorityuser cms.other.prio
+cmsphedex cms.other.prio
+uscms cms.other.user.us
+cmsprod cms.prod
+cms cms.other.user.nonus
+.* other

@@ -1,12 +1,3 @@
-##############################################################################
-##############################################################################
-#
-#	DO NOT EDIT - file is being maintained by puppet
-#
-##############################################################################
-##############################################################################
-
-
 GSI "^\/DC\=org\/DC\=doegrids\/OU\=People\/CN\=Anthony\ Tiradani\ 329103$" tiradani
 GSI "^\/DC\=org\/DC\=doegrids\/OU\=People\/CN\=Derek\ Weitzel\ 285345$" dweitzel
 GSI "^\/DC\=org\/DC\=doegrids\/OU\=People\/CN\=Brian\ Bockelman\ 504307$" bbockelm
