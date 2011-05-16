@@ -1,0 +1,2 @@
+pluginname=/opt/osg/osg-1.2/glexec-osg/lib64/modules/lcas_userban.mod,pluginargs=/etc/glexec/lcas/ban_users.db
+

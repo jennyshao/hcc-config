@@ -1,0 +1,10 @@
+path = /opt/osg/osg-1.2/glexec-osg/lib64/modules
+
+good = "lcmaps_dummy_good.mod"
+bad  = "lcmaps_dummy_bad.mod"
+
+gums = "lcmaps_gums.mod -exec /opt/osg/osg-1.2/glexec-osg/contrib/gums_interface/getmapping"
+
+glexec_get_account:
+gums -> good | bad
+

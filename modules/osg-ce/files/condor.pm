@@ -427,6 +427,10 @@ $group = Globus::GRAM::JobManager::condor_groupacct::obtain_condor_group(\@envir
     print SCRIPT_FILE "log_xml = True\n";
     print SCRIPT_FILE "+GratiaJobOrigin=\"GRAM\"\n";
     print SCRIPT_FILE "+IsT2Overflow=FALSE\n";
+    if ( $AccountingGroup eq "cms.other.user.t3") {
+			print SCRIPT_FILE "+IsT3User=TRUE\n";
+	}
+
     # NFS Lite mode
     if ($isNFSLite) {
         print SCRIPT_FILE "should_transfer_files = YES\n";

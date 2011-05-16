@@ -15,6 +15,7 @@
 # 10419 LessImportantWork
 # uscms02 TestGroup
 # uscms02 group_testgroup
+knowlton cms.other.user.t3
 malbouis cms.other.user.t3
 bloom cms.other.user.t3
 jbutt cms.other.user.t3
