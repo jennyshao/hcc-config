@@ -1,12 +1,3 @@
-##############################################################################
-##############################################################################
-#
-#	DO NOT EDIT - file is being maintained by puppet
-#
-##############################################################################
-##############################################################################
-
-
 QUEUE_SUPER_USERS = root, condor, gattebury, root
 
 START = False
@@ -25,14 +16,7 @@ NEGOTIATOR_USE_SLOT_WEIGHTS = TRUE
 PRIORITY_HALFLIFE = 43200
 
 
-GROUP_NAMES = group_cms_user, \
-              group_cms_prod, \
-              group_cms_prio, \
-              group_uscms_user, \
-              group_lcgadmin, \
-              group_t3_user, \
-              group_hcc, \
-              group_other, \
+GROUP_NAMES = \
               cms, \
               cms.prod, \
               cms.lcgadmin, \
@@ -76,14 +60,6 @@ GROUP_QUOTA_DYNAMIC_cms.other.user.us = .1
 # Other children
 GROUP_QUOTA_other.hcc = 100
 
-GROUP_QUOTA_group_cms_user = 200
-GROUP_QUOTA_group_cms_prio = 198
-GROUP_QUOTA_group_cms_prod = 400
-GROUP_QUOTA_group_uscms_user = 356
-GROUP_QUOTA_group_t3_user = 144
-GROUP_QUOTA_group_other = 100
-GROUP_QUOTA_group_hcc = 100
-GROUP_QUOTA_group_lcgadmin = 2
 GROUP_ACCEPT_SURPLUS = True
 
 # this is probably better, but I've no time to figure it out / test now
@@ -118,6 +94,11 @@ EVENT_LOG_JOB_AD_INFORMATION_ATTRS=Owner,CurrentHosts,x509userproxysubject,Accou
 MAX_HISTORY_LOG=524288000
 MAX_HISTORY_ROTATIONS=5
 
+MAX_NEGOTIATOR_LOG=52428800
+MAX_NUM_NEGOTIATOR_LOG=5
+
+MAX_COLLECTOR_LOG=52428800
+MAX_NUM_COLLECTOR_LOG=5
 
 DAEMON_LIST   = MASTER, COLLECTOR, NEGOTIATOR
 
