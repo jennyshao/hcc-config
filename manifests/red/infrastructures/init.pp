@@ -26,7 +26,7 @@ node basenode {
 	$snmpSources = [ 'red-mon.unl.edu', '172.16.200.3' ]
 
 	# this lists all our CEs - used for config.ini generation
-	$osgCEList = [ 'red.unl.edu', 'gpn-husker.unl.edu', 'red-gw1.unl.edu', 'red-gw2.unl.edu' ]
+	$osgCEList = [ 'red.unl.edu', 'red-gw1.unl.edu', 'red-gw2.unl.edu' ]
 
 	$gangliaClusterName = 'red-infrastructure'
 	$gangliaClusterOwner = 'Holland Computing Center'
@@ -40,7 +40,7 @@ node basenode {
 	$gangliaMulticastJoin = [ '239.2.11.71', '8650' ]  # multicast address, port
 
 	$ntpServersPublic = [ '0.us.pool.ntp.org', '1.us.pool.ntp.org', '2.us.pool.ntp.org', '3.us.pool.ntp.org' ]
-	$ntpServersLocal = [ 'red.unl.edu', 'gpn-husker.unl.edu', 't3.unl.edu' ]
+	$ntpServersLocal = [ 'red.unl.edu', 'red-gw1.unl.edu', 'red-gw2.unl.edu', 't3.unl.edu' ]
 	$timezone = "America/Chicago"
 
 }
