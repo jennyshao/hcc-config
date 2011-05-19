@@ -20,7 +20,7 @@ WORKER_NODES     = *@worker.unl.edu/172.16.1.*, *@worker.unl.edu/172.16.3.*
 USERS            = *@unl.edu
 
 # Authz settings for each daemon.  Preferably, change the templates above
-ALLOW_WRITE = $(FRIENDLY_DAEMONS)
+ALLOW_WRITE = $(FRIENDLY_DAEMONS) $(HOSTNAME)@worker.unl.edu/$(FULL_HOSTNAME)
 
 # Schedd is the only one accepting non-strong auth
 SCHEDD.ALLOW_WRITE               = $(USERS) $(HOSTNAME)@daemon.unl.edu/$(FULL_HOSTNAME)
@@ -30,7 +30,7 @@ COLLECTOR.ALLOW_ADVERTISE_SCHEDD = $(FRIENDLY_DAEMONS)
 COLLECTOR.ALLOW_ADVERTISE_STARTD = $(WORKER_NODES) $(HOSTNAME)@daemon.unl.edu/$(FULL_HOSTNAME)
 STARTD.ALLOW_NEGOTIATOR          = red-condor@daemon.unl.edu $(HOSTNAME)@daemon.unl.edu/$(FULL_HOSTNAME)
 SHADOW.ALLOW_WRITE               = $(ALLOW_WRITE), $(WORKER_NODES), $(HOSTNAME)@daemon.unl.edu/$(FULL_HOSTNAME)
-ALLOW_DAEMON                     = $(FRIENDLY_DAEMONS), condor@unl.edu, submit-side@matchsession
+ALLOW_DAEMON                     = $(FRIENDLY_DAEMONS), condor@unl.edu, submit-side@matchsession $(HOSTNAME)@worker.unl.edu/$(FULL_HOSTNAME)
 ALLOW_ADMINISTRATOR              = red-man@unl.edu/red-man.unl.edu, $(HOSTNAME)@daemon.unl.edu/$(FULL_HOSTNAME)
 
 # Authentication settings
