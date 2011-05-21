@@ -86,8 +86,8 @@ class condor {
 	}
 
 
-	# exists on collectors and submitters
-	if $isCondorCollector or $isCondorSubmitter {
+	# exists on collectors, submitters, and workers
+	if $isCondorCollector or $isCondorSubmitter or $isCondorWorker {
 		file { "/etc/condor/condor_mapfile":
 			ensure => present,
 			owner  => "root", group => "root", mode => 644,
