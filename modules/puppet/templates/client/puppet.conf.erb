@@ -1,29 +1,36 @@
-# File managed by Puppet
+##############################################################################
+##############################################################################
+#
+#       DO NOT EDIT - file is being maintained by puppet
+#
+##############################################################################
+##############################################################################
+
 
 [main]
-vardir = /var/lib/puppet
-logdir = /var/log/puppet
-rundir = /var/run/puppet
-ssldir = $vardir/ssl
-# Report Translactions to Master (or separated report) server
-report = true
-reportserver = <%= puppet_server %>
-summarize = true
-# trace = true
-usecacheonfailure = true
 
-<% if scope.lookupvar('puppet::params::version') == "0.2" -%>
-[puppetd]
-<% else -%>
+	vardir = /var/lib/puppet
+	logdir = /var/log/puppet
+	rundir = /var/run/puppet
+	ssldir = $vardir/ssl
+
+	# report transactions to master server
+	report = true
+	reportserver = <%= puppet_server %>
+	summarize = true
+	# trace = true
+	usecacheonfailure = true
+
+
 [agent]
-<% end -%>
-pluginsync = true
-#pluginsource = puppet://$server/plugins
-#plugindest = $vardir/lib/plugins
-#factpath = $vardir/lib/puppet/facter
-# listen = true
 
-# runinterval = 1800
-runinterval = 21600 # Run every 6 hours
+	pluginsync = true
+	# pluginsource = puppet://$server/plugins
+	# plugindest = $vardir/lib/plugins
+	# factpath = $vardir/lib/puppet/facter
+	listen = true
 
-server = <%= scope.lookupvar('puppet::params::server') %>
+	# run every 6 hours
+	runinterval = 21600
+
+	server = <%= scope.lookupvar('puppet::params::server') %>

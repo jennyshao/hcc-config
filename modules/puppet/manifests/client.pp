@@ -31,6 +31,17 @@ class puppet::client {
         notify  => Service["puppet"],
     }
 
+    file { "auth.conf":
+        path    => "${puppet::params::configdir}/auth.conf",
+        mode    => "${puppet::params::configfile_mode}",
+        owner   => "${puppet::params::configfile_owner}",
+        group   => "${puppet::params::configfile_group}",
+        require => Package[puppet],
+        ensure  => present,
+        content => template("puppet/client/auth.conf.erb"),
+        notify  => Service["puppet"],
+    }
+
     file {
         "namespaceauth.conf":
         path    => "${puppet::params::configdir}/namespaceauth.conf",

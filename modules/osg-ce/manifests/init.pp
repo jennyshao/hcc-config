@@ -12,6 +12,20 @@ class osg-ce {
 		content => template("osg-ce/config.ini.erb"),
 	}
 
+	file { "gip.conf":
+		ensure  => absent,
+		path    => "/opt/osg/osg-1.2/gip/etc/gip.conf",
+		owner   => "root", group => "root", mode => 644,
+		source  => "puppet://red-man.unl.edu/osg-ce/gip.conf",
+	}
+
+	file { "alter-attributes.conf":
+		ensure  => absent,
+		path    => "/opt/osg/osg-1.2/gip/etc/alter-attributes.conf",
+		owner   => "root", group => "root", mode => 644,
+		content => template("osg-ce/alter-attributes.conf.erb"),
+	}
+
 	file { "condor.pm":
 		ensure  => present,
 		path    => "/opt/osg/osg-1.2/globus/lib/perl/Globus/GRAM/JobManager/condor.pm",

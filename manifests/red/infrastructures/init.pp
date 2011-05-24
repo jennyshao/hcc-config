@@ -20,6 +20,9 @@ node basenode {
 	$domain = "unl.edu"
 	$dns_servers = [ '129.93.5.53', '129.93.5.69', '129.93.6.143', '129.93.6.189' ]
 
+	$puppet_server = "red-man.unl.edu"
+	$puppet_allow = [ "172.16.0.0/16", "129.93.239.128/26" ]
+
 	$snmpLocation = 'Schorr 02'
 	$snmpContactName = 'Garhan Attebury'
 	$snmpContactEmail = 'attebury@cse.unl.edu'

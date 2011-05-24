@@ -1,0 +1,44 @@
+##############################################################################
+##############################################################################
+#
+#	DO NOT EDIT - file is being maintained by puppet
+#
+##############################################################################
+##############################################################################
+
+
+#
+#  Copyright IBM Corporation. 2007
+#
+#  Authors:	Balbir Singh <balbir@linux.vnet.ibm.com>
+#  This program is free software; you can redistribute it and/or modify it
+#  under the terms of version 2.1 of the GNU Lesser General Public License
+#  as published by the Free Software Foundation.
+#
+#  This program is distributed in the hope that it would be useful, but
+#  WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#
+# See man cgconfig.conf for further details.
+#
+# By default, mount all controllers to /cgroup/<controller>
+
+mount {
+	cpuset	= /mnt/cgroups/cpuset;
+	cpu	= /mnt/cgroups/cpu;
+	cpuacct	= /mnt/cgroups/cpuacct;
+	memory	= /mnt/cgroups/memory;
+	freezer	= /mnt/cgroups/freezer;
+	net_cls	= /mnt/cgroups/net_cls;
+}
+
+group condor {
+  memory {
+    memory.use_hierarchy = "1";
+    memory.limit_in_bytes = "<%= memorysizeinbytes.to_i - (512*1024*1024) %>";
+    memory.memsw.limit_in_bytes = "<%= memorysizeinbytes.to_i - (512*1024*1024) + swapsizeinbytes.to_i %>";
+  }
+  cpuacct {}
+  freezer {}
+}
+
