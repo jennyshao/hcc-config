@@ -31,7 +31,7 @@ COLLECTOR.ALLOW_ADVERTISE_STARTD = $(WORKER_NODES) $(HOSTNAME)@daemon.unl.edu/$(
 STARTD.ALLOW_NEGOTIATOR          = red-condor@daemon.unl.edu $(HOSTNAME)@daemon.unl.edu/$(FULL_HOSTNAME)
 SHADOW.ALLOW_WRITE               = $(ALLOW_WRITE), $(WORKER_NODES), $(HOSTNAME)@daemon.unl.edu/$(FULL_HOSTNAME)
 ALLOW_DAEMON                     = $(FRIENDLY_DAEMONS), condor@unl.edu, submit-side@matchsession $(HOSTNAME)@worker.unl.edu/$(FULL_HOSTNAME)
-ALLOW_ADMINISTRATOR              = red-man@unl.edu/red-man.unl.edu, $(HOSTNAME)@daemon.unl.edu/$(FULL_HOSTNAME)
+ALLOW_ADMINISTRATOR              = red-man@unl.edu/red-man.unl.edu, red-man@daemon.unl.edu/172.16.200.1, $(HOSTNAME)@daemon.unl.edu/$(FULL_HOSTNAME)
 
 # Authentication settings
 SEC_DEFAULT_AUTHENTICATION               = REQUIRED
