@@ -1,300 +1,186 @@
 node 'node001' inherits red-private {
 	$role = "red-worker"
+	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node002' inherits red-private {
 	$role = "red-worker"
+	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node003' inherits red-private {
 	$role = "red-worker"
+	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node004' inherits red-private {
 	$role = "red-worker"
+	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node005' inherits red-private {
 	$role = "red-worker"
+	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node006' inherits red-private {
 	$role = "red-worker"
+	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node007' inherits red-private {
 	$role = "red-worker"
+	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node008' inherits red-private {
 	$role = "red-worker"
+	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node009' inherits red-private {
 	$role = "red-worker"
+	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node010' inherits red-private {
 	$role = "red-worker"
+	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node011' inherits red-private {
 	$role = "red-worker"
+	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node012' inherits red-private {
 	$role = "red-worker"
+	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node013' inherits red-private {
 	$role = "red-worker"
+	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node014' inherits red-private {
 	$role = "red-worker"
+	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node015' inherits red-private {
 	$role = "red-worker"
+	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node016' inherits red-private {
 	$role = "red-worker"
+	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node017' inherits red-private {
 	$role = "red-worker"
+	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node018' inherits red-private {
 	$role = "red-worker"
+	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node019' inherits red-private {
 	$role = "red-worker"
+	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node020' inherits red-private {
 	$role = "red-worker"
+	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node021' inherits red-private {
 	$role = "red-worker"
+	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node022' inherits red-private {
 	$role = "red-worker"
+	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node023' inherits red-private {
 	$role = "red-worker"
+	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node024' inherits red-private {
 	$role = "red-worker"
+	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node025' inherits red-private {
 	$role = "red-worker"
+	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node026' inherits red-private {
 	$role = "red-worker"
+	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node027' inherits red-private {
 	$role = "red-worker"
+	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node028' inherits red-private {
 	$role = "red-worker"
+	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node029' inherits red-private {
 	$role = "red-worker"
+	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node030' inherits red-private {
 	$role = "red-worker"
+	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node031' inherits red-private {
 	$role = "red-worker"
-	include general
-}
-
-node 'node032' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node033' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node034' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node035' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node036' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node037' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node038' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node039' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node040' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node041' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node042' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node043' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node044' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node045' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node046' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node047' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node048' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node049' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node050' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node051' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node052' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node053' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node054' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node055' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node056' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node057' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node058' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node059' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node060' inherits red-private {
-	$role = "red-worker"
+	$condorCustom09 = "thpc"
 	include general
 }
 
@@ -940,61 +826,73 @@ node 'node188' inherits red-private {
 
 node 'node189' inherits red-private {
 	$role = "red-worker"
+	$condorCustom09 = "r410"
 	include general
 }
 
 node 'node190' inherits red-private {
 	$role = "red-worker"
+	$condorCustom09 = "r410"
 	include general
 }
 
 node 'node191' inherits red-private {
 	$role = "red-worker"
+	$condorCustom09 = "r410"
 	include general
 }
 
 node 'node192' inherits red-private {
 	$role = "red-worker"
+	$condorCustom09 = "r410"
 	include general
 }
 
 node 'node193' inherits red-private {
 	$role = "red-worker"
+	$condorCustom09 = "r410"
 	include general
 }
 
 node 'node194' inherits red-private {
 	$role = "red-worker"
+	$condorCustom09 = "r410"
 	include general
 }
 
 node 'node195' inherits red-private {
 	$role = "red-worker"
+	$condorCustom09 = "r410"
 	include general
 }
 
 node 'node196' inherits red-private {
 	$role = "red-worker"
+	$condorCustom09 = "r410"
 	include general
 }
 
 node 'node197' inherits red-private {
 	$role = "red-worker"
+	$condorCustom09 = "r410"
 	include general
 }
 
 node 'node198' inherits red-private {
 	$role = "red-worker"
+	$condorCustom09 = "r410"
 	include general
 }
 
 node 'node199' inherits red-private {
 	$role = "red-worker"
+	$condorCustom09 = "r410"
 	include general
 }
 
 node 'node200' inherits red-private {
 	$role = "red-worker"
+	$condorCustom09 = "r410"
 	include general
 }
 

@@ -53,6 +53,16 @@ class condor {
 			owner  => "root", group => "root", mode => 644,
 			source => "puppet://red-man.unl.edu/condor/config.d/01-red-worker",
 		}
+
+		# if a condorCustom09 class is defined, use it
+		# this is for our custom START expressions like 09-thpc and 09-r410
+		if $condorCustom09 {
+			file { "/etc/condor/config.d/09-${condorCustom09}":
+				ensure => present,
+				owner  => "root", group => "root", mode => 644,
+				source => "puppet://red-man.unl.edu/condor/config.d/09-${condorCustom09}",
+			}
+		}
 	}
 
 
@@ -94,6 +104,8 @@ class condor {
 			source => "puppet://red-man.unl.edu/condor/condor_mapfile",
 		}
 	}
+
+
 
 }
 
