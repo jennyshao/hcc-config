@@ -12,12 +12,25 @@ class gridftp-hdfs {
 		ensure => present,
 	}
 
+	service { "xinetd":
+		name       => "xinetd",
+		ensure     => running,
+		enable     => true,
+		hasrestart => true,
+	}
+
 
 	file { "gridftp-hdfs":
 		path    => "/etc/xinetd.d/gridftp-hdfs",
 		owner   => "root", group => "root", mode => 644,
 		require => Package["gridftp-hdfs"],
 		source  => "puppet://red-man.unl.edu/gridftp-hdfs/gridftp-hdfs",
+	}
+
+	file { "gridftp-transfer-ProbeConfig":
+		path    => "/opt/vdt/gratia/probe/gridftp-transfer/ProbeConfig",
+		owner   => "root", group => "root", mode => 600,
+		content => template("gridftp-hdfs/ProbeConfig.erb"),
 	}
 
 }
