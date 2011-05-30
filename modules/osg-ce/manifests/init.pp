@@ -20,7 +20,7 @@ class osg-ce {
 	}
 
 	file { "alter-attributes.conf":
-		ensure  => absent,
+		ensure  => present,
 		path    => "/opt/osg/osg-1.2/gip/etc/alter-attributes.conf",
 		owner   => "root", group => "root", mode => 644,
 		content => template("osg-ce/alter-attributes.conf.erb"),
