@@ -1,0 +1,241 @@
+#!/usr/bin/env python
+
+import commands, sys, getopt, time, os
+
+#defining some variables
+# for keeping track of logfile content
+LOGFILE_CONTENT = ''
+#below for exit status
+STATE_OK = 0
+STATE_WARNING = 1
+STATE_CRITICAL = 2
+STATE_UNKNOWN = 3
+
+def main():
+    global LOGFILE_CONTENT
+    validS = unexpiredS = -1
+    validD = unexpiredD = ""
+    # Check if the host public certificate is valid against the trusted CAs
+    (validS, validD) = checkCertValid()
+    # Check if host public certificate is about to expire
+    if validS == STATE_OK:
+        (unexpiredS, unexpiredD) = checkCertExpire()
+    # report the checking result to Nagios according to 
+    # the outcome of certificate validity checking
+    tmp_str = ""
+    if validS == unexpiredS == STATE_OK:
+        tmp_str = "HostCert OK - The host public certificate is valid " + \
+                  "and not about to expire (%s)" % (unexpiredD)
+        print tmp_str
+        LOGFILE_CONTENT += "\n\n%s" % (tmp_str)
+        #createLogfile()
+        sys.exit(STATE_OK)
+    else:
+        problem = max(validS, unexpiredS)
+        if problem == 1:
+            tmp_str = "HostCert WARNING -"
+            print tmp_str,
+            LOGFILE_CONTENT += "\n\n%s " % (tmp_str)
+        elif problem == 2:
+            tmp_str = "HostCert CRITICAL -"
+            print tmp_str,
+            LOGFILE_CONTENT += "\n\n%s " % (tmp_str)            
+        else: #if problem == 3
+            tmp_str = "HostCert UNKNOWN -"
+            print tmp_str,
+            LOGFILE_CONTENT += "\n\n%s " % (tmp_str)
+            
+        # for validity checking
+        if validS == STATE_OK:
+            tmp_str = "Valid:OK(%s)," % (validD)
+            print tmp_str,
+            LOGFILE_CONTENT += "%s " % (tmp_str)
+        if validS == STATE_WARNING:
+            tmp_str = "Valid:WARN(%s)" % (validD)
+            print tmp_str
+            LOGFILE_CONTENT += "%s " % (tmp_str)
+            createLogfile()
+            sys.exit(STATE_WARNING)
+        if validS == STATE_CRITICAL:
+            tmp_str = "Valid:CRIT(%s)" % (validD)
+            print tmp_str
+            LOGFILE_CONTENT += "%s " % (tmp_str)
+            createLogfile()
+            sys.exit(STATE_CRITICAL)
+        if validS == STATE_UNKNOWN:
+            tmp_str = "Valid:UNKWN(%s)" % (validD)
+            print tmp_str
+            LOGFILE_CONTENT += "%s " % (tmp_str)
+            createLogfile()
+            sys.exit(STATE_UNKNOWN)
+         
+        # for expiration checking    
+        # unexpiredS STATE_OK already accounted for
+        if unexpiredS == STATE_WARNING:
+            tmp_str = "UnExpired:WARN(%s)" % (unexpiredD)
+            print tmp_str
+            LOGFILE_CONTENT += tmp_str
+            createLogfile()
+            sys.exit(STATE_WARNING)
+        if unexpiredS == STATE_CRITICAL:
+            tmp_str = "UnExpired:CRIT(%s)" % (unexpiredD)
+            print tmp_str
+            LOGFILE_CONTENT += tmp_str
+            createLogfile()
+            sys.exit(STATE_CRITICAL)
+        if unexpiredS == STATE_UNKNOWN:
+            tmp_str = "UnExpired:UNKWN(%s)" % (unexpiredD)
+            print tmp_str
+            LOGFILE_CONTENT += tmp_str
+            createLogfile()
+            sys.exit(STATE_UNKNOWN)
+
+def getArgs():
+    #gets arguments
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], "w:c:", ["warning", "critical"])
+    except getopt.GetoptError:
+       #print help info and exit:
+        usage("Couldn't parse arguments")
+    WARN = CRIT = ""
+    for opt, arg in opts:
+        if opt in ("-w", "--warning"):
+            WARN = arg
+        if opt in ("-c", "--critical"):
+            CRIT = arg
+            
+    return checkArgs(WARN, CRIT)
+
+def checkArgs(WARN, CRIT):
+    #argument checking, all bad arguments stop here
+    if WARN == "":
+        usage("Warning threshold not declared")
+    else:
+        WARN = float(WARN)
+    if CRIT == "":
+        usage("Critical threshold not declared")
+    else:
+        CRIT = float(CRIT)
+        
+    return (WARN, CRIT)
+    
+def checkCertValid():
+    global LOGFILE_CONTENT
+    # record the logfile
+    prompt = "Check if the host public certificate is valid " + \
+             "against the trusted CAs"
+    LOGFILE_CONTENT += '###### %s ######' % (prompt)
+    # define the command and get the result output from that
+    cmd = "openssl verify -CApath /etc/grid-security/certificates/ " + \
+          "/etc/grid-security/hostcert.pem"
+    (status, output) = commands.getstatusoutput(cmd)
+    # record the logfile
+    LOGFILE_CONTENT += '\nThe check command is: \n%s' % (cmd)
+    LOGFILE_CONTENT += '\nThe result of this command is : \n%s' % (output)
+    # analyze the result of the command
+    validS = -1
+    validD = ""
+    if output.find("hostcert.pem: OK") > -1: # phrase found
+        validS = STATE_OK
+        validD = "Host public certificate is valid against the trusted CAs"
+    elif output.find("No such file or directory") > -1:
+        validS = STATE_CRITICAL
+        validD = "Can't find the host public certificate"
+    elif output.find("certificate has expired") > -1:
+        validS = STATE_CRITICAL
+        validD = "Host public certificate has expired"
+    else:
+        validS = STATE_UNKNOWN
+        validD = "Unexpected error occurred"
+        
+    return (validS, validD)
+    
+def checkCertExpire():
+    global LOGFILE_CONTENT
+    # record the logfile
+    prompt = "Check if host public certificate is about to expire"
+    LOGFILE_CONTENT += '\n###### %s ######' % (prompt)
+    # get the arguments
+    (WARN, CRIT) = getArgs()
+    # record the logfile
+    LOGFILE_CONTENT += '\nThe warning threshold is %s days' % (WARN) + \
+                       '\nThe critical threshold is %s days' % (CRIT)
+    cmd = "openssl x509 -in /etc/grid-security/hostcert.pem -noout -enddate"
+    (status, output) = commands.getstatusoutput(cmd)
+    # record the logfile
+    LOGFILE_CONTENT += '\nThe check command is: \n%s' % (cmd)
+    LOGFILE_CONTENT += '\nThe result of this command is : \n%s' % (output)
+    # get the due date of valid certificate
+    # eg. Jan 16 08:21:06 2007 GMT
+    due_date = output.split("=")[-1]
+    # create a time tuple from this time string format
+    # eg. (2007, 1, 16, 8, 21, 6, 1, 16, -1)
+    due_date_tuple = time.strptime(due_date, "%b %d %H:%M:%S %Y GMT")
+    # get the machine time of the time tuple
+    # eg: 1162523795.0
+    # mktime() gives seconds since epoch 1/1/1970 00:00:00
+    dd_m = time.mktime(due_date_tuple)
+    # get the time difference between current time and the due date
+    time_diff = dd_m - time.mktime(time.localtime())
+    # the unit of time is day
+    time_diff_days = time_diff/(60*60*24)
+    # analyze the result of the command
+    unexpiredS = -1
+    unexpiredD = ""
+    if time_diff_days <= WARN:
+        if time_diff_days <= CRIT:
+            unexpiredS = STATE_CRITICAL
+            unexpiredD = "Certificate will expire in %d days " % (time_diff_days) + \
+                         "(due date = %s)" % (due_date)
+        else:
+            unexpiredS = STATE_WARNING
+            unexpiredD = "Certificate will expire in %d days " % (time_diff_days) + \
+                         "(due date = %s)" % (due_date)
+    else:
+        unexpiredS = STATE_OK
+        unexpiredD = output
+    
+    return (unexpiredS, unexpiredD)    
+    
+def createLogfile():
+    global LOGFILE_CONTENT
+    # make sure the directories have existed
+    # create that if not existed
+    paths = ['/usr/local/nagios/var', '/usr/local/nagios/var/check_HostCert']
+    for path in paths:
+        if not (os.path.exists(path) and os.path.isdir(path)):
+            cmd = 'mkdir %s;chmod 755 %s' % (path, path)
+            output = commands.getstatusoutput(cmd) 
+    # create the log file and delete older that if need be
+    # get the current time
+    ct = time.localtime() 
+    # get the struct_time with format argument
+    st = time.strftime('%m-%d-%Y-%H-%M',ct)
+    # opening and writing the log file
+    logfile = open('%s/HostCert-%s.log' % (paths[-1], st), 'w')
+    logfile.write(LOGFILE_CONTENT)
+    logfile.close()
+    # get the machine time (seconds since 1/1/1970 00:00:00)
+    # check if there are some log files that have existed for 7 days
+    ct_m = time.mktime(ct) 
+    deleteLogfile(ct_m, paths[-1])
+        
+def deleteLogfile(ct_m, path):
+    # delete log files that have existed for 7 days
+    # get the list of log files
+    cmd = 'ls %s' % (path)
+    output = commands.getoutput(cmd)
+    logs = output.split('\n')
+    # check if there are some log files that have existed for 7 days
+    # and delete the expired files
+    for log in logs:
+        # get the machine time of log file
+        lt_m = os.path.getmtime('%s/%s' % (path, log))
+        # get how many days between ct_m and lt_m
+        days = (ct_m - lt_m)/(60*60*24)
+        if days > 7:
+            os.remove("%s/%s" % (path, log))
+
+if __name__ == "__main__":
+    #runs script as main
+    main()

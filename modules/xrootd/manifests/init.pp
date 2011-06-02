@@ -43,6 +43,11 @@ class xrootd {
 		ensure => present,
 	}
 
+	package { "xrootd-status-probe":
+		require => Package["nrpe"],
+		ensure => present,
+	}
+
 	service { "xrootd":
 		name => "xrootd",
 		ensure => running,

@@ -5,6 +5,7 @@ class role_red-gridftp {
 	include hadoop
 	include gridftp-hdfs
 	include xrootd
-#	include tester
+	include nrpe
+	include sudo
 
 }
