@@ -1,0 +1,46 @@
+<storage-mapping>
+
+  <!-- ##################################################################### -->
+  <!-- #                                                                   # -->
+  <!-- #         DO NOT EDIT - file is being maintained by puppet          # -->
+  <!-- #                                                                   # -->
+  <!-- ##################################################################### -->
+
+
+  <!-- LFN mappings... -->
+  <!-- Direct protocol rules -->
+  <lfn-to-pfn protocol="direct" destination-match="foo" path-match=".*/LoadTest07_Nebraska_(.*)_.*_.*" result="/mnt/hadoop/user/uscms01/pnfs/unl\.edu/data4/cms/store/phedex_monarctest/Nebraska/LoadTest07_Nebraska_$1"/>
+  <lfn-to-pfn protocol="direct" destination-match=".*" path-match="/+store/user/brian/(.*)" result="/mnt/hadoop/user/brian/$1"/> <!-- Added by Brian on May 14; maps Ken Bloom's /store/user area to his Hadoop home area. -->
+  <lfn-to-pfn protocol="direct" destination-match=".*" path-match="/+store/(.*)" result="/mnt/hadoop/user/uscms01/pnfs/unl.edu/data4/cms/store/$1"/>
+  <lfn-to-pfn protocol="direct" destination-match=".*" path-match="/+store/data/(.*)" result="/mnt/hadoop/user/uscms01/pnfs/unl.edu/data4/cms/store/data/$1"/>
+  <!-- The "hadoop" protocol line is necessary for PA stageout -->
+  <!-- For Xrootd testing -->
+  <lfn-to-pfn protocol="hadoop" destination-match=".*" path-match="/+store/test/xrootd/T2_US_Nebraska/store/(.*)" result="/user/uscms01/pnfs/unl.edu/data4/cms/store/$1"/>
+  <lfn-to-pfn protocol="hadoop" destination-match=".*" path-match="/+store/user/brian/(.*)" result="/user/brian/$1"/> <!-- Added by Brian on Nov 1; maps Brian's /store/user area to his Hadoop home area. -->
+  <lfn-to-pfn protocol="hadoop" destination-match=".*" path-match="/+store/(.*)" result="/user/uscms01/pnfs/unl.edu/data4/cms/store/$1"/>
+  <!-- The 'dcap' rule is used for reading data in CMSSW; however, it only maps to a dcap server for /store/data; the rest goes to /mnt/hadoop -->
+  <lfn-to-pfn protocol="dcap"   destination-match=".*" chain="direct" path-match="(.*/+store/.*)" result="$1"/>
+  <!-- SRM protocol rules. -->
+  <!-- LoadTest rules; first, Nebraska LT, then all other T1s -->
+  <lfn-to-pfn protocol="srmv2"  destination-match=".*" chain="direct" path-match=".*/LoadTest07_Nebraska_(.*)_.*_.*" result="srm://dcache07.unl.edu:8443/srm/v2/server?SFN=$1"/>
+  <lfn-to-pfn protocol="srmv2"  destination-match=".*" path-match="/store/PhEDEx_LoadTest07/LoadTest07_Debug_.*/Nebraska/.*/(.*)" result="srm://dcache07.unl.edu:8443/srm/v2/server?SFN=/mnt/hadoop/user/uscms01/LoadTestDownload/$1"/>
+  <!-- SAM test rules; make sure they go to both srm.unl.edu and dcache07.unl.edu -->
+  <lfn-to-pfn protocol="srmv2"  destination-match=".*" path-match="(.*/+store/unmerged/SAM/testSRM/SAM-srm.unl.edu.*)" result="srm://srm.unl.edu:8443/srm/managerv2?SFN=/pnfs/unl.edu/data4/cms$1"/>
+  <lfn-to-pfn protocol="srmv2"  destination-match=".*" path-match="(.*/+store/user/test/SAM-srm.unl.edu.*)" result="srm://srm.unl.edu:8443/srm/managerv2?SFN=//pnfs/unl.edu/data4/cms$1"/>
+  <lfn-to-pfn protocol="srmv2"  destination-match=".*" chain="direct" path-match="(.*/+store/unmerged/SAM/testSRM/SAM-dcache07.unl.edu.*)" result="srm://dcache07.unl.edu:8443/srm/v2/server?SFN=$1"/>
+  <lfn-to-pfn protocol="srmv2"  destination-match=".*" chain="direct" path-match="(.*/store/unmerged/testLFN)" result="srm://srm.unl.edu:8446/srm/v2/server?SFN=$1"/>
+  <!-- Unmerged rules - these go to srm.unl.edu -->
+  <lfn-to-pfn protocol="srmv2"  destination-match=".*" chain="direct" path-match="(.*/store/unmerged/SAM.*)" result="srm://srm.unl.edu:8446/srm/v2/server?SFN=$1"/>
+  <lfn-to-pfn protocol="srmv2"  destination-match=".*" chain="direct" path-match="(.*/store/mc/SAM.*)" result="srm://srm.unl.edu:8446/srm/v2/server?SFN=$1"/>
+  <!-- /store/data goes to dCache -->
+  <!-- by default, go to Hadoop -->
+  <lfn-to-pfn protocol="srmv2"  destination-match=".*" chain="direct" path-match="(.*)" result="srm://dcache07.unl.edu:8443/srm/v2/server?SFN=$1"/>
+
+  <!-- Reverse mappings... -->
+  <pfn-to-lfn protocol="hadoop" destination-match=".*" path-match="/user/uscms01/pnfs/unl.edu/data4/cms/(.*)" result="/$1"/>
+  <pfn-to-lfn protocol="direct" destination-match=".*" chain="hadoop" path-match="/mnt/hadoop/(.*)" result="/$1"/>
+  <pfn-to-lfn protocol="direct" destination-match=".*" path-match="/+pnfs/unl\.edu/data4/cms/(.*)" result="/$1"/>
+  <pfn-to-lfn protocol="srmv2"  destination-match=".*" chain="direct" path-match=".*\?SFN=(.*)" result="$1"/>
+  <pfn-to-lfn protocol="dcap"   destination-match=".*" chain="direct" path-match="(.*)" result="$1"/>
+
+</storage-mapping>

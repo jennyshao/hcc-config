@@ -7,9 +7,9 @@
 ##############################################################################
 
 
-/opt/osg/app -ro,noatime,tcp,nolock,hard,intr,rsize=32768,wsize=32768 nfs04:/mnt/raid/opt/osg/app
-/opt/osg/data -ro,noatime,tcp,nolock,hard,intr,rsize=32768,wsize=32768 nfs04:/mnt/raid/opt/data
-/opt/kickstart -ro,noatime,tcp,nolock,hard,intr,rsize=32768,wsize=32768 red-man.unl.edu:/opt/kickstart
+/opt/osg/app -rw,noatime,tcp,nolock,hard,intr,rsize=32768,wsize=32768 nfs04:/mnt/raid/opt/osg/app
+/opt/osg/data -rw,noatime,tcp,nolock,hard,intr,rsize=32768,wsize=32768 nfs04:/mnt/raid/opt/data
+/opt/kickstart -rw,noatime,tcp,nolock,hard,intr,rsize=32768,wsize=32768 red-man.unl.edu:/opt/kickstart
 
 
 # tier3 automount

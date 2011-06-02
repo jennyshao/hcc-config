@@ -4,5 +4,7 @@ class role_red-gridftp {
 	include ganglia::diskstat
 	include hadoop
 	include gridftp-hdfs
+	include xrootd
+#	include tester
 
 }

@@ -17,8 +17,8 @@ class gridftp-hdfs {
 		ensure     => running,
 		enable     => true,
 		hasrestart => true,
+		require => Package["gridftp-hdfs"],
 	}
-
 
 	file { "gridftp-hdfs":
 		path    => "/etc/xinetd.d/gridftp-hdfs",
@@ -30,6 +30,7 @@ class gridftp-hdfs {
 	file { "gridftp-transfer-ProbeConfig":
 		path    => "/opt/vdt/gratia/probe/gridftp-transfer/ProbeConfig",
 		owner   => "root", group => "root", mode => 600,
+		require => Package["gridftp-hdfs"],
 		content => template("gridftp-hdfs/ProbeConfig.erb"),
 	}
 
