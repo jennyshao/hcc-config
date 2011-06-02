@@ -15,13 +15,17 @@ KILL    = FALSE
 DAEMON_LIST = MASTER, SCHEDD
 
 
+# define max interval for evaluating periodic release/removal
+MAX_PERIODIC_EXPR_INTERVAL = 1200
+
 # hold jobs using absurd amounts of disk (100+ GB)
 SYSTEM_PERIODIC_HOLD = \
    (JobStatus == 1 || JobStatus == 2) && (DiskUsage > 100000000 || ResidentSetSize > 1600000)
 
-# forceful removal of running after 2 days or 10 failed starts
+# forceful removal of running after 2 days, held jobs after 6 hours,
+# and anything trying to run more than 10 times
 SYSTEM_PERIODIC_REMOVE = \
-   (JobStatus == 5 && CurrentTime - EnteredCurrentStatus > 3600*24*7) || \
+   (JobStatus == 5 && CurrentTime - EnteredCurrentStatus > 3600*6) || \
    (JobStatus == 2 && CurrentTime - EnteredCurrentStatus > 3600*24*2) || \
    (JobStatus == 5 && JobRunCount >= 10) || \
    (JobStatus == 5 && HoldReasonCode =?= 14 && HoldReasonSubCode =?= 2)
