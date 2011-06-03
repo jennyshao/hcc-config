@@ -59,7 +59,7 @@ ENABLE_URL_TRANSFERS = TRUE
 FILETRANSFER_PLUGINS = /mnt/nfs04/opt/srm-plugin
 
 # for cgroups
-BASE_CGROUP = /condor
-USE_PID_NAMESPACES = true
-USE_FS_NAMESPACES = true
-PROCD_LOG = $(LOG)/ProcdLog
+# BASE_CGROUP = /condor
+# USE_PID_NAMESPACES = true
+# USE_FS_NAMESPACES = true
+# PROCD_LOG = $(LOG)/ProcdLog
