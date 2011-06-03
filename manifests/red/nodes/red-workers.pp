@@ -1169,6 +1169,7 @@ node 'node254' inherits red-private {
 node 'red-d8n1' inherits red-private {
 	$role = "red-worker"
 	include general
+	include hadoop
 }
 
 node 'red-d8n2' inherits red-private {

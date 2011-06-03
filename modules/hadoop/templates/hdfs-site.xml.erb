@@ -9,6 +9,13 @@
 <!-- #                                                                   # -->
 <!-- ##################################################################### -->
 
+<% if has_variable?("hdfs_dfsdir_list") then -%>
+<!-- hdfs_dfsdir_list = <%= hdfs_dfsdir_list %> -->
+<% else %>
+<!-- WARNING: hdfs_dfsdir_list fact not set -->
+<!-- (if this isn't a datanode, then it's ok) -->
+<% end %>
+
 <configuration>
 <property>
   <name>dfs.permissions.supergroup</name>
@@ -32,7 +39,7 @@
 </property>
 <property>
   <name>dfs.data.dir</name>
-  <value>/hadoop-data1,/hadoop-data2,/hadoop-data3,/hadoop-data4</value>
+  <value>/hadoop-data1</value>
 </property>
 <property>
   <name>dfs.datanode.handler.count</name>
