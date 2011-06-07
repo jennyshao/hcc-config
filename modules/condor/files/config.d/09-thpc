@@ -7,10 +7,15 @@
 ##############################################################################
 
 
+# limit to two cores and uscmsPool* jobs only
+START = $(START) && ((SlotID <= 2) && (regexp("uscmsPool.*", TARGET.Owner) == TRUE))
+
+
+
 # for old thpc 1g/core nodes
 # prevent cms jobs from running (not enough RAM)
 # still allows uscms01 which is well behaved lcgadmin
 
-START = ((regexp("uscmsPool.*", TARGET.Owner) =!= TRUE) && \
-         (regexp("cmsprio.*", TARGET.Owner) =!= TRUE) && \
-         (regexp("cmsprod", TARGET.Owner) =!= TRUE)) && $(START)
+#START = ((regexp("uscmsPool.*", TARGET.Owner) =!= TRUE) && \
+#         (regexp("cmsprio.*", TARGET.Owner) =!= TRUE) && \
+#         (regexp("cmsprod", TARGET.Owner) =!= TRUE)) && $(START)

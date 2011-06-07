@@ -56,4 +56,3 @@ node red-private inherits basenode {
 node red-public inherits basenode {
 	$zone = "red-public"
 }
-

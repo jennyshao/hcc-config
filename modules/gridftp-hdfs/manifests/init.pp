@@ -12,6 +12,11 @@ class gridftp-hdfs {
 		ensure => present,
 	}
 
+	package { "gratia-probe-gridftp-transfer":
+		name   => "gratia-probe-gridftp-transfer",
+		ensure => present,
+	}
+
 	service { "xinetd":
 		name       => "xinetd",
 		ensure     => running,
@@ -30,7 +35,7 @@ class gridftp-hdfs {
 	file { "gridftp-transfer-ProbeConfig":
 		path    => "/opt/vdt/gratia/probe/gridftp-transfer/ProbeConfig",
 		owner   => "root", group => "root", mode => 600,
-		require => Package["gridftp-hdfs"],
+		require => Package["gratia-probe-gridftp-transfer"],
 		content => template("gridftp-hdfs/ProbeConfig.erb"),
 	}
 
