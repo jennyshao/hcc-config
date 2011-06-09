@@ -39,7 +39,7 @@
 </property>
 <property>
   <name>dfs.data.dir</name>
-  <value>/hadoop-data1</value>
+  <value><% if has_variable?("hdfs_dfsdir_list") then -%><%= hdfs_dfsdir_list %><% else %>/hadoop-data1<% end %></value>
 </property>
 <property>
   <name>dfs.datanode.handler.count</name>
