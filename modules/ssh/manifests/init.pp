@@ -27,6 +27,22 @@ class ssh {
 		content => template("ssh/sshd_config.erb"),
 	}
 
+	file { "sshdir":
+		path    => "/root/.ssh",
+      ensure  => directory,
+		owner   => "root", group => "root", mode => 0700,
+		recurse => true,
+		before  => File["authorized_keys"],
+	}
+
+	file { "authorized_keys":
+		path    => "/root/.ssh/authorized_keys",
+		owner   => "root", group => "root", mode => 0600,
+		ensure  => present,
+		require => Package["openssh-server"],
+		source  => "puppet://red-man.unl.edu/ssh/authorized_keys",
+	}
+
 
 #	augeas { "sshd_config":
 #		context => "/files/etc/ssh/sshd_config",
