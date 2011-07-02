@@ -17,7 +17,11 @@ export HADOOP_CONF_DIR=/etc/hadoop-0.20/conf
 # remote nodes.
 
 # The java implementation to use.  Required.
-export JAVA_HOME=/usr/java/latest
+if [ -e /etc/alternatives/jre ]; then
+  export JAVA_HOME=/etc/alternatives/jre
+else
+  export JAVA_HOME=/usr/java/latest
+fi
 
 # Extra Java CLASSPATH elements.  Optional.
 #HADOOP_CLASSPATH=$HADOOP_CONF_DIR:$(build-classpath hadoop)
