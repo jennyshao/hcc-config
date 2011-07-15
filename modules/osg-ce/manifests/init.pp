@@ -26,6 +26,13 @@ class osg-ce {
 		content => template("osg-ce/alter-attributes.conf.erb"),
 	}
 
+	file { "xinetd-globus-gatekeeper":
+		ensure  => present,
+		path    => "/opt/osg/osg-1.2/vdt/services/xinetd-globus-gatekeeper",
+		owner   => "root", group => "root", mode => 644,
+		source  => "puppet://red-man.unl.edu/osg-ce/xinetd-globus-gatekeeper",
+	}
+
 	file { "condor.pm":
 		ensure  => present,
 		path    => "/opt/osg/osg-1.2/globus/lib/perl/Globus/GRAM/JobManager/condor.pm",

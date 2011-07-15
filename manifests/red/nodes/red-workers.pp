@@ -1166,204 +1166,24 @@ node 'node254' inherits red-private {
 	include general
 }
 
-node 'red-d8n1' inherits red-private {
+
+
+node /^red-d8n\d+\.unl\.edu$/ inherits red-private {
+	$role = "red-worker"
+	include general
+	include hadoop
+} 
+
+node /^red-d9n\d+\.unl\.edu$/ inherits red-private {
 	$role = "red-worker"
 	include general
 	include hadoop
 }
 
-node 'red-d8n2' inherits red-private {
+node /^red-d11n\d+\.unl\.edu$/ inherits red-private {
 	$role = "red-worker"
 	include general
+	include hadoop
 }
 
-node 'red-d8n3' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'red-d8n4' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'red-d8n5' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'red-d8n6' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'red-d8n7' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'red-d8n8' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'red-d8n9' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'red-d8n10' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'red-d8n11' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'red-d8n12' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'red-d8n13' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'red-d8n14' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'red-d8n15' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'red-d8n16' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'red-d8n17' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'red-d8n18' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'red-d8n19' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'red-d8n20' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'red-d9n1' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'red-d9n2' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'red-d9n3' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'red-d9n4' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'red-d9n5' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'red-d9n6' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'red-d9n7' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'red-d9n8' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'red-d9n9' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'red-d9n10' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'red-d9n11' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'red-d9n12' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'red-d9n13' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'red-d9n14' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'red-d9n15' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'red-d9n16' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'red-d9n17' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'red-d9n18' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'red-d9n19' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'red-d9n20' inherits red-private {
-	$role = "red-worker"
-	include general
-}
 

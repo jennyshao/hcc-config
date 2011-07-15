@@ -26,3 +26,5 @@ uscmsPool1396 cms.lcgadmin
 cmsprod cms.prod
 cmsprio cms.other.prio
 hcc other.hcc
+osgedu other.osgedu
+osg	other.osgedu
