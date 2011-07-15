@@ -39,5 +39,13 @@ class gridftp-hdfs {
 		content => template("gridftp-hdfs/ProbeConfig.erb"),
 	}
 
+
+	cron { "gridftp-killer":
+		ensure  => present,
+		command => "/root/gridftp_killer.py",
+		user    => root,
+		minute  => 0,
+	}
+
 }
 
