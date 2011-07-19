@@ -5,7 +5,7 @@ node 'red.unl.edu' inherits red-public {
 	$isCondorSubmitter = true
 	$role = "red-gatekeeper"
 	include general
-#	include autofs
+	include autofs
 	include ganglia
 }
 
