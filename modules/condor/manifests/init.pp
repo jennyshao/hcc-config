@@ -9,12 +9,12 @@
 #
 # FILE					exists on...
 # -------------------------------
-# 00-red					workers, submitters, collector
-# 01-red-worker		workers
-# 02-red-collector	collector
-# 03-red-submitter	submitters
-# 04-red-external		submitters, collector
-# 05-htpc				<whole machine crap, so nowhere now>
+# 01-red					workers, submitters, collector
+# 02-red-worker		workers
+# 03-red-collector	collector
+# 04-red-submitter	submitters
+# 05-red-external		submitters, collector
+# 06-htpc				<whole machine crap, so nowhere now>
 # 09-thpc				THPC nodes
 # 09-r410				KSU's r410 nodes (189-200)
 #
@@ -39,19 +39,19 @@ class condor {
 
 	# main condor config
 	# exists on all nodes
-	file { "/etc/condor/config.d/00-red":
+	file { "/etc/condor/config.d/01-red":
 		ensure  => present,
 		owner   => "root", group => "root", mode => 644,
-		source  => "puppet://red-man.unl.edu/condor/config.d/00-red",
+		source  => "puppet://red-man.unl.edu/condor/config.d/01-red",
 	}
 
 
 	# exists on worker nodes
 	if $isCondorWorker {
-		file { "/etc/condor/config.d/01-red-worker":
+		file { "/etc/condor/config.d/02-red-worker":
 			ensure => present,
 			owner  => "root", group => "root", mode => 644,
-			source => "puppet://red-man.unl.edu/condor/config.d/01-red-worker",
+			source => "puppet://red-man.unl.edu/condor/config.d/02-red-worker",
 		}
 
 		# if a condorCustom09 class is defined, use it
@@ -68,30 +68,30 @@ class condor {
 
 	# exists on the collector(s)
 	if $isCondorCollector {
-		file { "/etc/condor/config.d/02-red-collector":
+		file { "/etc/condor/config.d/03-red-collector":
 			ensure => present,
 			owner  => "root", group => "root", mode => 644,
-			source => "puppet://red-man.unl.edu/condor/config.d/02-red-collector",
+			source => "puppet://red-man.unl.edu/condor/config.d/03-red-collector",
 		}
 	}
 
 
 	# exists on submitters
 	if $isCondorSubmitter {
-		file { "/etc/condor/config.d/03-red-submitter":
+		file { "/etc/condor/config.d/04-red-submitter":
 			ensure => present,
 			owner  => "root", group => "root", mode => 644,
-			source => "puppet://red-man.unl.edu/condor/config.d/03-red-submitter",
+			source => "puppet://red-man.unl.edu/condor/config.d/04-red-submitter",
 		}
 	}
 
 
 	# exists on collectors, submitters, and workers
 	if $isCondorCollector or $isCondorSubmitter or $isCondorWorker {
-		file { "/etc/condor/config.d/04-red-external":
+		file { "/etc/condor/config.d/05-red-external":
 			ensure => present,
 			owner  => "root", group => "root", mode => 644,
-			source => "puppet://red-man.unl.edu/condor/config.d/04-red-external",
+			source => "puppet://red-man.unl.edu/condor/config.d/05-red-external",
 		}
 	}
 
