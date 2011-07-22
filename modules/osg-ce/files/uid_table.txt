@@ -19,6 +19,7 @@ knowlton cms.other.user.t3
 malbouis cms.other.user.t3
 bloom cms.other.user.t3
 jbutt cms.other.user.t3
+jorcutt cms.other.user.t3
 kellerjd cms.other.user.t3
 cmsphedex cms.lcgadmin
 lcgadmin cms.lcgadmin
