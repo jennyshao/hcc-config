@@ -47,5 +47,12 @@ class gridftp-hdfs {
 		minute  => 0,
 	}
 
+	cron { "gridftp-cleaner":
+		ensure  => present,
+		command => "find /tmp -iname \"gridftp-hdfs-buffer-*\" -type f -mtime +2 -exec rm -f {} \;",
+		user    => root,
+		minute  => 20,
+	}
+
 }
 
