@@ -1,4 +1,4 @@
-##############################################################################
+#############################################################################
 ##############################################################################
 #
 #	DO NOT EDIT - file is being maintained by puppet
@@ -20,11 +20,12 @@ MAX_PERIODIC_EXPR_INTERVAL = 1200
 
 # hold jobs using absurd amounts of disk (100+ GB)
 SYSTEM_PERIODIC_HOLD = \
-   (JobStatus == 1 || JobStatus == 2) && (DiskUsage > 100000000 || ResidentSetSize > 1600000)
+   (JobStatus == 1 || JobStatus == 2) && ((DiskUsage > 100000000 || ResidentSetSize > 1600000) && (TARGET.IsT3User == FALSE))
 
 # forceful removal of running after 2 days, held jobs after 6 hours,
 # and anything trying to run more than 10 times
 SYSTEM_PERIODIC_REMOVE = \
+   ((DiskUsage > 100000000 || ResidentSetSize > 1600000) && (TARGET.IsT3User == FALSE)) || \
    (JobStatus == 5 && CurrentTime - EnteredCurrentStatus > 3600*6) || \
    (JobStatus == 2 && CurrentTime - EnteredCurrentStatus > 3600*24*2) || \
    (JobStatus == 5 && JobRunCount >= 10) || \
