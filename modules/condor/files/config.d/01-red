@@ -14,10 +14,10 @@ CONDOR_HOST    = red-condor.unl.edu
 COLLECTOR_NAME = Nebraska T2
 CONDOR_ADMIN   = attebury@cse.unl.edu
 
-FLOCK_FROM          = red.unl.edu, red-gw1.unl.edu, red-gw2.unl.edu, t3.unl.edu
+FLOCK_FROM          = red.unl.edu, red-gw1.unl.edu, red-gw2.unl.edu, red-gw3.unl.edu, t3.unl.edu
 FLOCK_TO            = glidein.unl.edu
 ALLOW_ADMINISTRATOR = $(ALLOW_ADMINISTRATOR), red-man.unl.edu, 172.16.200.1
-ALLOW_WRITE         = $(ALLOW_WRITE), $(FLOCK_TO), red.unl.edu, red-gw1.unl.edu, red-gw2.unl.edu, t3.unl.edu, 172.16.200.24, 172.16.1.*, 172.16.3.*
+ALLOW_WRITE         = $(ALLOW_WRITE), $(FLOCK_TO), red.unl.edu, red-gw1.unl.edu, red-gw2.unl.edu, red-gw3.unl.edu, t3.unl.edu, 172.16.200.24, 172.16.1.*, 172.16.3.*
 
 MAX_JOBS_RUNNING = 50000
 
