@@ -8,5 +8,10 @@
 
 
 # dedicate 8/16 slots to T3 users only
+NUM_SLOTS=12
+NUM_SLOTS_TYPE_1=8
+NUM_SLOTS_TYPE_2=4
+SLOT_TYPE_1 = cpus=1, memory=3/48
+SLOT_TYPE_2 = cpus=1, memory=1/8 
 START = $(START) && ((SlotID <= 8) || ((SlotID > 8) && (TARGET.IsT3User == TRUE)))
 
