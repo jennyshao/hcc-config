@@ -8,6 +8,7 @@ node 'red.unl.edu' inherits red-public {
 	include autofs
 	include ganglia
 	include mcollective
+	include hadoop
 }
 
 node 'red-gw1.unl.edu' inherits red-public {
