@@ -22,6 +22,7 @@ class pam::params  {
         ubuntu => "ubuntu104",
         redhat => "redhat5",
         centos => "redhat5",
+        scientific => "redhat5",
     }
 
 # Basic settings

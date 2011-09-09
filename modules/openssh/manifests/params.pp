@@ -22,6 +22,7 @@ class openssh::params  {
         ubuntu  => "ssh",
         redhat  => "sshd",
         centos  => "sshd",
+        scientific  => "sshd",
     }
 
     $processname = $operatingsystem ? {
@@ -55,6 +56,7 @@ class openssh::params  {
         ubuntu  => "/etc/default/ssh",
         redhat  => "/etc/sysconfig/sshd",
         centos  => "/etc/sysconfig/sshd",
+        scientific  => "/etc/sysconfig/sshd",
     }
 
     # Used by monitor class

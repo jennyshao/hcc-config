@@ -33,6 +33,7 @@ class timezone {
 			Ubuntu  => "dpkg-reconfigure -f noninteractive tzdata",
 			RedHat  => "tzdata-update",
 			CentOS  => "tzdata-update",
+			Scientific  => "tzdata-update",
 			SuSE    => "FIX ME",
 			FreeBSD => "cp /usr/share/zoneinfo/${timezone} /etc/localtime && adjkerntz -a",
 		},

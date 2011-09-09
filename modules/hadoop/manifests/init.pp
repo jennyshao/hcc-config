@@ -27,37 +27,44 @@ class hadoop {
 		purge   => true,
 		force   => true,
 		source  => "puppet://red-man.unl.edu/hadoop/defaults",
+		require => Package["hadoop"],
 	}
 
 	# now apply our custom configs
 	file { "/etc/hadoop-0.20/conf.red/hdfs-site.xml":
 		owner   => "root", group => "root", mode => 0644,
 		content => template("hadoop/hdfs-site.xml.erb"),
+		require => Package["hadoop"],
 	}
 
 	file { "/etc/hadoop-0.20/conf.red/core-site.xml":
 		owner   => "root", group => "root", mode => 0644,
 		content => template("hadoop/core-site.xml.erb"),
+		require => Package["hadoop"],
 	}
 
 	file { "/etc/hadoop-0.20/conf.red/hadoop-metrics.properties":
 		owner   => "root", group => "root", mode => 0644,
 		content => template("hadoop/hadoop-metrics.properties.erb"),
+		require => Package["hadoop"],
 	}
 
 	file { "/etc/hadoop-0.20/conf.red/hadoop-env.sh":
 		owner   => "root", group => "root", mode => 0644,
 		content => template("hadoop/hadoop-env.sh.erb"),
+		require => Package["hadoop"],
 	}
 
 	file { "/etc/hadoop-0.20/conf.red/log4j.properties":
 		owner   => "root", group => "root", mode => 0644,
 		content => template("hadoop/log4j.properties.erb"),
+		require => Package["hadoop"],
 	}
 
 	file { "/etc/hadoop-0.20/conf.red/mapred-site.xml":
 		owner   => "root", group => "root", mode => 0644,
 		content => template("hadoop/mapred-site.xml.erb"),
+		require => Package["hadoop"],
 	}
 
 
@@ -71,12 +78,14 @@ class hadoop {
 		command => "/usr/sbin/alternatives --install /etc/hadoop-0.20/conf hadoop-0.20-conf /etc/hadoop-0.20/conf.red 50", 
 		unless  => "/usr/bin/test `/bin/ls -l /etc/alternatives/hadoop-0.20-conf | /bin/awk '{print \$11}'` = /etc/hadoop-0.20/conf.red",
 		logoutput => true,
+		require => Package["hadoop"],
 	}
 	exec { "run_hadoop_conf_alt_link":
 		path    => "/usr/bin:/usr/sbin:/bin",
 		command => "/usr/sbin/alternatives --auto hadoop-0.20-conf",
 		unless  => "/usr/bin/test `/bin/ls -l /etc/alternatives/hadoop-0.20-conf | /bin/awk '{print \$11}'` = /etc/hadoop-0.20/conf.red",
 		logoutput => true,
+		require => Package["hadoop"],
 	}
 
 
@@ -90,6 +99,19 @@ class hadoop {
 		package { "hadoop-fuse":
 			name   => "hadoop-0.20-fuse",
 			ensure => present,
+			require => Package["hadoop"],
+		}
+
+		# hadoop mountpoint
+		file { "/mnt/hadoop": ensure => directory }
+		mount { "/mnt/hadoop":
+			device  => "hdfs",
+			fstype  => "fuse",
+			ensure  => mounted,
+			options => "server=hadoop-name,port=9000,rdbuffer=32768,allow_other",
+			atboot  => true,
+			remounts => false,
+			require => File["/mnt/hadoop"],
 		}
 
 		require hadoop::osg
@@ -101,6 +123,7 @@ class hadoop {
 		package { "hadoop-datanode":
 			name   => "hadoop-0.20-datanode",
 			ensure => present,
+			require => Package["hadoop"],
 		}
 	} # isHDFSDatanode
 
