@@ -15,6 +15,7 @@ class timezone {
 			Ubuntu  => "/etc/timezone",
 			RedHat  => "/etc/sysconfig/clock",
 			CentOS  => "/etc/sysconfig/clock",
+			Scientific  => "/etc/sysconfig/clock",
 			SuSE    => "/etc/sysconfig/clock",
 			FreeBSD => "/etc/timezone-puppet",
 		},
