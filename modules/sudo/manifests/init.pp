@@ -8,8 +8,13 @@ class sudo {
 
 	file { "/etc/sudoers":
 		owner   => "root", group => "root", mode => 0440,
-		source  => "puppet://red-man.unl.edu/modules/sudo/sudoers",
+		content => template("sudo/sudoers.erb"),
 		require => Package["sudo"],
+	}
+
+	file { "/etc/sudoers.d":
+		ensure => directory,
+		owner  => "root", group => "root", mode => 0755,
 	}
 
 }

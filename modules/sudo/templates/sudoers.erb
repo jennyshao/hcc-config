@@ -5,7 +5,11 @@
 #
 ##############################################################################
 ##############################################################################
-
+#
+#  Note the use of sudoers.d/ at bottom of file
+#  Modules needing to tweak sudoers should put files there
+#
+##############################################################################
 
 
 ## Sudoers allows particular users to run various commands as
@@ -34,28 +38,28 @@
 ## These are groups of related commands...
 
 ## Networking
-Cmnd_Alias NETWORKING = /sbin/route, /sbin/ifconfig, /bin/ping, /sbin/dhclient, /usr/bin/net, /sbin/iptables, /usr/bin/rfcomm, /usr/bin/wvdial, /sbin/iwconfig, /sbin/mii-tool
+#Cmnd_Alias NETWORKING = /sbin/route, /sbin/ifconfig, /bin/ping, /sbin/dhclient, /usr/bin/net, /sbin/iptables, /usr/bin/rfcomm, /usr/bin/wvdial, /sbin/iwconfig, /sbin/mii-tool
 
 ## Installation and management of software
-Cmnd_Alias SOFTWARE = /bin/rpm, /usr/bin/up2date, /usr/bin/yum
+#Cmnd_Alias SOFTWARE = /bin/rpm, /usr/bin/up2date, /usr/bin/yum
 
 ## Services
-Cmnd_Alias SERVICES = /sbin/service, /sbin/chkconfig
+#Cmnd_Alias SERVICES = /sbin/service, /sbin/chkconfig
 
 ## Updating the locate database
-Cmnd_Alias LOCATE = /usr/bin/updatedb
+#Cmnd_Alias LOCATE = /usr/bin/updatedb
 
 ## Storage
-Cmnd_Alias STORAGE = /sbin/fdisk, /sbin/sfdisk, /sbin/parted, /sbin/partprobe, /bin/mount, /bin/umount
+#Cmnd_Alias STORAGE = /sbin/fdisk, /sbin/sfdisk, /sbin/parted, /sbin/partprobe, /bin/mount, /bin/umount
 
 ## Delegating permissions
-Cmnd_Alias DELEGATING = /usr/sbin/visudo, /bin/chown, /bin/chmod, /bin/chgrp 
+#Cmnd_Alias DELEGATING = /usr/sbin/visudo, /bin/chown, /bin/chmod, /bin/chgrp 
 
 ## Processes
-Cmnd_Alias PROCESSES = /bin/nice, /bin/kill, /usr/bin/kill, /usr/bin/killall
+#Cmnd_Alias PROCESSES = /bin/nice, /bin/kill, /usr/bin/kill, /usr/bin/killall
 
 ## Drivers
-Cmnd_Alias DRIVERS = /sbin/modprobe
+#Cmnd_Alias DRIVERS = /sbin/modprobe
 
 # Defaults specification
 
@@ -64,6 +68,12 @@ Cmnd_Alias DRIVERS = /sbin/modprobe
 #         You have to run "ssh -t hostname sudo <cmd>".
 #
 #Defaults    requiretty
+
+#
+# Refuse to run if unable to disable echo on the tty. This setting should also be
+# changed in order to be able to use sudo without a tty. See requiretty above.
+#
+Defaults   !visiblepw
 
 Defaults    env_reset
 Defaults    env_keep = "COLORS DISPLAY HOSTNAME HISTSIZE INPUTRC KDEDIR \
@@ -85,9 +95,6 @@ Defaults    env_keep = "COLORS DISPLAY HOSTNAME HISTSIZE INPUTRC KDEDIR \
 ## Allow root to run any commands anywhere 
 root	ALL=(ALL) 	ALL
 
-nrpe  ALL=(ALL)       NOPASSWD: /usr/lib64/nagios/plugins/check_ide_smart, /opt/kickstart/nagios/check_red_mounts, /usr/bin/xrdcp_probe.py, /usr/lib64/nagios/plugins/check_megaraid_sas
-
-
 ## Allows members of the 'sys' group to run networking, software, 
 ## service management apps and more.
 # %sys ALL = NETWORKING, SOFTWARE, SERVICES, STORAGE, DELEGATING, PROCESSES, LOCATE, DRIVERS
@@ -105,3 +112,4 @@ nrpe  ALL=(ALL)       NOPASSWD: /usr/lib64/nagios/plugins/check_ide_smart, /opt/
 ## Allows members of the users group to shutdown this system
 # %users  localhost=/sbin/shutdown -h now
 
+#includedir /etc/sudoers.d
