@@ -12,6 +12,7 @@ class nrpe {
 		enable => true,
 		hasrestart => true,
 		hasstatus => true,
+		require => [ Package["nrpe"], File["sudo-nrpe"], ],
 		subscribe => File["nrpe.cfg"],
 	}
 
@@ -20,6 +21,13 @@ class nrpe {
 		owner => "root", group => "root", mode => 644,
 		content => template("nrpe/nrpe.cfg.erb"),
 		require => Package["nrpe"],
+	}
+
+	file { "sudo-nrpe":
+		path => "/etc/sudoers.d/sudo-nrpe",
+		owner => "root", group => "root", mode => 0440,
+		require => Class["sudo"],
+		source => "puppet:///modules/nrpe/sudo-nrpe",
 	}
 
 	file { "check_host_cert":

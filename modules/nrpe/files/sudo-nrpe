@@ -1,0 +1,11 @@
+##############################################################################
+##############################################################################
+#
+#  DO NOT EDIT - file is being maintained by puppet
+#
+##############################################################################
+##############################################################################
+
+
+# allow nrpe to run certain probes as root
+nrpe	ALL=(ALL)	NOPASSWD: /usr/lib64/nagios/plugins/check_ide_smart, /usr/lib64/nagios/plugins/check_megaraid_sas, /usr/bin/xrdcp_probe.py
