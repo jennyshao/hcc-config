@@ -1,0 +1,148 @@
+##############################################################################
+##############################################################################
+#
+#	DO NOT EDIT - file is being maintained by puppet
+#
+##############################################################################
+##############################################################################
+
+#################################################################
+# BeStMan and BeStMan Clients Copyright(c) 2007-2011,
+# Lawrence Berkeley National Laboratory. All rights reserved.
+# Support at SRM@LBL.GOV and documents at http://sdm.lbl.gov/bestman
+#################################################################
+#
+# BESTMAN_SYSCONF contains both external env settings and internal definitions
+#
+#################################################################
+# Below is ONLY for ESTERNAL env settings
+#################################################################
+#
+#
+# Initialization
+SRM_HOME=/etc/bestman2
+BESTMAN_SYSCONF=/etc/bestman2/conf/bestman2.rc
+JAVA_HOME=/usr/java/latest
+#
+#
+# BeStMan2 server system init variables
+BESTMAN_LOG=/var/log/bestman2/bestman2.log
+BESTMAN_PID=/var/run/bestman2.pid
+BESTMAN_LOCK=/var/lock/bestman2
+SRM_OWNER=bestman
+#
+#
+# BeStMan2 server and clients common variables
+BESTMAN_LIB=/usr/share/java/bestman2
+X509_CERT_DIR=/etc/grid-security/certificates
+# GLOBUS_HOSTNAME=
+# GLOBUS_LOCATION=
+# GLOBUS_TCP_PORT_RANGE=
+# GLOBUS_TCP_SOURCE_RANGE=
+# VOMSDIR=
+# BESTMAN_JAVA_SRM_OTHER_OPTS=
+#
+#
+# BeStMan2 server variables
+BESTMAN_MAX_JAVA_HEAP=3072
+# BESTMAN_JAVA_STACK_SIZE=
+# BESTMAN_EVENT_LOG_COUNT=
+# BESTMAN_EVENT_LOG_SIZE=
+# BESTMAN_CONNECTOR_QUEUESIZE=
+# BESTMAN_CONNECTION_ACCEPTORSIZE=
+BESTMAN_GUMSCERTPATH=/etc/grid-security/http/bestman-httpcert.pem
+BESTMAN_GUMSKEYPATH=/etc/grid-security/http/bestman-httpkey.pem
+# BESTMAN_GUMSPROXYPATH=
+# BESTMAN_PLUGIN=
+# BESTMAN_EXTRALIB=
+BESTMAN_GUMS_ENABLED=yes
+JETTY_DEBUG_ENABLED=no
+BESTMAN_GATEWAYMODE_ENABLED=yes
+BESTMAN_FULLMODE_ENABLED=no
+#
+#
+# BeStMan2 clients variables
+JAVA_CLIENT_MAX_HEAP=512
+JAVA_CLIENT_MIN_HEAP=32
+# JAVA_CLIENT_STACK_SIZE=
+#################################################################
+###########################################################
+###########################################################
+###########################################################
+###########################################################
+# Below is ONLY for BeStMan server INTERNAL definitions
+###########################################################
+# BeStMan server GATEWAY mode configuration
+# installed on Mon Aug  8 13:54:35 PDT 2011 
+# administrative guide on http://sdm.lbl.gov/bestman
+###########################################################
+###########################################################
+EventLogLocation=/var/log/bestman2
+# Modify eventLogLevel to adjust logging level (DEBUG | INFO)
+eventLogLevel=INFO
+###########################################################
+# Provide blocking for user access to the list of the local directories
+## default: /;/etc;/var
+## All definitions will include the default blocked list
+## e.g. localPathListToBlock=/;/etc;/var 
+###########################################################
+# Provide permission for user access to the list of the local directories
+## If a path is listed on both blocked and allowed list,
+##           blocked is taken priority.
+## e.g. localPathListAllowed=/home;/project 
+###########################################################
+securePort=8443
+CertFileName=/etc/grid-security/http/bestman-httpcert.pem
+KeyFileName=/etc/grid-security/http/bestman-httpkey.pem
+###########################################################
+# supportedProtocolList can be defined
+##      When different from the same hostname that BeStMan runs on
+##      Or, multiple transfer servers are supported
+## supportedProtocolList=gsiftp://host1.domain.tld;gsiftp://host2.domain.tld
+supportedProtocolList=gsiftp://red-gridftp1.unl.edu:2811;gsiftp://red-gridftp2.unl.edu:2811;gsiftp://red-gridftp3.unl.edu:2811;gsiftp://red-gridftp4.unl.edu:2811;gsiftp://red-gridftp5.unl.edu:2811;gsiftp://red-gridftp6.unl.edu:2811;gsiftp://red-gridftp7.unl.edu:2811;gsiftp://red-gridftp8.unl.edu:2811;gsiftp://red-gridftp9.unl.edu:2811;gsiftp://red-gridftp10.unl.edu:2811;gsiftp://red-gridftp12.unl.edu:2811
+
+###########################################################
+### For Xrootd, xrootdTokenCompName=oss.cgroup may be needed
+############################################################ 
+pathForToken=true
+checkSizeWithFS=true
+checkSizeWithGsiftp=false
+###########################################################
+# Sudo to manage file system (mkdir, rmdir, rm, mv, cp, ls)
+# /etc/sudoers needs the following modifications
+#              when daemon account runs bestman server
+#              check proper paths for commands if needed
+#    Cmnd_Alias SRM_CMD = /bin/rm, /bin/mkdir, /bin/rmdir, /bin/mv, /bin/cp, /bin/ls
+#    Runas_Alias SRM_USR = ALL, !root
+#    daemon   ALL=(SRM_USR) NOPASSWD: SRM_CMD
+# 
+accessFileSysViaSudo=true
+noSudoOnLs=true
+###########################################################
+# MaxMappedIDCached limits how many mapped ids can be cached at a given time
+##   LifetimeSecondsMappedIDCached limits how long mapped ids are cached
+##   LifetimeSecondsMappedIDCached=0 : permanently cache
+##   LifetimeSecondsMappedIDCached<0 : never cache
+##   LifetimeSecondsMappedIDCached>0 : cache for the duration
+###########################################################
+MaxMappedIDCached=1000
+LifetimeSecondsMappedIDCached=1800
+###########################################################
+## e.g. SUMGserviceURL=https://gums.lbl.gov:8443/gums/services/GUMSAuthorizationServicePort
+GUMSserviceURL=https://<%= gumsServer %>:8443/gums/services/GUMSAuthorizationServicePort
+# GUMSCurrHostDN=NOT_PROVIDED
+##  DN gets extracted from the cert/key when running server from 
+##     /etc/grid-security/hostcert.pem
+##     /etc/grid-security/hostkey.pem
+GridMapFileName=/etc/bestman2/conf/grid-mapfile.empty
+###########################################################
+# Do Not edit below unless you really really understand the entries
+###########################################################
+# GATEWAY mode entries
+###########################################################
+disableSpaceMgt=true
+useBerkeleyDB=false
+noCacheLog=true
+###########################################################
+FactoryID=srm/v2/server
+noEventLog=false

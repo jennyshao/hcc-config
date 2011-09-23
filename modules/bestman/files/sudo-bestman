@@ -1,0 +1,16 @@
+##############################################################################
+##############################################################################
+#
+#	DO NOT EDIT - file is being maintained by puppet
+#
+##############################################################################
+##############################################################################
+
+
+# for cmsprod/cmswrite
+Defaults umask = 0002
+
+# bestman file commands
+Cmnd_Alias SRM_CMD = /bin/rm, /bin/mkdir, /bin/rmdir, /bin/mv, /bin/ls
+Runas_Alias SRM_USR = ALL, !root
+bestman ALL=(SRM_USR) NOPASSWD: SRM_CMD
