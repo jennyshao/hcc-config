@@ -26,7 +26,7 @@ class hadoop {
 		recurse => true,
 		purge   => true,
 		force   => true,
-		source  => "puppet://red-man.unl.edu/hadoop/defaults",
+		source  => "puppet:///modules/hadoop/defaults",
 		require => Package["hadoop"],
 	}
 
@@ -111,7 +111,7 @@ class hadoop {
 			options => "server=hadoop-name,port=9000,rdbuffer=32768,allow_other",
 			atboot  => true,
 			remounts => false,
-			require => File["/mnt/hadoop"],
+			require => [ File["/mnt/hadoop"], File["/etc/hadoop-0.20/conf.red/hdfs-site.xml"] ],
 		}
 
 		require hadoop::osg

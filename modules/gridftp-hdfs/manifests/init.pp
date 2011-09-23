@@ -29,7 +29,7 @@ class gridftp-hdfs {
 		path    => "/etc/xinetd.d/gridftp-hdfs",
 		owner   => "root", group => "root", mode => 644,
 		require => Package["gridftp-hdfs"],
-		source  => "puppet://red-man.unl.edu/gridftp-hdfs/gridftp-hdfs",
+		source  => "puppet:///modules/gridftp-hdfs/gridftp-hdfs",
 	}
 
 	file { "gridftp-transfer-ProbeConfig":

@@ -42,7 +42,7 @@ class condor {
 	file { "/etc/condor/config.d/01-red":
 		ensure  => present,
 		owner   => "root", group => "root", mode => 644,
-		source  => "puppet://red-man.unl.edu/condor/config.d/01-red",
+		source  => "puppet:///modules/condor/config.d/01-red",
 	}
 
 
@@ -51,7 +51,7 @@ class condor {
 		file { "/etc/condor/config.d/02-red-worker":
 			ensure => present,
 			owner  => "root", group => "root", mode => 644,
-			source => "puppet://red-man.unl.edu/condor/config.d/02-red-worker",
+			source => "puppet:///modules/condor/config.d/02-red-worker",
 		}
 
 		# if a condorCustom09 class is defined, use it
@@ -60,7 +60,7 @@ class condor {
 			file { "/etc/condor/config.d/09-${condorCustom09}":
 				ensure => present,
 				owner  => "root", group => "root", mode => 644,
-				source => "puppet://red-man.unl.edu/condor/config.d/09-${condorCustom09}",
+				source => "puppet:///modules/condor/config.d/09-${condorCustom09}",
 			}
 		}
 	}
@@ -71,7 +71,7 @@ class condor {
 		file { "/etc/condor/config.d/03-red-collector":
 			ensure => present,
 			owner  => "root", group => "root", mode => 644,
-			source => "puppet://red-man.unl.edu/condor/config.d/03-red-collector",
+			source => "puppet:///modules/condor/config.d/03-red-collector",
 		}
 	}
 
@@ -81,7 +81,7 @@ class condor {
 		file { "/etc/condor/config.d/04-red-submitter":
 			ensure => present,
 			owner  => "root", group => "root", mode => 644,
-			source => "puppet://red-man.unl.edu/condor/config.d/04-red-submitter",
+			source => "puppet:///modules/condor/config.d/04-red-submitter",
 		}
 	}
 
@@ -91,7 +91,7 @@ class condor {
 		file { "/etc/condor/config.d/05-red-external":
 			ensure => present,
 			owner  => "root", group => "root", mode => 644,
-			source => "puppet://red-man.unl.edu/condor/config.d/05-red-external",
+			source => "puppet:///modules/condor/config.d/05-red-external",
 		}
 	}
 
@@ -101,7 +101,7 @@ class condor {
 		file { "/etc/condor/condor_mapfile":
 			ensure => present,
 			owner  => "root", group => "root", mode => 644,
-			source => "puppet://red-man.unl.edu/condor/condor_mapfile",
+			source => "puppet:///modules/condor/condor_mapfile",
 		}
 	}
 

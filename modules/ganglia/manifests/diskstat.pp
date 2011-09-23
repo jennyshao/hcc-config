@@ -5,11 +5,6 @@
 #
 class ganglia::diskstat {
 
-	package { "ganglia-gmond-modules-python":
-		name => "ganglia-gmond-modules-python",
-		ensure => present,
-	}
-
 	file { "diskstat.pyconf":
 		path    => "/etc/ganglia/conf.d/diskstat.pyconf",
 		mode    => 644,
@@ -26,7 +21,7 @@ class ganglia::diskstat {
 		mode    => 644,
 		owner   => "root",
 		group   => "root",
-		source  => "puppet://$servername/ganglia/python_modules/diskstat.py",
+		source  => "puppet:///modules/ganglia/python_modules/diskstat.py",
 		require => Package[ganglia-gmond-modules-python],
 		ensure  => present,
 	}

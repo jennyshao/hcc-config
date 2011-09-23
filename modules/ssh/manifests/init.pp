@@ -40,7 +40,7 @@ class ssh {
 		owner   => "root", group => "root", mode => 0600,
 		ensure  => present,
 		require => Package["openssh-server"],
-		source  => "puppet://red-man.unl.edu/ssh/authorized_keys",
+		source  => "puppet:///modules/ssh/authorized_keys",
 	}
 
 

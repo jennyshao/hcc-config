@@ -44,52 +44,52 @@ class wn-glexec {
 	file { "/etc/glexec/testglexec":
 		ensure  => "present",
 		owner   => "root", group => "root", mode => 644,
-		source  => "puppet://red-man.unl.edu/wn-glexec/testglexec",
+		source  => "puppet:///modules/wn-glexec/testglexec",
 	}
 
 	file { "/etc/glexec/glexec.conf":
       ensure  => "present",
       owner   => "root", group => "root", mode => 644,
-      source  => "puppet://red-man.unl.edu/wn-glexec/glexec.conf",
+      source  => "puppet:///modules/wn-glexec/glexec.conf",
    }
 	file { "/etc/glexec/tracking_groups.cfg":
       ensure  => "present",
       owner   => "root", group => "root", mode => 644,
-      source  => "puppet://red-man.unl.edu/wn-glexec/tracking_groups.cfg",
+      source  => "puppet:///modules/wn-glexec/tracking_groups.cfg",
    }
    file { "/etc/glexec/contrib_monitor":
       ensure  => "present",
       owner   => "root", group => "root", mode => 644,
-      source  => "puppet://red-man.unl.edu/wn-glexec/contrib_monitor",
+      source  => "puppet:///modules/wn-glexec/contrib_monitor",
    } 
 
 	file { "/etc/glexec/lcas/ban_users.db":
       ensure  => "present",
       owner   => "root", group => "root", mode => 644,
-      source  => "puppet://red-man.unl.edu/wn-glexec/lcas/ban_users.db",
+      source  => "puppet:///modules/wn-glexec/lcas/ban_users.db",
    }
 
    file { "/etc/glexec/lcas/lcas-suexec.db":
       ensure  => "present",
       owner   => "root", group => "root", mode => 644,
-      source  => "puppet://red-man.unl.edu/wn-glexec/lcas/lcas-suexec.db",
+      source  => "puppet:///modules/wn-glexec/lcas/lcas-suexec.db",
    }
 
 	file { "/etc/glexec/lcmaps/lcmaps-suexec.db":
       ensure  => "present",
       owner   => "root", group => "root", mode => 644,
-      source  => "puppet://red-man.unl.edu/wn-glexec/lcmaps/lcmaps-suexec.db",
+      source  => "puppet:///modules/wn-glexec/lcmaps/lcmaps-suexec.db",
    }
    
 	file { "/etc/glexec/contrib/glexec_monitor/glexec_monitor.cfg":
       ensure  => "present",
       owner   => "root", group => "root", mode => 644,
-      source  => "puppet://red-man.unl.edu/wn-glexec/contrib/glexec_monitor/glexec_monitor.cfg",
+      source  => "puppet:///modules/wn-glexec/contrib/glexec_monitor/glexec_monitor.cfg",
    }
    file { "/etc/glexec/contrib/gums_interface/getmapping.cfg":
       ensure  => "present",
       owner   => "root", group => "root", mode => 644,
-      source  => "puppet://red-man.unl.edu/wn-glexec/contrib/gums_interface/getmapping.cfg",
+      source  => "puppet:///modules/wn-glexec/contrib/gums_interface/getmapping.cfg",
    }
 }
 

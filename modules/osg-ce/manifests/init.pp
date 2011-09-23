@@ -16,7 +16,7 @@ class osg-ce {
 		ensure  => absent,
 		path    => "/opt/osg/osg-1.2/gip/etc/gip.conf",
 		owner   => "root", group => "root", mode => 644,
-		source  => "puppet://red-man.unl.edu/osg-ce/gip.conf",
+		source  => "puppet:///modules/osg-ce/gip.conf",
 	}
 
 	file { "alter-attributes.conf":
@@ -30,35 +30,35 @@ class osg-ce {
 		ensure  => present,
 		path    => "/opt/osg/osg-1.2/vdt/services/xinetd-globus-gatekeeper",
 		owner   => "root", group => "root", mode => 644,
-		source  => "puppet://red-man.unl.edu/osg-ce/xinetd-globus-gatekeeper",
+		source  => "puppet:///modules/osg-ce/xinetd-globus-gatekeeper",
 	}
 
 	file { "condor.pm":
 		ensure  => present,
 		path    => "/opt/osg/osg-1.2/globus/lib/perl/Globus/GRAM/JobManager/condor.pm",
 		owner   => "root", group => "root", mode => 644,
-		source  => "puppet://red-man.unl.edu/osg-ce/condor.pm",
+		source  => "puppet:///modules/osg-ce/condor.pm",
 	}
 
 	file { "condor_groupacct.pm":
 		ensure  => present,
 		path    => "/opt/osg/osg-1.2/globus/lib/perl/Globus/GRAM/JobManager/condor_groupacct.pm",
 		owner   => "root", group => "root", mode => 644,
-		source  => "puppet://red-man.unl.edu/osg-ce/condor_groupacct.pm",
+		source  => "puppet:///modules/osg-ce/condor_groupacct.pm",
 	}
 
 	file { "ea_table.txt":
 		ensure  => present,
 		path    => "/opt/osg/osg-1.2/vdt-app-data/ea_table.txt",
 		owner   => "root", group => "root", mode => 644,
-		source  => "puppet://red-man.unl.edu/osg-ce/ea_table.txt",
+		source  => "puppet:///modules/osg-ce/ea_table.txt",
 	}
 
 	file { "uid_table.txt":
 		ensure  => present,
 		path    => "/opt/osg/osg-1.2/vdt-app-data/uid_table.txt",
 		owner   => "root", group => "root", mode => 644,
-		source  => "puppet://red-man.unl.edu/osg-ce/uid_table.txt",
+		source  => "puppet:///modules/osg-ce/uid_table.txt",
 	}
 
 

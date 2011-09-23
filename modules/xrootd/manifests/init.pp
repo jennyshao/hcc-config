@@ -85,7 +85,7 @@ class xrootd {
 		path    => "/etc/xrootd/storage.xml",
 		owner   => "root", group => "root", mode => 644,
 		require => Package["xrootd-cmstfc"],
-		source  => "puppet://red-man.unl.edu/xrootd/storage.xml",
+		source  => "puppet:///modules/xrootd/storage.xml",
 	}
 
 	file { "lcmaps.cfg":

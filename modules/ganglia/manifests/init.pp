@@ -7,12 +7,12 @@ class ganglia {
 
 	package { ganglia-gmond:
 		name   => "ganglia-gmond", 
-		ensure => present,
+		ensure => latest,
 	}
 
 	package { ganglia-gmond-modules-python:
 		name   => "ganglia-gmond-modules-python",
-		ensure => present,
+		ensure => latest,
 	}
 
 
