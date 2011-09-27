@@ -4,49 +4,32 @@
 
 class xrootd {
 
-	group { "xrootd":
-		name => "xrootd",
-		ensure => present,
-		gid => 108,
-	}
+	include fetch-crl
 
-	user { "xrootd":
-		name => "xrootd",
-		ensure => present,
-		uid => 108,
-		gid => "xrootd",
-		managehome => false,
-		shell => "/sbin/nologin",
-	}
-
-	package { "xrootd-server":
-		ensure => present,
-		require => [
-			User["xrootd"],
-			File["/usr/lib64/libjvm.so"],
-		]
-	}
-
-
-	package { "xrootd-hdfs":
-		ensure => present,
-		require => Package["xrootd-server"],
-	}
-
-	package { "xrootd-lcmaps":
-		ensure => present,
-		require => Package["xrootd-server"],
-	}
-
-	package { "xrootd-cmstfc":
-		require => Package["xrootd-server"],
+	package { "xrootd-server.x86_64":
 		ensure => present,
 	}
 
-	package { "xrootd-status-probe":
-		require => Package["nrpe"],
+	package { "xrootd-hdfs.x86_64":
+		ensure => present,
+		require => Package["xrootd-server.x86_64"],
+	}
+
+	package { "xrootd-lcmaps.x86_64":
+		ensure => present,
+		require => Package["xrootd-server.x86_64"],
+	}
+
+	package { "xrootd-cmstfc.x86_64":
+		require => Package["xrootd-server.x86_64"],
 		ensure => present,
 	}
+
+#	package { "xrootd-status-probe":
+#		require => Package["nrpe"],
+#		require => Class["nrpe"],
+#		ensure => present,
+#	}
 
 	service { "xrootd":
 		name => "xrootd",
@@ -54,8 +37,8 @@ class xrootd {
 		enable => true,
 		hasrestart => true,
 		hasstatus => true,
-		require => Package["xrootd-server"],
-		subscribe => File["xrootd.cf"],
+		require => [ Package["xrootd-server.x86_64"], File["xrdcert"], File["xrdkey"], ],
+		subscribe => File["xrootd-clustered.cfg"],
 	}
 
 	service { "cmsd":
@@ -64,58 +47,57 @@ class xrootd {
 		enable => true,
 		hasrestart => true,
 		hasstatus => true,
-		require => Package["xrootd-server"],
-		subscribe => File["xrootd.cf"],
+		require => [ Package["xrootd-server.x86_64"], File["xrdcert"], File["xrdkey"], ],
+		subscribe => File["xrootd-clustered.cfg"],
 	}
 
-	# xrootd needs libjvm.so, sun jdk doesn't make the link
-	file { "/usr/lib64/libjvm.so":
-		ensure => link,
-		target => "../java/latest/jre/lib/amd64/server/libjvm.so",
-	}
-
-	file { "xrootd.cf":
-		path    => "/etc/xrootd/xrootd.cf",
+	file { "xrootd-clustered.cfg":
+		path    => "/etc/xrootd/xrootd-clustered.cfg",
 		owner   => "root", group => "root", mode => 644,
-		require => Package["xrootd-server"],
-		content => template("xrootd/xrootd.cf.erb"),
+		require => Package["xrootd-server.x86_64"],
+		content => template("xrootd/xrootd-clustered.cfg.erb"),
 	}
 
 	file { "storage.xml":
 		path    => "/etc/xrootd/storage.xml",
 		owner   => "root", group => "root", mode => 644,
-		require => Package["xrootd-cmstfc"],
+		require => Package["xrootd-cmstfc.x86_64"],
 		source  => "puppet:///modules/xrootd/storage.xml",
 	}
 
 	file { "lcmaps.cfg":
 		path    => "/etc/xrootd/lcmaps.cfg",
 		owner   => "root", group => "root", mode => 644,
-		require => Package["xrootd-lcmaps"],
+		require => Package["xrootd-lcmaps.x86_64"],
 		content => template("xrootd/lcmaps.cfg.erb"),
 	}
 
+	file { "Authfile":
+		path    => "/etc/xrootd/Authfile",
+		owner   => "root", group => "root", mode => 644,
+		require => Package["xrootd-server.x86_64"],
+		source  => "puppet:///modules/xrootd/Authfile",
+	}
 
 	# xrootd certificates are just a copy of hostcerts owned by xrootd:xrootd
 	file { "xrd":
 		path => "/etc/grid-security/xrd",
 		ensure => directory,
 		owner   => "xrootd", group => "xrootd", mode => 0755,
-		require => Package["xrootd-server"],
 	}
 
 	file { "xrdcert":
 		path  => "/etc/grid-security/xrd/xrdcert.pem",
 		owner => "xrootd", group => "xrootd", mode => 0644,
 		source => "/etc/grid-security/hostcert.pem",
-		require => Package["xrootd-server"],
+		require => Class["hostcert"],
 	}
 
 	file { "xrdkey":
 		path  => "/etc/grid-security/xrd/xrdkey.pem",
 		owner => "xrootd", group => "xrootd", mode => 0400,
 		source => "/etc/grid-security/hostkey.pem",
-		require => Package["xrootd-server"],
+		require => Class["hostcert"],
 	}
 
 }
