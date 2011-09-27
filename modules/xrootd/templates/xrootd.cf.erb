@@ -14,11 +14,9 @@ xrd.port 1094
 # The roles this server will play.
 all.role server
 all.role manager if xrootd.unl.edu
+
 # The known managers
 all.manager srm.unl.edu:1213
-#all.manager xrootd.unl.edu:1213
-#all.manager xrootd-itb.unl.edu:1213
-#all.manager xrootd.ultralight.org:1213
 
 # Allow any path to be exported; this is further refined in the authfile.
 all.export / nostage
@@ -43,7 +41,6 @@ acc.authdb /etc/xrootd/Authfile
 acc.audit deny grant
 
 # Security configuration
-#sec.protocol /usr/lib64 gsi -certdir:/etc/grid-security/certificates -cert:/etc/grid-security/xrd/xrdcert.pem -key:/etc/grid-security/xrd/xrdkey.pem -crl:3
 sec.protocol /usr/lib64 gsi -certdir:/etc/grid-security/certificates -cert:/etc/grid-security/xrd/xrdcert.pem -key:/etc/grid-security/xrd/xrdkey.pem -crl:1 -authzfun:libXrdLcmaps.so -authzfunparms:--osg,--lcmapscfg,/etc/xrootd/lcmaps.cfg,--loglevel,0|useglobals --gmapopt:2 --gmapto:0
 
 xrootd.seclib /usr/lib64/libXrdSec.so
@@ -56,10 +53,7 @@ cms.delay startup 10
 cms.fxhold 60s
 
 if exec xrootd
-  #xrd.report xrootd-itb.unl.edu:3333 every 300s all
-  xrd.report xrootd.t2.ucsd.edu:8884 every 60s all
-  #xrootd.monitor all flush 5s mbuff 1k window 1s dest files io info stage user
-  #xrootd.monitor all flush 5s mbuff 1k window 1s dest files io info user xrootd.unl.edu:3334 dest files io info stage user xrootd.t2.ucsd.edu:8884
-  xrootd.monitor all flush 5s mbuff 1k window 1s dest files io info user xrootd.t2.ucsd.edu:9930
+  xrd.report xrootd.t2.ucsd.edu:9931 every 60s all
+  xrootd.monitor all auth flush 30s mbuff 1472 window 5s dest files io info user xrootd.t2.ucsd.edu:9930
 fi
 
