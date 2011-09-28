@@ -18,7 +18,7 @@ export HADOOP_CONF_DIR=/etc/hadoop-0.20/conf
 
 # The java implementation to use.  Required.
 if [ -e /etc/alternatives/jre ]; then
-  export JAVA_HOME=/etc/alternatives/jre
+  export JAVA_HOME=/etc/alternatives
 else
   export JAVA_HOME=/usr/java/latest
 fi
