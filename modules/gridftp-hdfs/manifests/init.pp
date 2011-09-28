@@ -7,52 +7,41 @@
 
 class gridftp-hdfs {
 
-	package { "gridftp-hdfs":
-		name   => "gridftp-hdfs",
-		ensure => present,
-	}
+	include fetch-crl
+	include globus
 
-	package { "gratia-probe-gridftp-transfer":
-		name   => "gratia-probe-gridftp-transfer",
-		ensure => present,
-	}
+	package { "osg-gridftp-hdfs.x86_64": ensure => present, }
+	package { "gratia-probe-gridftp-transfer": ensure => present, }
 
-	service { "xinetd":
-		name       => "xinetd",
+	service { "gridftp-hdfs":
+		name       => "gridftp-hdfs",
 		ensure     => running,
 		enable     => true,
 		hasrestart => true,
-		require => Package["gridftp-hdfs"],
-	}
-
-	file { "gridftp-hdfs":
-		path    => "/etc/xinetd.d/gridftp-hdfs",
-		owner   => "root", group => "root", mode => 644,
-		require => Package["gridftp-hdfs"],
-		source  => "puppet:///modules/gridftp-hdfs/gridftp-hdfs",
+		require => Package["osg-gridftp-hdfs.x86_64"],
 	}
 
 	file { "gridftp-transfer-ProbeConfig":
-		path    => "/opt/vdt/gratia/probe/gridftp-transfer/ProbeConfig",
-		owner   => "root", group => "root", mode => 600,
-		require => Package["gratia-probe-gridftp-transfer"],
+		path    => "/etc/gratia/gridftp-transfer/ProbeConfig",
+		owner   => "root", group => "root", mode => 644,
 		content => template("gridftp-hdfs/ProbeConfig.erb"),
+		require => Package["gratia-probe-gridftp-transfer"],
 	}
 
 
-	cron { "gridftp-killer":
-		ensure  => present,
-		command => "/root/gridftp_killer.py",
-		user    => root,
-		minute  => 0,
-	}
+#	cron { "gridftp-killer":
+#		ensure  => present,
+#		command => "/root/gridftp_killer.py",
+#		user    => root,
+#		minute  => 0,
+#	}
 
-	cron { "gridftp-cleaner":
-		ensure  => present,
-		command => "find /tmp -iname \"gridftp-hdfs-buffer-*\" -type f -mtime +2 -exec rm -f {} \;",
-		user    => root,
-		minute  => 20,
-	}
+#	cron { "gridftp-cleaner":
+#		ensure  => present,
+#		command => "find /tmp -iname \"gridftp-hdfs-buffer-*\" -type f -mtime +2 -exec rm -f {} \;",
+#		user    => root,
+#		minute  => 20,
+#	}
 
 }
 

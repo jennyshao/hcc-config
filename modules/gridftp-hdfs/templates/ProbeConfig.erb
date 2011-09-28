@@ -22,7 +22,6 @@
     Title2="Probe information and functional configuration"
 
     ProbeName="gridftp-transfer:<%= fqdn %>" 
-       Comments20="ProbeName used to be spelled 'MeterName'"
     SiteName="Nebraska"
     Grid="OSG"
     SuppressUnknownVORecords="0"
@@ -33,13 +32,10 @@
     Title3="Tuning parameter"
 
     BundleSize="100"
-       Comments28="Number of records to be sent per envelope. Consider setting higher (up to 200)."
     MaxPendingFiles="100000"
     MaxStagedArchives="400"
-       Comments30="The maximum of backload files is MaxPendingFiles * MaxStagedArchives per probe"
     UseSyslog="0"
     ConnectionTimeout="900"
-       Comments31="Number of second GratiaCore will wait before timing out an attempt to connect or post to the Collector"
 
     LogLevel="2"
        Comments32="Controls debug messages printed to log file."
@@ -59,19 +55,18 @@
     KeyFile="/etc/grid-security/hostkey.pem"
     UseGratiaCertificates="0"
        Comments40="If no directory is specified the gratia certificate file will be created in 'WorkingFolder'/certs."
-    GratiaCertificateFile="gratia.probecert.pem"
-    GratiaKeyFile="gratia.probekey.pem"
+    GratiaCertificateFile="/var/lib/gratia/data/certs/gratia.probecert.pem"
+    GratiaKeyFile="/var/lib/gratia/data/certs/gratia.probekey.pem"
     
     Title5="File and directory location"
 
-    VDTSetupFile="MAGIC_VDT_LOCATION/setup.sh"
-    UserVOMapFile="MAGIC_VDT_LOCATION/monitoring/grid3-user-vo-map.txt"
-    CertInfoLogPattern="MAGIC_VDT_LOCATION/var/log/accounting/blahp.log-*"
+    UserVOMapFile="/var/lib/osg/user-vo-map"
+    CertInfoLogPattern="/var/log/accounting/blahp.log-*"
         Comments51="Location and wildcard pattern of log files that contains certificate information about the jobs in the format followed by the 'blah demons'."
 
-    DataFolder="/opt/vdt/gratia/var/data/"
-    WorkingFolder="/opt/vdt/gratia/var/tmp"
-    LogFolder="/opt/vdt/gratia/var/logs/"
+    DataFolder="/var/lib/gratia/data/"
+    WorkingFolder="/var/lib/gratia/tmp"
+    LogFolder="/var/log/gratia"
 
-    GridftpLogDir="MAGIC_VDT_LOCATION/globus/var/log"
+    GridftpLogDir="/var/log"
 />
