@@ -84,6 +84,7 @@ class xrootd {
 		path => "/etc/grid-security/xrd",
 		ensure => directory,
 		owner   => "xrootd", group => "xrootd", mode => 0755,
+		require => Package["xrootd-server.x86_64"],
 	}
 
 	file { "xrdcert":
