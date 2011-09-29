@@ -97,6 +97,11 @@ verifyproxy = "lcmaps_verify_proxy.mod"
           "--allow-limited-proxy"
           " -certdir /etc/grid-security/certificates"
 
+# New modules for tracking and condor integration for glexec
+# This was added by BB, Sept 29, 2011
+tracking = "lcmaps_process_tracking.mod"
+condor_updates = "lcmaps_condor_update.mod"
+
 #-----------------------------------------------------------------------------
 #
 # Mapping policies
@@ -145,8 +150,9 @@ glexec:
 ## "gumsclient". 
 
 ## Policy 1: GUMS but not SAZ (most common)
-#verifyproxy -> gumsclient
-#gumsclient -> glexectracking
+verifyproxy -> gumsclient
+gumsclient -> condor_updates
+condor_updates -> tracking
 
 ## Policy 2: GUMS & SAZ
 #verifyproxy -> sazclient
