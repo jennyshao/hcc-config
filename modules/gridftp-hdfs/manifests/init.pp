@@ -9,6 +9,7 @@ class gridftp-hdfs {
 
 	include fetch-crl
 	include globus
+	include hadoop
 
 	package { "osg-gridftp-hdfs.x86_64": ensure => present, }
 	package { "gratia-probe-gridftp-transfer": ensure => present, }
@@ -18,7 +19,7 @@ class gridftp-hdfs {
 		ensure     => running,
 		enable     => true,
 		hasrestart => true,
-		require => Package["osg-gridftp-hdfs.x86_64"],
+		require => [ Package["osg-gridftp-hdfs.x86_64"], Class["hadoop"], ],
 	}
 
 	file { "gridftp-transfer-ProbeConfig":

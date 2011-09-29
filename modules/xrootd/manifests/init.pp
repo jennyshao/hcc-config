@@ -5,6 +5,8 @@
 class xrootd {
 
 	include fetch-crl
+	include hadoop
+	include hostcert
 
 	package { "xrootd-server.x86_64":
 		ensure => present,
@@ -37,7 +39,7 @@ class xrootd {
 		enable => true,
 		hasrestart => true,
 		hasstatus => true,
-		require => [ Package["xrootd-server.x86_64"], File["xrdcert"], File["xrdkey"], ],
+		require => [ Package["xrootd-server.x86_64"], File["xrdcert"], File["xrdkey"], Class["hadoop"], ],
 		subscribe => File["xrootd-clustered.cfg"],
 	}
 
@@ -47,7 +49,7 @@ class xrootd {
 		enable => true,
 		hasrestart => true,
 		hasstatus => true,
-		require => [ Package["xrootd-server.x86_64"], File["xrdcert"], File["xrdkey"], ],
+		require => [ Package["xrootd-server.x86_64"], File["xrdcert"], File["xrdkey"], Class["hadoop"], ],
 		subscribe => File["xrootd-clustered.cfg"],
 	}
 
