@@ -30,7 +30,7 @@ def list_processes():
             continue
     return all_procs
 
-def find_gridftp(age=6*3600):
+def find_gridftp(age=12*3600):
     xinetd_proc = None
     gridftp_procs = []
     parent_proc = {}
