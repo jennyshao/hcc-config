@@ -11,6 +11,8 @@ class general {
 	include ntp
 	include timezone
 	include snmp
+	include at
+	include cron
 
 	# role specific classes are included here
 	if ( $role ) { include "role_$role" }
