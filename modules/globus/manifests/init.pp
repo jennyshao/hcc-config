@@ -9,6 +9,8 @@
 class globus {
 
 	package { "lcmaps.x86_64": ensure => present, }
+	package { "lcmaps-plugins-condor-update.x86_64": ensure => present,  }
+	package { "lcmaps-plugins-process-tracking.x86_64": ensure => present,  }
 
 	file { "lcmaps.db":
 		path    => "/etc/lcmaps.db",
