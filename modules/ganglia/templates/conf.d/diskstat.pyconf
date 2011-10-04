@@ -4,7 +4,7 @@ modules {
     language = 'python'
 
     param devices {
-      value = 'sda sdb'
+      value = 'sda'
     }
   }
 }
