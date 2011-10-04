@@ -427,6 +427,7 @@ $group = Globus::GRAM::JobManager::condor_groupacct::obtain_condor_group(\@envir
     print SCRIPT_FILE "log_xml = True\n";
     print SCRIPT_FILE "+GratiaJobOrigin=\"GRAM\"\n";
     print SCRIPT_FILE "+IsT2Overflow=FALSE\n";
+    print SCRIPT_FILE "+WantIOProxy=TRUE\n";
     if ( $AccountingGroup eq "cms.other.user.t3") {
 			print SCRIPT_FILE "+IsT3User=TRUE\n";
 	}
