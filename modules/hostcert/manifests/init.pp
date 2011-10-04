@@ -6,6 +6,8 @@
 #
 class hostcert {
 
+	include osg-ca-certs
+
 	file { "/etc/grid-security":
 		ensure => directory,
 		owner  => "root", group => "root", mode => 0755,
@@ -21,29 +23,31 @@ class hostcert {
 		path    => "/etc/grid-security/hostcert.pem",
 		owner   => "root", group => "root", mode => 644,
 		source  => "puppet://red-man.unl.edu/hostcert/${hostname}-hostcert.pem",
-		require => File["/etc/grid-security"],
+		require => [ File["/etc/grid-security"], Class["osg-ca-certs"], ],
 	}
 
 	file { "hostkey.pem":
 		path    => "/etc/grid-security/hostkey.pem",
 		owner   => "root", group => "root", mode => 600,
 		source  => "puppet://red-man.unl.edu/hostcert/${hostname}-hostkey.pem",
-		require => File["/etc/grid-security"],
+		require => [ File["/etc/grid-security"], Class["osg-ca-certs"], ],
 	}
 
 
 	file { "httpcert.pem":
 		path    => "/etc/grid-security/http/httpcert.pem",
 		owner   => "root", group => "root", mode => 644,
-		source  => "puppet://red-man.unl.edu/hostcert/${hostname}-httpcert.pem",
-		require => File["/etc/grid-security/http"],
+		source  => [ "puppet://red-man.unl.edu/hostcert/${hostname}-httpcert.pem",
+		             "puppet://red-man.unl.edu/hostcert/${hostname}-hostcert.pem", ],
+		require => [ File["/etc/grid-security"], Class["osg-ca-certs"], ],
 	}
 
 	file { "httpkey.pem":
 		path    => "/etc/grid-security/http/httpkey.pem",
 		owner   => "root", group => "root", mode => 600,
-		source  => "puppet://red-man.unl.edu/hostcert/${hostname}-httpkey.pem",
-		require => File["/etc/grid-security/http"],
+		source  => [ "puppet://red-man.unl.edu/hostcert/${hostname}-httpkey.pem",
+		             "puppet://red-man.unl.edu/hostcert/${hostname}-hostkey.pem", ],
+		require => [ File["/etc/grid-security"], Class["osg-ca-certs"], ],
 	}
 
 }
