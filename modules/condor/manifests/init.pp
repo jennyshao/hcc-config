@@ -17,14 +17,31 @@
 # 06-htpc				<whole machine crap, so nowhere now>
 # 09-thpc				THPC nodes
 # 09-r410				KSU's r410 nodes (189-200)
+# 09-node000			testing worker node (a vm)
 #
 
 class condor {
+
+	include hostcert
+	include hadoop
+
+	package { condor: name => "condor.x86_64", ensure => installed }
+
+	# NOTE: this ensure condor isn't set to run on reboot but does not necessiarly start it
+   service { "condor":
+      name => "condor",
+      enable => false,
+      hasrestart => true,
+      hasstatus => true,
+      require => [ Package["condor"], Class["hadoop"], Class["hostcert"], ],
+   }
+
 
 	# create condor_config.local if missing, but do not maintain it
 	file { "/etc/condor/condor_config.local":
 		owner   => "root", group => "root", mode => 644,
 		ensure  => present,
+		require => Package["condor"],
 	}
 
 	# clean config.d
@@ -34,6 +51,7 @@ class condor {
 		recurse => true,
 		purge   => true,
 		force   => true,
+		require => Package["condor"],
 	}
 
 
@@ -43,6 +61,7 @@ class condor {
 		ensure  => present,
 		owner   => "root", group => "root", mode => 644,
 		source  => "puppet:///modules/condor/config.d/01-red",
+		require => Package["condor"],
 	}
 
 
@@ -52,6 +71,7 @@ class condor {
 			ensure => present,
 			owner  => "root", group => "root", mode => 644,
 			source => "puppet:///modules/condor/config.d/02-red-worker",
+			require => Package["condor"],
 		}
 
 		# if a condorCustom09 class is defined, use it
@@ -61,6 +81,7 @@ class condor {
 				ensure => present,
 				owner  => "root", group => "root", mode => 644,
 				source => "puppet:///modules/condor/config.d/09-${condorCustom09}",
+				require => Package["condor"],
 			}
 		}
 	}
@@ -72,6 +93,7 @@ class condor {
 			ensure => present,
 			owner  => "root", group => "root", mode => 644,
 			source => "puppet:///modules/condor/config.d/03-red-collector",
+			require => Package["condor"],
 		}
 	}
 
@@ -82,6 +104,7 @@ class condor {
 			ensure => present,
 			owner  => "root", group => "root", mode => 644,
 			source => "puppet:///modules/condor/config.d/04-red-submitter",
+			require => Package["condor"],
 		}
 	}
 
@@ -92,6 +115,7 @@ class condor {
 			ensure => present,
 			owner  => "root", group => "root", mode => 644,
 			source => "puppet:///modules/condor/config.d/05-red-external",
+			require => Package["condor"],
 		}
 	}
 
@@ -102,10 +126,27 @@ class condor {
 			ensure => present,
 			owner  => "root", group => "root", mode => 644,
 			source => "puppet:///modules/condor/condor_mapfile",
+			require => Package["condor"],
 		}
 	}
 
 
+
+	# nfslite wrapper
+	file { "/usr/local/bin/condor_nfslite_job_wrapper.sh":
+		ensure => present,
+		owner  => "root", group => "root", mode => 755,
+		source => "puppet:///modules/condor/condor_nfslite_job_wrapper.sh",
+		require => Package["condor"],
+	}
+
+	# srm-plugin
+	file { "/usr/local/bin/srm-plugin":
+		ensure => present,
+		owner  => "root", group => "root", mode => 755,
+		source => "puppet:///modules/condor/srm-plugin",
+		require => Package["condor"],
+	}
 
 }
 

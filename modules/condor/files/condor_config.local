@@ -1,0 +1,3 @@
+# Initially created by puppet, but changes should not get overwritten (in theory)
+
+# ALL_DEBUG = D_FULLDEBUG
