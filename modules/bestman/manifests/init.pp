@@ -4,6 +4,8 @@
 
 class bestman {
 
+	include fetch-crl
+
 	package { "bestman2-server":
 		ensure => present,
 	}
