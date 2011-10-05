@@ -17,4 +17,11 @@ class sudo {
 		owner  => "root", group => "root", mode => 0755,
 	}
 
+	file { "/etc/sudoers.d/sudo-admins":
+		ensure  => present,
+		owner   => "root", group => "root", mode => "0440",
+		content => template("sudo/sudo-admins.erb"),
+		require => File["/etc/sudoers.d"],
+	}
+
 }

@@ -53,6 +53,14 @@ node basenode {
 	$users_ldap_basedn = "dc=rcf,dc=unl,dc=edu"
 	$users_ldap_ssl = "yes"
 
+	$gumsServer = "red-auth.unl.edu"
+
+	# our base admin list for red
+	$sudoAdmins = [ 'gattebury', 'clundst', 'bbockelm' ]
+
+	# extra admin list (empty by default, override in a node's .pp file)
+	$sudoExtraAdmins = ''
+
 }
 
 
