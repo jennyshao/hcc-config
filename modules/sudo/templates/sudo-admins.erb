@@ -1,0 +1,19 @@
+##############################################################################
+##############################################################################
+#
+#	DO NOT EDIT - file is being maintained by puppet
+#
+##############################################################################
+##############################################################################
+
+
+# base admin list from $sudoAdmins
+<% sudoAdmins.each do |admin| -%>
+<%= admin %>	ALL=(ALL)	ALL
+<% end %>
+
+
+# additional admins from $sudoExtraAdmins if defined
+<% sudoExtraAdmins.each do |extra_admin| -%>
+<%= extra_admin %>	ALL=(ALL)	ALL
+<% end %>
