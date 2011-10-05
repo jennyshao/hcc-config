@@ -1,0 +1,122 @@
+#!/bin/bash
+
+##############################################################################
+##############################################################################
+#
+#       DO NOT EDIT - file is being maintained by puppet
+#
+##############################################################################
+##############################################################################
+
+
+EXPECTED_ARGS=2
+LOCAL_TEMP_BASE_FOLDER='/var/tmp/'
+LOG_FILE='/tmp/srm.log'
+TIMENOW=`date`
+
+
+# Plugin Essential
+if [ "$1" = "-classad" ]
+then
+   echo "PluginVersion = \"0.1\""
+   echo "PluginType = \"FileTransfer\""
+   echo "SupportedMethods = \"srm\""
+   exit 0
+fi
+
+echo "$TIMENOW $0 SRM PLUGIN OPERATION STARTED  " >> $LOG_FILE
+
+#check number of input arguments only useful if invoked manually
+if [ $# -ne $EXPECTED_ARGS ]
+then
+  echo "Incomplete Arguments" >> $LOG_FILE
+  echo -e "\nUsage:"
+  echo "`basename $0` <Source URI> <Destination>"
+  echo -e "\n"
+  exit 1
+fi
+
+#check that uri begins with srm only useful if invoked manually
+if [[ $1 != srm://* ]]
+then
+  echo "Invalid URI $1 " >> $LOG_FILE
+  echo -e "\n"
+  echo "Source URI must begin with srm://"
+  echo -e "\n"
+  exit 1
+fi
+whoamistr=`whoami`
+echo "$TIMENOW $0 plugin invoked as $whoamistr Starting. File will finally move to $2 " >> $LOG_FILE
+
+#transfer the file to tmp folder
+initdir=`pwd`
+filename=`basename $1`
+tmpdir=`mktemp -d`
+#source /opt/osgwn1.2.15/setup.sh
+#lcg-cp --connect-timeout 100 --srm-timeout 100 -b -D srmv2 $1 $tmpdir/$filename  >> $LOG_FILE 2>&1 
+#echo "$TIMENOW $0 Invoked command: lcg-cp --connect-timeout 100 --srm-timeout 100 -b -D srmv2 $1 $tmpdir/$filename " >> $LOG_FILE
+
+TransferInput=$1
+filepath=${TransferInput#*SFN=}
+cp $filepath $tmpdir/$filename
+
+echo "$TIMENOW $0 Invoked command: cp $filepath $tmpdir/$filename " >> $LOG_FILE
+
+echo "$TIMENOW $0 Ready to cd to $tmpdir" >> $LOG_FILE
+
+cd $tmpdir
+
+filetype=`file -ibz $filename`
+echo "$TIMENOW $0 filetype downloaded: $filetype" >> $LOG_FILE
+
+moveoriginalfile=1
+
+if [[ $filetype ==  application/x-tar*application/x-gzip* ]]
+then
+  echo -e "$TIMENOW $0 Applying Gzip AND Tar" >>  $LOG_FILE
+  tar -xvzf $filename
+  moveoriginalfile=0
+elif [[ $filetype == *application/x-gzip* ]]
+then
+  echo -e "$TIMENOW $0 Applying  Gzip" >>  $LOG_FILE
+  if [[ $filename != *.gz ]]
+  then
+    echo -e "$TIMENOW $0 gunzip -d -c $filename > $initdir/$filename" >> $LOG_FILE
+    gunzip -d -c $filename > $initdir/$filename
+  else
+    gunzip $filename
+  fi
+  ls -lh
+  moveoriginalfile=0
+elif [[ $filetype == application/x-tar*application/x-bzip2*  ]]
+then
+  echo -e "$TIMENOW $0 Applying Bzip AND Tar" >>  $LOG_FILE
+  tar -xvjf $filename
+  moveoriginalfile=0
+elif [[ $filetype == *application/x-bzip2*  ]]
+then
+  echo -e "$TIMENOW $0 Applying Bzip" >>  $LOG_FILE
+  bunzip2 $filename
+  moveoriginalfile=0
+fi
+
+if [[ $? !=  0 ]]
+then
+  echo -e "$TIMENOW $0 Error transferring files" >>  $LOG_FILE
+  exit 1
+fi
+
+
+
+if [ ! -e $initdir/$filename ]
+then
+  cp $filename $2  #this will copy the file to the destination file name if different
+  mv * $initdir/.
+fi
+echo "$TIMENOW $0 Done - Init Dir Was: $initdir " >> $LOG_FILE
+ls -lh $initdir
+rm -rf $tmpdir
+echo "$TIMENOW $0 Cleaned tmp files with: rm -rf $tmpdir " >> $LOG_FILE
+echo "$TIMENOW $0 SRM PLUGIN OPERATION COMPLETED  " >> $LOG_FILE
+
+exit 0

@@ -1,0 +1,15 @@
+##############################################################################
+##############################################################################
+#
+#	DO NOT EDIT - file is being maintained by puppet
+#
+##############################################################################
+##############################################################################
+
+# this ... is ... SPAR... er, I mean node000
+#START = ((regexp("uscmsPool.*", TARGET.Owner) =!= TRUE) && \
+#         (regexp("cmsprio.*", TARGET.Owner) =!= TRUE) && \
+#         (regexp("cmsprod", TARGET.Owner) =!= TRUE)) && $(START)
+
+START = regexp("uscms01.*", TARGET.Owner) == TRUE && (TARGET.IsGarhanTestJob == TRUE) && $(START)
+# START = regexp("gattebury.*", TARGET.Owner) == TRUE && (TARGET.IsGarhanTestJob == TRUE) && $(START)
