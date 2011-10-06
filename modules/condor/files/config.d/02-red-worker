@@ -46,7 +46,7 @@ DELEGATE_JOB_GSI_CREDENTIALS = False
 
 
 # for nfslite
-USER_JOB_WRAPPER = /opt/osg/osg-wn-source/condor_nfslite_job_wrapper.sh
+USER_JOB_WRAPPER = /usr/local/bin/condor_nfslite_job_wrapper.sh
 
 
 # for VM stuff
@@ -56,7 +56,7 @@ VM_Networking = true
 VM_NETWORKING_TYPE = nat
 LIBVIRT_XML_SCRIPT = 
 ENABLE_URL_TRANSFERS = TRUE
-FILETRANSFER_PLUGINS = /mnt/nfs04/opt/srm-plugin
+FILETRANSFER_PLUGINS = /usr/local/bin/srm-plugin
 
 # for cgroups
 # BASE_CGROUP = /condor
