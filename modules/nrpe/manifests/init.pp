@@ -6,6 +6,7 @@ class nrpe {
 
 	package { "nrpe": ensure => present, }
 	package { "nagios-plugins-all": ensure => present, }
+	package { "megaraid-cli": ensure => present, }
 
 	service { "nrpe":
 		ensure => running,
@@ -34,6 +35,13 @@ class nrpe {
 		path => "/usr/lib64/nagios/plugins/check_host_cert",
 		owner => "root", group => "root", mode => 755,
 		source => "puppet:///modules/nrpe/check_host_cert",
+		require => Package["nagios-plugins-all"],
+	}
+
+	file { "check_megaraid_sas":
+		path => "/usr/lib64/nagios/plugins/check_megaraid_sas",
+		owner => "root", group => "root", mode => 755,
+		source => "puppet:///modules/nrpe/check_megaraid_sas",
 		require => Package["nagios-plugins-all"],
 	}
 

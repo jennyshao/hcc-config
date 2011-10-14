@@ -49,7 +49,7 @@ if ( $opt_h ) {
 	exit;
 }
 
-my $megacli = 'sudo /opt/MegaRAID/MegaCli/MegaCli64';
+my $megacli = 'sudo /usr/bin/MegaCli64';
 
 
 my ($adapters);
