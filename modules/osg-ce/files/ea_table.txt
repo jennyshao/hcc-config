@@ -16,7 +16,7 @@ cmsprio cms.other.prio
 cmssoft cms.other.prio
 priorityuser cms.other.prio
 cmsphedex cms.other.prio
-uscms cms.other.user.us
 cmsprod cms.prod
+uscms cms.other.user.us
 cms cms.other.user.nonus
 .* other

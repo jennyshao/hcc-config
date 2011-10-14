@@ -24,8 +24,6 @@ kellerjd cms.other.user.t3
 cmsphedex cms.lcgadmin
 lcgadmin cms.lcgadmin
 uscmsPool1396 cms.lcgadmin
-cmsprod cms.prod
-cmsprio cms.other.prio
 hcc other.hcc
 osgedu other.osgedu
 osg	other.osgedu
