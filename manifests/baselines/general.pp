@@ -14,6 +14,12 @@ class general {
 	include at
 	include cron
 
+   include users
+   include pam
+   include openssh
+   include sudo
+   include autofs
+
 	# role specific classes are included here
 	if ( $role ) { include "role_$role" }
 

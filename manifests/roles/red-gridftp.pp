@@ -1,11 +1,16 @@
 class role_red-gridftp {
 
-	include fetch-crl
-	include ganglia::diskstat
-	include hadoop
-	include gridftp-hdfs
-	include xrootd
-	include nrpe
-	include sudo
+   include general
+   include users
+   include autofs
+   include pam
+   include openssh
+   include sudo
+   include nrpe
+   include ganglia
+   include ganglia::diskstat
+   include hostcert
+   include gridftp-hdfs
+   include xrootd
 
 }

@@ -1,897 +1,551 @@
+node /node000/ inherits red-private {
+
+#	$role = "red-worker"
+
+   $gangliaClusterName = 'red-worker'
+   $gangliaTCPAcceptChannel = '8651'
+   $gangliaUDPSendChannel = [ 'red-mon.unl.edu', '8651' ]
+   $gangliaUDPRecvChannel = '8651'
+
+	$mountsHDFS = true
+	$isCondorWorker = true
+#	$condorCustom09 = "node000"
+
+	$pakitiTag = "T2_US_Nebraska_Workers"
+
+	include general
+	include users
+	include pam
+	include openssh
+	include autofs
+	include sudo
+	include nrpe
+   include hostcert
+	include osg-ca-certs
+   include fetch-crl
+	include pakiti
+   include ganglia
+
+   include hadoop
+   include condor
+	include osg-wn-client
+	include glexec
+
+   # must hard mount OSGAPP and OSGDATA to make RSV probes happy
+   # automounting will not show correct permissions
+	file { "/opt/osg": ensure => directory }
+   file { "/opt/osg/app": ensure => directory }
+   mount { "/opt/osg/app":
+      device  => "nfs04:/mnt/raid/opt/osg/app",
+      fstype  => "nfs",
+      ensure  => mounted,
+      options => "rw,noatime,tcp,nolock,hard,intr,rsize=32768,wsize=32768",
+      atboot  => true,
+      require => [ File["/opt/osg"], File["/opt/osg/app"], ],
+   }
+
+   file { "/opt/osg/data": ensure => directory }
+   mount { "/opt/osg/data":
+      device  => "nfs04:/mnt/raid/opt/data",
+      fstype  => "nfs",
+      ensure  => mounted,
+      options => "rw,noatime,tcp,nolock,hard,intr,rsize=32768,wsize=32768",
+      atboot  => true,
+      require => [ File["/opt/osg"], File["/opt/osg/data"], ],
+   }
+
+
+}
+
+##############################################################################
+
 node 'node001' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
 	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node002' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
 	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node003' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
 	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node004' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
 	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node005' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
 	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node006' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
 	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node007' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
 	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node008' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
 	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node009' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
 	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node010' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
 	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node011' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
 	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node012' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
 	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node013' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
 	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node014' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
 	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node015' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
 	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node016' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
 	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node017' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
 	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node018' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
 	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node019' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
 	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node020' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
 	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node021' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
 	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node022' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
 	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node023' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
 	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node024' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
 	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node025' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
 	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node026' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
 	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node027' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
 	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node028' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
 	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node029' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
 	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node030' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
 	$condorCustom09 = "thpc"
 	include general
 }
 
 node 'node031' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
 	$condorCustom09 = "thpc"
 	include general
 }
 
-node 'node061' inherits red-private {
-	$role = "red-worker"
-	include general
-}
 
-node 'node062' inherits red-private {
-	$role = "red-worker"
-	include general
-}
 
-node 'node063' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node064' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node065' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node066' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node067' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node068' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node069' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node070' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node071' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node072' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node073' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node074' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node075' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node076' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node077' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node078' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node079' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node080' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node081' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node082' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node083' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node084' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node085' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node086' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node087' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node088' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node089' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node090' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node091' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node092' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node093' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node094' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node095' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node096' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node097' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node098' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node099' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node100' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node101' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node102' inherits red-private {
-	$role = "red-worker"
-	include general
-}
 
 node 'node103' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node104' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node105' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node106' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node107' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node108' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node109' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node110' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
-node 'node111' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node112' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node113' inherits red-private {
-	$role = "red-worker"
-	include general
-}
 
 node 'node114' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node115' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node116' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node117' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node118' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node119' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node120' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node121' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node122' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node123' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node124' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node125' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node126' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node127' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node128' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node129' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node130' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node131' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node132' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node133' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node134' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node135' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node136' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node137' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node138' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node139' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
-node 'node140' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node141' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node142' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node143' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node144' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node145' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node146' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node147' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node148' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node149' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node150' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node151' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node152' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node153' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node154' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node155' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node156' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node157' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node158' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node159' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node160' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node161' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node162' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node163' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node164' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node165' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node166' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node167' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node168' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node169' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node170' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node171' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node172' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node173' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node174' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node175' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node176' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node177' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node178' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node179' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node180' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node181' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node182' inherits red-private {
-	$role = "red-worker"
-	include general
-}
 
 node 'node183' inherits red-private {
 	$role = "red-worker"
-	include general
-}
 
-node 'node184' inherits red-private {
-	$role = "red-worker"
-	include general
-}
+	# for Anthony Tiradani vm testing with Ashu
+	$sshExtraAdmins = 'tiradani'
+	$sudoExtraAdmins = 'tiradani'
 
-node 'node185' inherits red-private {
-	$role = "red-worker"
 	include general
-}
-
-node 'node186' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node187' inherits red-private {
-	$role = "red-worker"
-	include general
-}
-
-node 'node188' inherits red-private {
-	$role = "red-worker"
-	include general
+	include sudo
+	include nrpe
 }
 
 node 'node189' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	$condorCustom09 = "r410"
 	include general
 }
 
 node 'node190' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	$condorCustom09 = "r410"
 	include general
 }
 
 node 'node191' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	$condorCustom09 = "r410"
 	include general
 }
 
 node 'node192' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	$condorCustom09 = "r410"
 	include general
 }
 
 node 'node193' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	$condorCustom09 = "r410"
 	include general
 }
 
 node 'node194' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	$condorCustom09 = "r410"
 	include general
 }
 
 node 'node195' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	$condorCustom09 = "r410"
 	include general
 }
 
 node 'node196' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	$condorCustom09 = "r410"
 	include general
 }
 
 node 'node197' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	$condorCustom09 = "r410"
 	include general
 }
 
 node 'node198' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	$condorCustom09 = "r410"
 	include general
 }
 
 node 'node199' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	$condorCustom09 = "r410"
 	include general
 }
 
 node 'node200' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	$condorCustom09 = "r410"
 	include general
 }
@@ -1042,148 +696,193 @@ node 'node229' inherits red-private {
 }
 
 node 'node230' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node231' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node232' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node233' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node234' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node235' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node236' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node237' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node238' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node239' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node240' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node241' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node242' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node243' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node244' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node245' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node246' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node247' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node248' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node249' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node250' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node251' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node252' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node253' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 node 'node254' inherits red-private {
-	$role = "red-worker"
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
 }
 
 
-
-node /^red-d8n\d+\.unl\.edu$/ inherits red-private {
-	$role = "red-worker"
+node /^node1[4,5,6,7]\d\.red\.hcc\.unl\.edu$/ inherits red-private {
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
-	include hadoop
+}
+node 'node180.red.hcc.unl.edu' inherits red-private {
+	$role = "red-worker57"
+	$isHDFSDatanode = true
+	include general
+}
+node 'node181.red.hcc.unl.edu' inherits red-private {
+	$role = "red-worker57"
+	$isHDFSDatanode = true
+	include general
+}
+node 'node182.red.hcc.unl.edu' inherits red-private {
+	$role = "red-worker57"
+	$isHDFSDatanode = true
+	include general
+}
+
+node /^red-d8n\d+\.red\.hcc\.unl\.edu$/ inherits red-private {
+	$role = "red-worker57"
+	$isHDFSDatanode = true
+	include general
 } 
 
-node /^red-d9n\d+\.unl\.edu$/ inherits red-private {
-	$role = "red-worker"
+node /^red-d9n\d+\.red\.hcc\.unl\.edu$/ inherits red-private {
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
-	include hadoop
 }
 
-node /^red-d11n\d+\.unl\.edu$/ inherits red-private {
-	$role = "red-worker"
+node /^red-d11n\d+\.red\.hcc\.unl\.edu$/ inherits red-private {
+	$role = "red-worker57"
+	$isHDFSDatanode = true
 	include general
-	include hadoop
 }
 
 
