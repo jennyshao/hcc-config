@@ -10,8 +10,8 @@
 # for old thpc 1g/core nodes
 # prevent cms jobs from running (not enough RAM)
 # still allows uscms01 which is well behaved lcgadmin
-NUM_SLOTS=2
+#NUM_SLOTS=2
 #With only 2 slots, let everyone run.
-#START = ((regexp("uscmsPool.*", TARGET.Owner) =!= TRUE) && \
+START = ((regexp("uscmsPool.*", TARGET.Owner) =!= TRUE) && \
          (regexp("cmsprio.*", TARGET.Owner) =!= TRUE) && \
          (regexp("cmsprod", TARGET.Owner) =!= TRUE)) && $(START)
