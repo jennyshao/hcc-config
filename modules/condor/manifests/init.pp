@@ -149,5 +149,14 @@ class condor {
 		require => Package["condor"],
 	}
 
+	# vm-nfs-plugin
+	file { "/usr/local/bin/vm-nfs-plugin":
+		ensure => present,
+		owner  => "root", group => "root", mode => 755,
+		source => "puppet:///modules/condor/vm-nfs-plugin",
+		require => Package["condor"],
+	}
+
+
 }
 

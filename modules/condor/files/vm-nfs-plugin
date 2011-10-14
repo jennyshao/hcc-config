@@ -1,0 +1,271 @@
+#!/bin/bash
+
+# Plugin Essential
+if [ "$1" = "-classad" ]
+then
+   echo "PluginVersion = \"0.1\""
+   echo "PluginType = \"FileTransfer\""
+   echo "SupportedMethods = \"nfs\""
+   exit 0
+fi
+#----------------------------------------
+
+# *** BASEDIRECTORY: location where the lock files per templates are stored)
+BASEDIRECTORY='/var/tmp/condorvms'
+
+# *** TEMPLATEBASE: location where the vm templates are cached)
+TEMPLATEBASE='/opt/osg/data/condor_vm_templates'
+
+LOG_FILE='/var/tmp/condornfsplugin.log'
+
+# *** binaries to use
+WHICHLSOF='/usr/sbin/lsof'
+WHICHQEMUIMG='/usr/bin/qemu-img'
+
+#-------------------------------------------
+# *** Get the folder structures and variables ready
+
+EXPECTED_ARGS=2
+TIMENOW=`date`
+TEMPLATES_FOLDER=${TEMPLATEBASE}'/templates'
+mkdir -p $TEMPLATES_FOLDER
+LOCKS_FOLDER=${BASEDIRECTORY}'/vmlocks'
+mkdir -p $LOCKS_FOLDER
+WHOAMI=`whoami`
+WORK_DIRECTORY=$BASEDIRECTORY/$WHOAMI
+mkdir -p $WORK_DIRECTORY
+chmod 777 $BASEDIRECTORY -Rf
+
+echo "------------------------------------------------ " >> $LOG_FILE
+echo "$TIMENOW NFS PLUGIN OPERATION STARTED as $WHOAMI $WHOAMI2" >> $LOG_FILE
+
+# number of seconds
+sleepfor=120
+retires=5
+# so 120 * 5 = 10 minutes max before bailing out
+
+maxretries=$(($retires + 1))
+thisscript=`basename ${0}`
+LOCK="/tmp/${thisscript}lock"
+echo "$TIMENOW will try to get '$LOCK' " >> $LOG_FILE
+trap 'rm -rf $LOCK; exit $?' INT TERM EXIT
+for var in `seq 1 $maxretries`
+do 
+   mkdir $LOCK &> /dev/null
+   if [ $? -lt 1 ]
+   then
+      break
+   else
+      if [ $var -gt $retires ]
+      then
+        echo "$TIMENOW Exiting max tries reached" >> $LOG_FILE
+        exit 1
+      fi
+      echo "$TIMENOW sleeping for $sleepfor round $var" >> $LOG_FILE
+      sleep $sleepfor
+   fi
+done
+
+
+
+transferInputstr_format='nfs:<abs path to (nfs hosted) inputfile file>:<relative path to vminstance folder>:<basename of vminstance file>'
+
+tmpdir=${WORK_DIRECTORY}/TEMP_$RANDOM
+mkdir -p $tmpdir
+
+
+#-------------------------------------------
+# *** check number of input arguments only useful if invoked manually
+if [ $# -ne $EXPECTED_ARGS ]
+then
+  echo "$TIMENOW Incomplete Arguments will exit with value 1" >> $LOG_FILE
+  printusage
+  exit 1
+fi
+
+#-------------------------------------------
+# *** check that uri begins with nfs only useful if invoked manually
+if [[ $1 != nfs:*:* ]]
+then
+  echo "$TIMENOW Invalid URI '$1' will exit with value 1" >> $LOG_FILE
+  printusage
+  exit 1
+fi
+
+
+transferInputstr=$1
+echo "$TIMENOW Input strings received '$1' whereto '$2'" >> $LOG_FILE
+
+#-------------------------------------------
+# *** split the first argument to an array
+IFS=':' read -ra transferInputarray <<< "$transferInputstr"
+
+
+
+inputfile_abspth=${transferInputarray[1]}
+inputfile_basenme=`basename $inputfile_abspth`
+
+inputfile_abspth_cleaned=${inputfile_abspth//[^a-zA-Z0-9]/_}
+inputfile_lock_abspth=$LOCKS_FOLDER/$inputfile_abspth_cleaned #make lock file by replacing non alphanumerics to _
+
+
+backingfile_abspth=''
+
+#-------------------------------------------
+# *** check if source to copy template image from exists
+if [ ! -f $inputfile_abspth ]
+then
+    touch $inputfile_abspth 
+    echo "$TIMENOW Input File '$inputfile_abspth' does not exists will exit with value 1" >> $LOG_FILE
+    exit 1
+fi
+
+
+
+#-------------------------------------------
+# *** check cache metadata exists and if backing file needs to be brought back
+replace_input_file=0
+
+if [ ! -f $inputfile_lock_abspth ]
+then
+    touch $inputfile_lock_abspth >> $LOG_FILE 2>&1 # the final process file name will be echoed into the file later
+    echo "$TIMENOW Exit status lock file creation $?" >> $LOG_FILE
+    echo "$TIMENOW Lock file '$inputfile_lock_abspth' created" >> $LOG_FILE
+    replace_input_file=1
+    echo "$TIMENOW Value of replace_input_file=$replace_input_file" >> $LOG_FILE
+elif [ -f $inputfile_lock_abspth -a $inputfile_abspth -nt $inputfile_lock_abspth ]
+then
+    touch $inputfile_lock_abspth
+    replace_input_file=1
+    if [ -n "$backingfile_abspth" ]
+    then
+        fileopen=`$WHICHLSOF | grep "$backingfile_abspth"`
+        if [ ${#fileopen}  -gt 0 ]
+        then
+            echo "$TIMENOW $backingfile_abspth exists but being used will NOT bring backingfile image and NOT Create instance image exiting with value 1" >> $LOG_FILE
+            echo "$TIMENOW grep Output on lsof: '$fileopen' '$backingfile_abspth'" >> $LOG_FILE
+            echo "$TIMENOW $backingfile_abspth exists but being used will NOT bring backingfile image and NOT Create instance image exiting with value 1" 
+            exit 1
+        else
+            echo "$TIMENOW $backingfile_abspth exists but not being used will bring new backingfile image " >> $LOG_FILE
+         fi
+    fi
+else
+     echo "$TIMENOW Lock file '$inputfile_lock_abspth' newer than $inputfile_abspth no need to bring input file again just create instance" >> $LOG_FILE
+fi
+echo "$TIMENOW Value of replace_input_file=$replace_input_file" >> $LOG_FILE
+
+initdir=$PWD
+
+
+if [ $replace_input_file -gt 0 ] 
+then
+    echo "$TIMENOW Will change to $tmpdir from $PWD" >> $LOG_FILE
+    cd $tmpdir
+    echo "$TIMENOW In folder $PWD Ready to copy 'cp $inputfile_abspth .'" >> $LOG_FILE
+    cp $inputfile_abspth .
+    filetype=`file -ibz $inputfile_basenme`
+    echo "$TIMENOW filetype downloaded: $filetype" >> $LOG_FILE
+    if [[ $filetype ==  application/x-tar*application/x-gzip* ]]
+    then
+      echo -e "$TIMENOW Applying Gzip AND Tar" >>  $LOG_FILE
+      tar -xzf $inputfile_basenme
+    elif [[ $filetype == *application/x-tar*  ]]
+    then
+      echo -e "$TIMENOW Applying Untar 'tar -xvf $inputfile_basenme' in '$PWD'" >>  $LOG_FILE
+      tar -xf $inputfile_basenme
+    elif [[ $filetype == *application/x-gzip* ]]
+    then
+      echo -e "$TIMENOW Applying  Gzip" >>  $LOG_FILE
+      if [[ $inputfile_basenme != *.gz ]]
+      then
+        tmpdir2=`mktemp -d`
+        echo -e "$TIMENOW gunzip -d -c $inputfile_basenme > $tmpdir2/$inputfile_basenme" >> $LOG_FILE
+        gunzip -d -c $inputfile_basenme > $tmpdir2/$inputfile_basenme
+      else
+        gunzip $inputfile_basenme
+      fi
+    elif [[ $filetype == application/x-tar*application/x-bzip2*  ]]
+    then
+      echo -e "$TIMENOW Applying Bzip AND Tar" >>  $LOG_FILE
+      tar -xjf $inputfile_basenme
+    elif [[ $filetype == *application/x-bzip2*  ]]
+    then
+      echo -e "$TIMENOW Applying Bzip" >>  $LOG_FILE
+      bunzip2 $inputfile_basenme
+    fi
+        
+    
+   #find the file type and move it to the final location
+    find . -print0 | while read -d $'\0' file
+    do
+      if [ ! -d $file ]
+      then
+         echo -e "$TIMENOW Getting file type by 'file $file'" >>  $LOG_FILE
+         filetype=`file "$file"`
+         if [[ $filetype == *"QEMU"* ]] 
+         #if [[ $filetype == *"JPEG"* ]] 
+         then
+            mv $file $TEMPLATES_FOLDER
+	    bnamefile=`basename $file`
+            backingfile_abspth=$TEMPLATES_FOLDER/$bnamefile
+            echo  "$backingfile_abspth" > $inputfile_lock_abspth
+            echo -e "$TIMENOW Found Image File $backingfile_abspth of type $filetype  - Moving file by 'mv $file $TEMPLATES_FOLDER'" >>  $LOG_FILE
+         else
+            mkdir -p $TEMPLATES_FOLDER/$inputfile_abspth_cleaned
+            mv $file $TEMPLATES_FOLDER/$inputfile_abspth_cleaned
+            echo -e "$TIMENOW Found file $TEMPLATES_FOLDER/$inputfile_abspth_cleaned of type $filetype Moving file by 'mv $file $TEMPLATES_FOLDER/$inputfile_abspth_cleaned'" >>  $LOG_FILE
+         fi
+      fi
+    done
+   cd $initdir
+else
+    #copy the additional archive files
+    cd $TEMPLATES_FOLDER/$inputfile_abspth_cleaned
+    find . -print0 | while read -d $'\0' file
+    do
+      if [ ! -d $file ]
+      then
+        cp $file $initdir
+      fi
+    done
+    cd $initdir
+fi
+echo "$TIMENOW Base files in $TEMPLATES_FOLDER and $TEMPLATES_FOLDER/$inputfile_abspth_cleaned " >> $LOG_FILE
+
+backingfile_abspth=`cat $inputfile_lock_abspth`
+
+#create the vm instance copy on write
+commandqemu="$WHICHQEMUIMG create -b $backingfile_abspth -f  qcow2   ${initdir}/${transferInputarray[3]}"
+echo "$TIMENOW commandqemu: $commandqemu " >> $LOG_FILE
+$commandqemu 
+echo "$TIMENOW INSTANCE files in ${initdir}  " >> $LOG_FILE
+commandlinkfolder="ln -s ${initdir} $WORK_DIRECTORY/${transferInputarray[2]}" 
+#########$commandlinkfolder   #DO NOT CREATE LINK
+echo "$TIMENOW Linked using $commandlinkfolder " >> $LOG_FILE
+
+#cleanup temp
+rm -rf $tmpdir
+rm -rf $LOCK
+echo "$TIMENOW Cleaned tmp files with: rm -rf $tmpdir " >> $LOG_FILE
+
+
+#sanity check to make sure file transfer was succesful and lock file is deleted otherwise
+if [ ! -f $backingfile_abspth ]
+then
+    echo "$TIMENOW Error Input File '$backingfile_abspth' does not exists will exit with value 1" >> $LOG_FILE
+    echo "$TIMENOW Clean lock file '$inputfile_lock_abspth' " >> $LOG_FILE
+    rm $inputfile_lock_abspth
+    exit 1
+fi
+cd $initdir
+exit 0;
+
+function printusage 
+{
+  echo -e "\nUsage:"
+  echo "`basename $0` $transferInputstr_format"
+  echo -e "\n"
+}
+           
+           
