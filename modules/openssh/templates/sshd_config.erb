@@ -43,15 +43,14 @@ SyslogFacility AUTHPRIV
 #LogLevel INFO
 
 # Authentication:
-
-AllowUsers gattebury clundst bbockelm dweitzel tharvill jthiltge jsamuels acaprez aguru root
+AllowUsers <% sshAdmins.each do |admin| -%><%= admin %> <% end %><% sshExtraAdmins.each do |extraAdmin| -%><%= extraAdmin %> <% end %>
 #LoginGraceTime 2m
 PermitRootLogin without-password
 #StrictModes yes
 #MaxAuthTries 6
 
 #RSAAuthentication yes
-PubkeyAuthentication no
+#PubkeyAuthentication no
 #AuthorizedKeysFile	.ssh/authorized_keys
 
 # For this to work you will also need host keys in /etc/ssh/ssh_known_hosts
@@ -130,6 +129,6 @@ Subsystem	sftp	/usr/libexec/openssh/sftp-server
 
 
 # allow pubkeys from red-man
-Match Address 129.93.239.161,172.16.200.1
-   PubkeyAuthentication yes
+#Match Address 129.93.239.161,172.16.200.1
+#   PubkeyAuthentication yes
 

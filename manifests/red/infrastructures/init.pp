@@ -55,11 +55,13 @@ node basenode {
 
 	$gumsServer = "red-auth.unl.edu"
 
-	# our base admin list for red
+	# base and extra admin list for sudoers (override extra in node definitions)
 	$sudoAdmins = [ 'gattebury', 'clundst', 'bbockelm' ]
-
-	# extra admin list (empty by default, override in a node's .pp file)
 	$sudoExtraAdmins = ''
+
+	# base admin list for openssh AllowUsers (override extra in node definitions)
+	$sshAdmins = [ 'gattebury', 'clundst', 'bbockelm', 'tharvill', 'jsamuels', 'jthiltge', 'root' ]
+	$sshExtraAdmins = ''
 
 }
 
