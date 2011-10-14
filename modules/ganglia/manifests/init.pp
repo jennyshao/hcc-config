@@ -16,13 +16,28 @@ class ganglia {
 	}
 
 
+	group { "ganglia":
+		name => "ganglia",
+		ensure => present,
+	}
+
+	user { "ganglia":
+		name => "ganglia",
+		ensure => present,
+		system => true,
+		gid => "ganglia",
+		managehome => false,
+		shell => "/sbin/nologin",
+	}
+
+
 	service { "gmond":
 		name       => "gmond",
 		ensure     => running,
 		enable     => true,
 		hasrestart => true,
 		hasstatus  => true,
-		require    => Package["ganglia-gmond"],
+		require    => [ Package["ganglia-gmond"], User["ganglia"], ],
 		subscribe  => File["gmond.conf"],
 	}
 
@@ -33,7 +48,7 @@ class ganglia {
 		owner   => "root",
 		group   => "root",
 		content => template("ganglia/gmond.conf.erb"),
-		require => Package[ganglia-gmond],
+		require => [ Package[ganglia-gmond], User["ganglia"], ],
 		ensure  => present,
 	}
 
