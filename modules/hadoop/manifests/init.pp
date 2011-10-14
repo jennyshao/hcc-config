@@ -18,6 +18,21 @@ class hadoop {
 	}
 
 
+	# ensure /hadoop-data* directories are owned by hdfs:hadoop
+	# should only do this once, but every time won't hurt
+	exec { "chown hdfs:hadoop /hadoop-data*":
+		path => "/usr/bin:/usr/sbin:/bin",
+		onlyif => [ "test `ls -ld /hadoop-data1 | awk '{print \$3}'` != hdfs" ],
+	}
+
+	# ensure log location is owned correctly (still broken in hadoop-0.20-osg packages)
+	file { "/var/log/hadoop-0.20":
+		ensure => directory,
+		owner => "hdfs", group => "hadoop", mode => 0755,
+		require => Package["hadoop"],
+	}
+
+
 	# we keep our configs on a dedicated conf.red directory
 	# start by cleaning and copying default configs
 	file { "/etc/hadoop-0.20/conf.red":
@@ -90,6 +105,15 @@ class hadoop {
 
 
 
+	# NOTE: Temporary fix for /usr/bin/hadoop-fuse-dfs to correctly follow symlinks
+	file { "/usr/bin/hadoop-fuse-dfs":
+		owner   => "root", group => "root", mode => 0755,
+		source  => "puppet:///modules/hadoop/hadoop-fuse-dfs",
+		require => Package["hadoop"],
+	}
+
+
+
 	# mountsHDFS specifies whether this node needs to mount hdfs via fuse
 	# if so, hadoop-fuse (which can be used without -osg) is needed
 	# just require -osg special sauce for now
@@ -111,7 +135,7 @@ class hadoop {
 			options => "server=hadoop-name,port=9000,rdbuffer=32768,allow_other",
 			atboot  => true,
 			remounts => false,
-			require => [ File["/mnt/hadoop"], File["/etc/hadoop-0.20/conf.red/hdfs-site.xml"] ],
+			require => [ File["/mnt/hadoop"], File["/etc/hadoop-0.20/conf.red/hdfs-site.xml"], File["/usr/bin/hadoop-fuse-dfs"], ],
 		}
 
 		require hadoop::osg
