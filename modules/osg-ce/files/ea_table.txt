@@ -12,13 +12,14 @@
 # examples:
 
 # Role=cmssoft ImportantWork
+atlas other
 cmsprio cms.other.prio
 cmssoft cms.other.prio
 priorityuser cms.other.prio
 priority cms.other.prio
 cmsphedex cms.other.prio
 cmsprod cms.prod
-production cms.prod
+cms\/Role\=production cms.prod
 uscms cms.other.user.us
 cms cms.other.user.nonus
 .* other
