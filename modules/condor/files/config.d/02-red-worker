@@ -56,7 +56,7 @@ VM_Networking = true
 VM_NETWORKING_TYPE = nat
 LIBVIRT_XML_SCRIPT = 
 ENABLE_URL_TRANSFERS = TRUE
-FILETRANSFER_PLUGINS = /usr/local/bin/srm-plugin
+FILETRANSFER_PLUGINS = /usr/local/bin/srm-plugin,/usr/local/bin/vm-nfs-plugin
 
 # for cgroups
 # BASE_CGROUP = /condor
