@@ -21,5 +21,5 @@ then
 fi
 
 export OSG_WN_TMP=$_CONDOR_SCRATCH_DIR
-
+export PATH=/bin:/usr/bin:$PATH
 exec "$@"
