@@ -1,63 +1,36 @@
-node /node000/ inherits red-private {
 
-#	$role = "red-worker"
-
-   $gangliaClusterName = 'red-worker'
-   $gangliaTCPAcceptChannel = '8651'
-   $gangliaUDPSendChannel = [ 'red-mon.unl.edu', '8651' ]
-   $gangliaUDPRecvChannel = '8651'
-
-	$mountsHDFS = true
-	$isCondorWorker = true
-#	$condorCustom09 = "node000"
-
-	$pakitiTag = "T2_US_Nebraska_Workers"
-
+# nodes 000-060 have no HDFS (thpc nodes)
+node /^node0[0-5][0-9]$|^node060$/ inherits red-private {
+	$role = "red-worker57"
+	$condorCustom09 = "thpc"
 	include general
-	include users
-	include pam
-	include openssh
-	include autofs
-	include sudo
-	include nrpe
-   include hostcert
-	include osg-ca-certs
-   include fetch-crl
-	include pakiti
-   include ganglia
+}
 
-   include hadoop
-   include condor
-	include osg-wn-client
-	include glexec
 
-   # must hard mount OSGAPP and OSGDATA to make RSV probes happy
-   # automounting will not show correct permissions
-	file { "/opt/osg": ensure => directory }
-   file { "/opt/osg/app": ensure => directory }
-   mount { "/opt/osg/app":
-      device  => "nfs04:/mnt/raid/opt/osg/app",
+node /demo\d\d\d/ inherits red-private {
+	$sshExtraAdmins = [ 'acaprez', 'aguru', 'jwang' ]
+	$sudoExtraAdmins = [ 'acaprez', 'aguru', 'tharvill', 'jthiltge', 'jsamuels', 'jwang' ]
+	$role = "red-worker57"
+	include general
+
+	# mount sh-util for benchmarking
+   file { "/util": ensure => directory }
+   mount { "/util":
+      device  => "sh-util:/mnt/util/PF",
       fstype  => "nfs",
       ensure  => mounted,
       options => "rw,noatime,tcp,nolock,hard,intr,rsize=32768,wsize=32768",
       atboot  => true,
-      require => [ File["/opt/osg"], File["/opt/osg/app"], ],
+      require => File["/util"],
    }
-
-   file { "/opt/osg/data": ensure => directory }
-   mount { "/opt/osg/data":
-      device  => "nfs04:/mnt/raid/opt/data",
-      fstype  => "nfs",
-      ensure  => mounted,
-      options => "rw,noatime,tcp,nolock,hard,intr,rsize=32768,wsize=32768",
-      atboot  => true,
-      require => [ File["/opt/osg"], File["/opt/osg/data"], ],
-   }
-
-
 }
 
 ##############################################################################
+
+node /node\d\d\d/ inherits red-private {
+	$role = "red-worker57"
+	include general
+}
 
 node 'node001' inherits red-private {
 	$role = "red-worker57"
