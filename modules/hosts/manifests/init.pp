@@ -14,6 +14,6 @@ class hosts {
 		content => template("hosts/hosts.erb"),
 	}
 
-	if $my_project { include "hosts::${my_project}" }
+	if $::my_project { include "hosts::${my_project}" }
 
 } # class hosts
