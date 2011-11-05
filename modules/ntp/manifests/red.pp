@@ -19,7 +19,12 @@
 # - Via some kind on infile line modification tools, such as Augeas or the Example42's conf define approach
 #
 class ntp::red inherits ntp {
+
 	File["ntp.conf"] {
-		content => template("ntp/ntp.conf.erb"),
+		content => $lsbmajdistrelease ? {
+			6 => template("ntp/ntp.conf-rhel6.erb"),
+			default => template("ntp/ntp.conf.erb"),
+		}
 	}
+
 }
