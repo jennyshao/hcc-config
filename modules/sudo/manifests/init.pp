@@ -8,13 +8,16 @@ class sudo {
 
 	file { "/etc/sudoers":
 		owner   => "root", group => "root", mode => 0440,
-		content => template("sudo/sudoers.erb"),
 		require => Package["sudo"],
+		content => $lsbmajdistrelease ? {
+			6 => template("sudo/sudoers-rhel6.erb"),
+			default => template("sudo/sudoers.erb"),
+		}
 	}
 
 	file { "/etc/sudoers.d":
 		ensure => directory,
-		owner  => "root", group => "root", mode => 0755,
+		owner  => "root", group => "root", mode => 0750,
 	}
 
 	file { "/etc/sudoers.d/sudo-admins":
