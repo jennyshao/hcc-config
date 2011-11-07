@@ -54,6 +54,10 @@ case "${pam::params::oslayout}" {
             owner   => "${pam::params::configfile_owner}",
             group   => "${pam::params::configfile_group}",
             ensure  => present,
+				source  => $lsbmajdistrelease ? {
+					6 => "puppet:///modules/pam/ldap/redhat6/system-auth-ac",
+					default => "puppet:///modules/pam/ldap/redhat5/system-auth-ac",
+				}
         }
 
     }
@@ -85,7 +89,10 @@ case "${pam::params::oslayout}" {
         owner   => "${pam::params::configfile_owner}",
         group   => "${pam::params::configfile_group}",
         ensure  => present,
-        content => template("pam/pam-sshd-rhel5.erb"),
+        content => $lsbmajdistrelease ? {
+		6 => template("pam/pam-sshd-rhel6.erb"),
+		default => template("pam/pam-sshd-rhel5.erb"),
+		}
     }
 
     file { "/etc/pam.d/su":

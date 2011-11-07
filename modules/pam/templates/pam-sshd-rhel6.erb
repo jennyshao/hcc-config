@@ -1,0 +1,24 @@
+##############################################################################
+##############################################################################
+#
+#	DO NOT EDIT - file is being maintained by puppet
+#
+##############################################################################
+##############################################################################
+
+
+auth       required     pam_yubico.so id=5754 key=6dR0B3hlHxuLP/zgiaCN+jx685g= debug ldap_uri=<% users_ldap_servers.each do |ldap| %>ldaps://<%= ldap %>,<% end %> ldapdn=ou=People,<%= users_ldap_basedn %> user_attr=uid yubi_attr=inetSubscriberAccountId
+
+auth       required     pam_sepermit.so
+auth       include      password-auth
+account    required     pam_nologin.so
+account    include      password-auth
+password   include      password-auth
+# pam_selinux.so close should be the first session rule
+session    required     pam_selinux.so close
+session    required     pam_loginuid.so
+# pam_selinux.so open should only be followed by sessions to be executed in the user context
+session    required     pam_selinux.so open env_params
+session    optional     pam_keyinit.so force revoke
+session    include      password-auth
+

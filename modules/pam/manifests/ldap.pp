@@ -32,11 +32,16 @@ case "${pam::params::oslayout}" {
         }
     }
 
-    redhat5: {
-        File ["/etc/pam.d/system-auth-ac"] {
-                source => "${pam::params::pam_source}/ldap/${pam::params::oslayout}/system-auth-ac",
-        }
-    }
+	default: {
+		File ["/etc/pam.d/system-auth-ac"] {
+			source => $lsbmajdistrelease ? {
+				6 => "puppet:///modules/pam/ldap/redhat6/system-auth-ac",
+				default => "puppet:///modules/pam/ldap/redhat5/system-auth-ac",
+			}
+		}
+	}
+
+	}
 
 } # End case
 
