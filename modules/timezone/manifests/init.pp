@@ -1,45 +1,28 @@
+#
 # Class: timezone
 #
 # maintains the timezone
 #
 
-class timezone {
+class timezone(
+	$timezone_path = $timezone::params::timezone_path,
+	$timezone_cmd = $timezone::params::timezone_cmd
+) inherits timezone::params {
 
-	file { "timezone":
+	file { 'timezone':
+		path => $timezone_path,
 		ensure => present,
-		owner  => "root",
-		group  => "root",
-		mode   => 644,
-		path   => $operatingsystem ? {
-			Debian  => "/etc/timezone",
-			Ubuntu  => "/etc/timezone",
-			RedHat  => "/etc/sysconfig/clock",
-			CentOS  => "/etc/sysconfig/clock",
-			Scientific  => "/etc/sysconfig/clock",
-			SuSE    => "/etc/sysconfig/clock",
-			FreeBSD => "/etc/timezone-puppet",
-		},
-
+		owner => 'root', group => 'root', mode => '0644',
 		content => $operatingsystem ? {
 			default => template("timezone/timezone-${operatingsystem}" ),
 		},
-
 		notify => Exec['set-timezone'],
 	}
 
-	exec { "set-timezone":
-		command => $operatingsystem ? {
-			Debian  => "dpkg-reconfigure -f noninteractive tzdata",
-			Ubuntu  => "dpkg-reconfigure -f noninteractive tzdata",
-			RedHat  => "tzdata-update",
-			CentOS  => "tzdata-update",
-			Scientific  => "tzdata-update",
-			SuSE    => "FIX ME",
-			FreeBSD => "cp /usr/share/zoneinfo/${timezone} /etc/localtime && adjkerntz -a",
-		},
-
-		require => File["timezone"],
-		subscribe => File["timezone"],
+	exec { 'set-timezone':
+		command => $timezone_cmd,
+		require => File['timezone'],
+		subscribe => File['timezone'],
 		refreshonly => true,
 	}
 
