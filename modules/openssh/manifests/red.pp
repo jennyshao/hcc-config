@@ -14,6 +14,13 @@
 #
 class openssh::red inherits openssh {
 
+	File["sshd_config"] {
+		content => $lsbmajdistrelease ? {
+			6 => template("openssh/sshd_config-rhel6.erb"),
+			default => template("openssh/sshd_config.erb"),
+		}
+	}
+
 #    File["sshd_config"] {
 #        source => [ 
 #            "${openssh::params::openssh_source}/red/sshd_config-$hostname",
