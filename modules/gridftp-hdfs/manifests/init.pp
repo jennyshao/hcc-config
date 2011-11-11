@@ -70,7 +70,7 @@ class gridftp-hdfs {
 	# removes stale buffers after 14 hours on disk
 	cron { "gridftp-cleaner":
 		ensure  => present,
-		command => "find /tmp -iname \"gridftp-hdfs-buffer-*\" -type f -mmin +840 -exec rm -f {} \;",
+		command => "find /tmp -iname \"gridftp-hdfs-buffer-*\" -type f -mmin +840 -exec rm -f {} \\;",
 		user    => root,
 		minute  => 20,
 	}
