@@ -422,6 +422,12 @@ sub submit
             "print: $script_filename: $!",
             Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
     }
+
+    #####################
+    # T2Overflow addition
+    $requirements = "(IS_GLIDEIN=!=TRUE || TARGET.GLIDECLIENT_Group=?=\"T2Overflow\")";
+    #####################
+
     @tmpr = $description->condor_os;
     if (scalar(@tmpr) > 0)
     {
