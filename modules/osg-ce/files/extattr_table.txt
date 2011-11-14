@@ -14,7 +14,9 @@
 # Role=cmssoft ImportantWork
 atlas other
 ligo  other
-cmsprio cms.other.prio
+# pilot jobs going to prio by accident, force into cms.other.user.us
+# cmsprio cms.other.prio
+cmsprio cms.other.user.us
 cmssoft cms.other.prio
 priorityuser cms.other.prio
 priority cms.other.prio

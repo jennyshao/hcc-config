@@ -1,39 +1,74 @@
 ##############################################################################
 ##############################################################################
 #
-#	DO NOT EDIT - file is being maintained by puppet
+#  DO NOT EDIT - file is being maintained by puppet
 #
 ##############################################################################
 ##############################################################################
 
+
+# Copyright 1999-2006 University of Chicago
+# 
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# 
+# http://www.apache.org/licenses/LICENSE-2.0
+# 
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 # Globus::GRAM::JobManager::condor package
 #
 # CVS Information:
-# $Source: /p/vdt/workspace/vdt_cvs/vdt_src/Globus-CondorNFSLite-Setup/globus/lib/perl/Globus/GRAM/JobManager/condornfslite.pm,v $
-# $Date: 2007/03/27 13:58:15 $
-# $Revision: 1.1 $
-# $Author: kronenfe $
+# $Source: /home/globdev/CVS/globus-packages/gram/jobmanager/lrms/condor/source/condor.pm,v $
+# $Date: 2011/08/09 16:32:02 $
+# $Revision: 1.2 $
+# $Author: bester $
 
 use Globus::GRAM::Error;
 use Globus::GRAM::JobState;
 use Globus::GRAM::JobManager;
 use Globus::GRAM::StdioMerger;
 use Globus::Core::Paths;
+use Globus::Core::Config;
+use IPC::Open3;
 
-use Config;
-use Globus::GRAM::JobManager::condor_groupacct;
-# NOTE: This package name must match the name of the .pm file!!
+# Load OSG group accounting module, if possible
+eval { require Globus::GRAM::JobManager::condor_accounting_groups };
+our $accounting_groups_callout = ! $@; # Don't make callout if we couldn't load module
+
+
 package Globus::GRAM::JobManager::condor;
 
 @ISA = qw(Globus::GRAM::JobManager);
 
-my ($condor_submit, $condor_rm);
+my ($condor_submit, $condor_rm, $condor_config, $isNFSLite, $isManagedFork);
 
 BEGIN
 {
-    $condor_submit 	= '/usr/bin/condor_submit';
-    $condor_rm	 	= '/usr/bin/condor_rm';
+    my $config = new Globus::Core::Config(
+            '${sysconfdir}/globus/globus-condor.conf');
+
+    $condor_submit = $config->get_attribute("condor_submit") || "no";
+    $condor_rm = $config->get_attribute("condor_rm") || "no";
+    $condor_arch = $config->get_attribute("condor_arch") || undef;
+    $condor_os = $config->get_attribute("condor_os") || undef;
+    $condor_config = $config->get_attribute("condor_config") || "";
+    $condor_check_vanilla_files = $config->get_attribute(
+            "check_vanilla_files") || "no";
+    $condor_mpi_script = $config->get_attribute("condor_mpi_script") || "no";
+
+    if ($condor_config ne '')
+    {
+        $ENV{CONDOR_CONFIG} = $condor_config;
+    }
+
+    $isNFSLite = 0;
+    $isManagedFork = 0;
 }
 
 sub new
@@ -45,64 +80,49 @@ sub new
     my $description = $self->{JobDescription};
     my $stdout = $description->stdout();
     my $stderr = $description->stderr();
-    my $globus_condor_conf = "$ENV{GLOBUS_LOCATION}/etc/globus-condor.conf";
-
-    # We want to have individual Condor log files for each job for
-    # pre-WS GRAM, but still have a single log file for WS GRAM
-    # (which uses the SEG to monitor job status).
-    if ( !defined( $description->factoryendpoint() ) ) {
-	$self->{individual_condor_log} = 1;
-    } else {
-	$self->{individual_condor_log} = 0;
-    }
+    my $globus_condor_conf = "$Globus::Core::Paths::sysconfdir/globus/globus-condor.conf";
 
     if (-r $globus_condor_conf)
-    {
+    {   
         local(*FH);
-
+        
         if (open(FH, "<$globus_condor_conf"))
-        {
+        {   
             while(<FH>) {
                 chomp;
-                if (m/log_path=(.*)$/) {
-                    $self->{condor_logfile} = $1;
+                if (m/^isNFSLite=([0-9]*)$/) {
+                    $isNFSLite = int($1);
                     last;
                 }
             }
             close(FH);
         }
     }
-    if (! exists($self->{condor_logfile}) || $self->{individual_condor_log})
+
+    if ($description->servicetag() =~ m/^fork\./ ||
+         $description->servicetag() =~ m/^managedfork\./ )
+    {
+        $isManagedFork = 1;
+    }
+
+    if (! exists($self->{condor_logfile}))
     {
         if(! exists($ENV{GLOBUS_SPOOL_DIR}))
         {
-            $log_dir = $Globus::Core::Paths::tmpdir;
+            $log_dir = $self->job_dir(); 
         }
         else
         {
             $log_dir = $ENV{GLOBUS_SPOOL_DIR};
         }
-	if ( $self->{individual_condor_log} ) {
-	    $self->{condor_logfile} = "$log_dir/gram_condor_log."
-		. $description->uniq_id();
-	} else {
-	    $self->{condor_logfile} = "$log_dir/gram_condor_log";
-	}
+        $self->{condor_logfile} = "$log_dir/condor." . $description->uniq_id();
     }
-    if ((! -e $self->{condor_logfile}) && ($self->{individual_condor_log} == 0)) 
+    if(! -e $self->{condor_logfile}) 
     {
-        # We make sure that the log file exists with the correct 
-        # permissions. If we just let Condor create it, it will
-        # have 664 permissions, and when another user submits a job
-        # they will be unable to write to the log file. We create the 
-        # file in append mode to avoid a race condition, in case
-        # multiple instantiations of this script open and write
-        # to the log file. 
         if ( open(CONDOR_LOG_FILE, '>>' . $self->{condor_logfile}) ) 
         {
             close(CONDOR_LOG_FILE);
         }
-        chmod(0666, $self->{condor_logfile});
     }
 
     if($description->jobtype() eq 'multiple' && $description->count > 1)
@@ -128,29 +148,21 @@ sub submit
     my @environment;
     my $environment_string;
     my $script_filename;
-    my $error_filename;
-    my $requirements = '';
+    my @requirements;
+    my @tmpr;
     my $rank = '';
     my @arguments;
     my $argument_string;
-    my %library_vars;
     my @response_text;
     my @submit_attrs;
     my $submit_attrs_string;
     my $multi_output = 0;
-    my $failure_text = '';
-
-    my $isNFSLite = 1; # Flag to tell if we are using NFS lite. 1 or true for yes
+    my $pid;
+    my $status;
+    my ($condor_submit_out, $condor_submit_err);
+    my $rc;
     my $scratch_isset = 0; # Flag if the SCRATCH_DIRECTORY environment variable is set indicating likely GRAM job
-    
-
-    # Reject jobs that want streaming, if so configured
-    if ( $description->streamingrequested() &&
-	 $description->streamingdisabled() ) {
-
-	$self->log("Streaming is not allowed.");
-	return Globus::GRAM::Error::OPENING_STDOUT;
-    }
+    my $is_grid_monitor = 0;
 
     if($description->jobtype() eq 'single' ||
        $description->jobtype() eq 'multiple')
@@ -166,9 +178,17 @@ sub submit
     {
 	$universe = 'standard'
     }
+    elsif($description->jobtype() eq 'mpi' && $condor_mpi_script ne 'no')
+    {
+        $universe = 'parallel';
+    }
     else
     {
 	return Globus::GRAM::Error::JOBTYPE_NOT_SUPPORTED();
+    }
+    if ($isManagedFork)
+    {
+        $universe = 'local';
     }
 
     # Validate some RSL parameters
@@ -192,11 +212,11 @@ sub submit
 
     # In the standard universe, we can validate stdin and directory
     # because they will sent to the execution host  by condor transparently.
-    if($universe eq 'standard')
+    if($universe eq 'standard' || $condor_check_vanilla_files eq 'yes')
     {
 	if(! -d $description->directory())
 	{
-	    return Globus::GRAM::Error::BAD_DIRECTORY;
+            return Globus::GRAM::Error::BAD_DIRECTORY();
 	}
 	elsif(! -r $description->stdin())
 	{
@@ -212,63 +232,67 @@ sub submit
 	}
     }
 
-    $library_vars{LD_LIBRARY_PATH} = 0;
-    if($Config{osname} eq 'irix')
+    # Check if this is the Condor-G grid monitor
+    if ($isManagedFork)
     {
-	$library_vars{LD_LIBRARYN32_PATH} = 0;
-	$library_vars{LD_LIBRARY64_PATH} = 0;
-    }
-    @environment = $description->environment();
-    foreach $tuple (@environment)
-    {
-	if(!ref($tuple) || scalar(@$tuple) != 2)
-	{
-	    return Globus::GRAM::Error::RSL_ENVIRONMENT();
-	}
-	if(exists($library_vars{$tuple->[0]}))
-	{
-	    $tuple->[1] .= ":$library_string";
-	    $library_vars{$tuple->[0]} = 1;
-	}
+        my $exec = $description->executable();
+        my $file_out = `/usr/bin/file $exec`;
+        if ( $file_out =~ /script/ || $file_out =~ /text/ ||
+	     $file_out =~ m|/usr/bin/env| ) {
+	    open( EXEC, "<$exec" ) or
+ 	        return Globus::GRAM::Error::EXECUTABLE_PERMISSIONS();
+	    while( <EXEC> ) {
+	        if ( /Sends results from the grid_manager_monitor_agent back to a/ ) {
+		    $is_grid_monitor = 1;
+	        }
+ 	    }
+	    close( EXEC );
+        }
     }
 
-    my $gram_contact = '';
+    # Reject jobs that want streaming, if so configured
+    if ( $description->streamingrequested() &&
+         $description->streamingdisabled() && !$is_grid_monitor ) {
+    
+        $self->log("Streaming is not allowed.");
+        return Globus::GRAM::Error::OPENING_STDOUT;
+    }
+
+    @environment = $description->environment();
+
+    foreach my $tuple ($description->environment())
+    {
+        if(!ref($tuple) || scalar(@$tuple) != 2)
+        {
+            return Globus::GRAM::Error::RSL_ENVIRONMENT();
+        }
+    }
+
     # NFS lite start
-    if ($isNFSLite) {
+    if ($isNFSLite && !$isManagedFork) {
 
         my $osg_grid = '';
         my $use_osg_grid = 1;
-
+    
         map {
             if ($_->[0] eq "OSG_GRID") {
                 $osg_grid =  $_->[1]; 
             } elsif ($_->[0] eq "OSG_DONT_USE_OSG_GRID_FOR_GL") {
                 $use_osg_grid = 0;
             } elsif ($_->[0] eq "LOGNAME") {
-                $logname =  $_->[1]; 
+                $logname =  $_->[1];
             } elsif ($_->[0] eq "SCRATCH_DIRECTORY") {
-                $scratch_isset = 1; 
+                $scratch_isset = 1;
                 $scratch_directory =  $_->[1]; 
                 $_->[1] = '$_CONDOR_SCRATCH_DIR';
-            } elsif ($_->[0] eq "X509_USER_PROXY") { 
+            } elsif ($_->[0] eq "X509_USER_PROXY") {
                 $_->[0] = "CHANGED_X509"; 
-            } elsif ($_->[0] eq "GLOBUS_GRAM_JOB_CONTACT") {
-                $gram_contact = $_->[1];
             }
         } @environment;
-
-        # If this is an OSG installation, we set GLOBUS_LOCATION based on OSG_GRID
-        if ($osg_grid ne '') {
-            map {
-                if ($use_osg_grid && $_->[0] eq "GLOBUS_LOCATION") { 
-                    $_->[1] = $osg_grid . "/globus"; 
-                }
-            } @environment;
-        }
-
+    
         if ($scratch_isset) {
             # Remote_InitialDir apparently suppresses the setting of the SCRATCH_DIRECTORY env variable
-	    push(@environment,["MY_INITIAL_DIR",'$_CONDOR_SCRATCH_DIR']);
+            push(@environment,["MY_INITIAL_DIR",'$_CONDOR_SCRATCH_DIR']);
         }
         elsif ( $description->directory() =~ m/.+$logname/xms ) {
             # If the directory ends with the logname it might be a globus-job-run job
@@ -280,20 +304,17 @@ sub submit
             # doing.
             push(@environment,["MY_INITIAL_DIR",$description->directory()] );
         }
-    }
+    }       
     # NFS Lite End
 
-
-    foreach (keys %library_vars)
+    if ($isManagedFork)
     {
-        my $library_path = join(':', $description->library_path());
-
-	if($library_vars{$_} == 0)
-	{
-	    push(@environment, [$_, $library_path]);
-	}
+        append_path_array(\@environment, 'LD_LIBRARY_PATH', $ENV{LD_LIBRARY_PATH});
+        append_path_array(\@environment, 'PERL5LIB', $ENV{PERL5LIB});
+        append_path_array(\@environment, 'PATH', $ENV{PATH});
     }
-    $environment_string = join(' ',
+
+    $environment_string = join(';',
                                map {$_->[0] . "=" . $_->[1]} @environment);
 
     @arguments = $description->arguments();
@@ -304,15 +325,32 @@ sub submit
 	    return Globus::GRAM::Error::RSL_ARGUMENTS();
 	}
     }
+    if ($description->directory() =~ m|^[^/]|)
+    {
+        my $home = (getpwuid($<))[7];
+
+        $description->add('directory', "$home/".$description->directory());
+    }
+    if ($description->executable() =~ m|^[^/]|)
+    {
+        $description->add('executable',
+                $description->directory() . '/' . $description->executable());
+    }
+    if ($universe eq 'parallel')
+    {
+        unshift(@arguments, $description->executable);
+        $description->add('executable', $condor_mpi_script);
+    }
     if($#arguments >= 0)
     {
-	$argument_string = join(' ',
+	$argument_string = '"' . join(' ',
 				map
 				{
-				    $_ =~ s/"/\\\"/g; #"
-				    $_;
+				    $_ =~ s/'/''/g;
+				    $_ =~ s/"/""/g;
+				    $_ = "'$_'";
 				}
-				@arguments);
+				@arguments) . '"';
     }
     else
     {
@@ -336,115 +374,205 @@ sub submit
     {
 	$submit_attrs_string = '';
     }
-###  Patch from Burt Holtzman to assign priorities
 
-$group = Globus::GRAM::JobManager::condor_groupacct::obtain_condor_group(\@environment, \$self);
-
-
-
-#    ### condor group priorities ###
-#    
-#    map { 
-#        if ($_->[0] eq "LOGNAME") {$logname = $_->[1]; } 
-#    } @environment;
-
-#    # dump everything in other group by default
-#    $AccountingGroup = "group_other." . $logname;
-#     if ($logname =~ m/cmsprio.*/) { $AccountingGroup = "group_cms_prio." . $logname; }
-#    if ($logname =~ /.*cmsprod.*/) { $AccountingGroup = "group_cms_prod." . $logname ; }
-#    if ($logname =~ /.*cmsphedex.*/) { $AccountingGroup = "group_lcgadmin." . $logname ; }
-#    if ($logname =~ /.*uscms.*/) { $AccountingGroup = "group_cms_user." . $logname ; }
-#    if ($logname =~ /.*bloom.*/) { $AccountingGroup = "group_cms_user." . $logname ; }
-#    if ($logname =~ /.*lcgadmin.*/) { $AccountingGroup = "group_lcgadmin." . $logname; }
-#    if ($logname =~ /.*uscmsPool1396.*/) { $AccountingGroup = "group_lcgadmin." . $logname ; }
-#    if ($logname =~ /.*uscmsPool496.*/) { $AccountingGroup = "group_other." . $logname ; }
-
-    ##############################
-
-
+    my $group;
+    if ($accounting_groups_callout) {
+       $group = Globus::GRAM::JobManager::condor_accounting_groups::obtain_condor_group(\@environment, $self);
+    }
 
     # Create script for condor submission
     $script_filename = $self->job_dir() . '/scheduler_condor_submit_script';
 
-    $error_filename = $self->job_dir() . '/scheduler_condor_submit_stderr';
-
     local(*SCRIPT_FILE);
 
-    open(SCRIPT_FILE, ">$script_filename") 
-        or return Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED;
+    $rc = open(SCRIPT_FILE, ">$script_filename") ;
 
-    print SCRIPT_FILE "#\n# description file for condor submission\n#\n";
-    print SCRIPT_FILE "Universe = $universe\n";
-    print SCRIPT_FILE "Notification = Never\n";
-    if ($description->directory() =~ m|^[^/]|)
+    if (!$rc)
     {
-        my $home = (getpwuid($<))[7];
-
-        $description->add('directory', "$home/".$description->directory());
-    }
-    if ($description->executable() =~ m|^[^/]|)
-    {
-        $description->add('executable',
-                $description->directory() . '/' . $description->executable());
+        return $self->respond_with_failure_extension(
+            "open: $script_filename: $!",
+            Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
     }
 
-    print SCRIPT_FILE "Executable = " . $description->executable . "\n";
-
-    # Commenting these out to assume the current OS and arch
-    # Uncomment these if you need to set a specific OS or architecture
-    #$requirements  = "OpSys == \"" . $description->condor_os() . "\" ";
-    #$requirements .= " && Arch == \"" . $description->condor_arch() . "\" ";
-    $requirements = "(IS_GLIDEIN=!=TRUE || TARGET.GLIDECLIENT_Group=?=\"T2Overflow\")";
-
+    $rc = print SCRIPT_FILE "#\n# description file for condor submission\n#\n";
+    if (!$rc)
+    {
+        return $self->respond_with_failure_extension(
+            "print: $script_filename: $!",
+            Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
+    }
+    $rc = print SCRIPT_FILE "Universe = $universe\n";
+    if (!$rc)
+    {
+        return $self->respond_with_failure_extension(
+            "print: $script_filename: $!",
+            Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
+    }
+    $rc = print SCRIPT_FILE "Notification = Never\n";
+    if (!$rc)
+    {
+        return $self->respond_with_failure_extension(
+            "print: $script_filename: $!",
+            Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
+    }
+    $rc = print SCRIPT_FILE "Executable = " . $description->executable . "\n";
+    if (!$rc)
+    {
+        return $self->respond_with_failure_extension(
+            "print: $script_filename: $!",
+            Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
+    }
+    @tmpr = $description->condor_os;
+    if (scalar(@tmpr) > 0)
+    {
+        my $r = "(" .
+            join(" || ",
+                map {"OpSys == \"$_\""} @tmpr) .
+            ")";
+        push(@requirements, $r);
+    }
+    elsif (defined($condor_os))
+    {
+        my $r = "(" . join(" || ",
+            map { "OpSys == \"$_\"" } split(/\s+/, $condor_os)) . ")";
+        push(@requirements, $r);
+    }
+    @tmpr = $description->condor_arch();
+    if (scalar(@tmpr) > 0)
+    {
+        my $r = "(" .
+            join(" || ", map {"Arch == \"$_\""} @tmpr) .
+                ")";
+        push(@requirements, $r);
+    }
+    elsif (defined($condor_arch))
+    {
+        my $r = "(" . join(" || ",
+            map { "Arch == \"$_\"" } split(/\s+/, $condor_arch)) . ")";
+        push(@requirements, $r);
+    }
     if($description->min_memory() ne '')
     {
-        #$requirements .= "  Memory >= " . $description->min_memory();
-        $requirements .= " && Memory >= " . $description->min_memory();
-        $rank = "rank = Memory\n";
+        push(@requirements, " Memory >= " . $description->min_memory());
     }
 
-    print SCRIPT_FILE "Requirements = $requirements\n";
+    if ($isManagedFork)
+    {
+        $requirements = ("True");
+    }
+ 
 
+    if (scalar(@requirements) > 0)
+    {
+        $rc = print SCRIPT_FILE "Requirements = ", join(" && ", @requirements) ."\n";
+    }
+    if (!$rc)
+    {
+        return $self->respond_with_failure_extension(
+            "print: $script_filename: $!",
+            Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
+    }
 
-    # added for group priorities
-    print SCRIPT_FILE "+AccountingGroup = \"$AccountingGroup\"\n";
-
+    if ($accounting_groups_callout && $group) {
+        $name = getpwuid($>);
+        $rc = print SCRIPT_FILE "+AccountingGroup = \"$group.$name\"\n" if $group;
+        if (!$rc)
+        {
+            return $self->respond_with_failure_extension(
+                "print: $script_filename: $!",
+                Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
+        }
+    }
 
     if($rank ne '')
     {
-	print SCRIPT_FILE "$rank\n";
+	$rc = print SCRIPT_FILE "$rank\n";
+        if (!$rc)
+        {
+            return $self->respond_with_failure_extension(
+                "print: $script_filename: $!",
+                Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
+        }
     }
 
     if ($ENV{X509_USER_PROXY} ne "") {
-        print SCRIPT_FILE "X509UserProxy = $ENV{X509_USER_PROXY}\n";
+        $rc = print SCRIPT_FILE "X509UserProxy = $ENV{X509_USER_PROXY}\n";
+        if (!$rc)
+        {
+            return $self->respond_with_failure_extension(
+                "print: $script_filename: $!",
+                Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
+        }
     }
-    print SCRIPT_FILE "+Environment = \"\$\$([ ifThenElse(IsT2Overflow =?= TRUE, \\\"IsT2Overflow=1 GLOBUS_GRAM_JOB_CONTACT=$gram_contact\\\", \\\"$environment_string\\\") ])\"\n";
-    #print SCRIPT_FILE "Environment = $environment_string\n";
-    print SCRIPT_FILE "Arguments = $argument_string\n";
-    print SCRIPT_FILE "InitialDir = " . $description->directory() . "\n";
-    print SCRIPT_FILE "Input = " . $description->stdin() . "\n";
-    print SCRIPT_FILE "Log = " . $self->{condor_logfile} . "\n";
-    print SCRIPT_FILE "log_xml = True\n";
-    print SCRIPT_FILE "+GratiaJobOrigin=\"GRAM\"\n";
-    print SCRIPT_FILE "+IsT2Overflow=FALSE\n";
-    print SCRIPT_FILE "+WantIOProxy=TRUE\n";
-    if ( $AccountingGroup eq "cms.other.user.t3") {
-			print SCRIPT_FILE "+IsT3User=TRUE\n";
-	}
+    $rc = print SCRIPT_FILE "Environment = $environment_string\n";
+    if (!$rc)
+    {
+        return $self->respond_with_failure_extension(
+            "print: $script_filename: $!",
+            Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
+    }
+    $rc = print SCRIPT_FILE "Arguments = $argument_string\n";
+    if (!$rc)
+    {
+        return $self->respond_with_failure_extension(
+            "print: $script_filename: $!",
+            Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
+    }
+    $rc = print SCRIPT_FILE "InitialDir = " . $description->directory() . "\n";
+    if (!$rc)
+    {
+        return $self->respond_with_failure_extension(
+            "print: $script_filename: $!",
+            Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
+    }
+    $rc = print SCRIPT_FILE "Input = " . $description->stdin() . "\n";
+    if (!$rc)
+    {
+        return $self->respond_with_failure_extension(
+            "print: $script_filename: $!",
+            Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
+    }
+    $rc = print SCRIPT_FILE "Log = " . $self->{condor_logfile} . "\n";
+    if (!$rc)
+    {
+        return $self->respond_with_failure_extension(
+            "print: $script_filename: $!",
+            Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
+    }
+    $rc = print SCRIPT_FILE "log_xml = True\n";
+    if (!$rc)
+    {
+        return $self->respond_with_failure_extension(
+            "print: $script_filename: $!",
+            Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
+    }
+    $rc = print SCRIPT_FILE "+GratiaJobOrigin=\"GRAM\"\n";
+    if (!$rc)
+    {
+        return $self->respond_with_failure_extension(
+            "print: $script_filename: $!",
+            Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
+    }
+    if ( $is_grid_monitor ) {
+	$rc = print SCRIPT_FILE "+GridMonitorJob = True\n";
+        if (!$rc)
+        {
+            return $self->respond_with_failure_extension(
+                "print: $script_filename: $!",
+                Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
+        }
+    }
 
     # NFS Lite mode
-    if ($isNFSLite) {
+    if ($isNFSLite && !$isManagedFork) {
         print SCRIPT_FILE "should_transfer_files = YES\n";
         print SCRIPT_FILE "when_to_transfer_output = ON_EXIT\n";
         print SCRIPT_FILE "transfer_output = true\n";
         # GRAM Files to transfer to the worker node
         # Only do this if we are dealing with a GRAM job that has set up a scratch area
         # otherwise we assume it is a globus-job-run or the users is using remote_initialdir
-	if ( $scratch_isset && !( $self->isWSGramGlobus() ) ) {
-	   if ( $self->isWSGramCondorG() ) {
-		$scratch_directory =  $description->directory();
-	    }
-            my $sdir;
+	if ( $scratch_isset ) {
+            my $sdir; my @flist;
             opendir($sdir,$scratch_directory);
             my @sfiles = grep { !/^\./} readdir($sdir);
             close $sdir;
@@ -464,116 +592,247 @@ $group = Globus::GRAM::JobManager::condor_groupacct::obtain_condor_group(\@envir
         }
     }
     # End NFS Lite Mode
-    print SCRIPT_FILE "#Extra attributes specified by client\n";
-    print SCRIPT_FILE "$submit_attrs_string\n";
-    if ($group) {
-   $name = getpwuid($>);
-   print SCRIPT_FILE "+AccountingGroup = \"$group.$name\"\n" if $group;
-    }
 
-    for (my $i = 0; $i < $description->count(); $i++) {
-        if ($multi_output) {
-            print SCRIPT_FILE "Output = " .
-                    $self->{STDIO_MERGER}->add_file('out') . "\n";
-            print SCRIPT_FILE "Error = " .
-                    $self->{STDIO_MERGER}->add_file('err') . "\n";
-        } else {
-            print SCRIPT_FILE "Output = " . $description->stdout() . "\n";
-            print SCRIPT_FILE "Error = " . $description->stderr() . "\n";
+    $rc = print SCRIPT_FILE "#Extra attributes specified by client\n";
+    if (!$rc)
+    {
+        return $self->respond_with_failure_extension(
+            "print: $script_filename: $!",
+            Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
+    }
+    $rc = print SCRIPT_FILE "$submit_attrs_string\n";
+    if (!$rc)
+    {
+        return $self->respond_with_failure_extension(
+            "print: $script_filename: $!",
+            Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
+    }
+    $rc = print SCRIPT_FILE "X509UserProxy = $ENV{X509_USER_PROXY}\n";
+    if (!$rc)
+    {
+        return $self->respond_with_failure_extension(
+            "print: $script_filename: $!",
+            Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
+    }       
+
+    my $shouldtransferfiles = $description->shouldtransferfiles();
+    if (defined($shouldtransferfiles))
+    {
+        $self->log("Adding \"should_transfer_files = $shouldtransferfiles\"\n");
+        $rc = print SCRIPT_FILE "should_transfer_files = $shouldtransferfiles\n";
+        if (!$rc)
+        {
+            return $self->respond_with_failure_extension(
+                "print: $script_filename: $!",
+                Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
         }
-        print SCRIPT_FILE "queue 1\n";
     }
 
-    close(SCRIPT_FILE);
-
-    $self->log("About to submit condor job");
-    local(*FH);
-    my $pid = open(FH, "-|");
-    if( !defined($pid))
+    my $WhenToTransferOutput = $description->whentotransferoutput();
+    if (defined($WhenToTransferOutput))
     {
-        # failure to fork
-        $failure_text = "fork: $!\n";
+        $self->log("Adding \"WhenToTransferOutput = $WhenToTransferOutput\"\n");
+        $rc = print SCRIPT_FILE "WhenToTransferOutput = $WhenToTransferOutput\n";
+        if (!$rc)
+        {
+            return $self->respond_with_failure_extension(
+                "print: $script_filename: $!",
+                Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
+        }
     }
-    elsif ($pid)
+
+    my $transfer_input_files = $description->transferinputfiles();
+    if (defined($transfer_input_files))
     {
-        my $rc = 0;
-
-        $self->log("I am the parent");
-        # parent
-        @response_text = <FH>;
-        $rc = close(FH);
-
-        if ((!$rc) && $! == 0) {
-            $self->log("submission failed!!!");
-            # condor submission failed with non-zero exit code
-            $self->nfssync( $error_filename, 0);
-
-            if ($rc == 127 && $response_text[0] =~ m/^exec: /) {
-                # exec failed
-                $self->log("exec failed\n");
-                $failure_text = join(//, @response_text);
-                @response_text = ();
-            } elsif (-s $error_filename) {
-                $self->log("Error file is not empty, and submission failed\n");
-                # condor_submit stderr is in $error_filename, we'll use that
-                # as our extended error info
-                local(*ERR);
-                open(ERR, "<$error_filename");
-                local($/);
-                $failure_text = <ERR>;
-                $self->log("Error text is $failure_text");
-                close(ERR);
-                @response_text = ();
-            } else {
-                $self->log("Error file is empty, and submission failed\n");
-            }
-        } else {
-            $self->log("\$rc = $rc, \$! = $!");
+        $self->log("Adding explicitly \"transfer_input_files = "
+                  ."$transfer_input_files\"\n");
+        $rc = print SCRIPT_FILE "transfer_input_files = $transfer_input_files\n";
+        if (!$rc)
+        {
+            return $self->respond_with_failure_extension(
+                "print: $script_filename: $!",
+                Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
         }
     }
     else
     {
-        # child
-        open (STDERR, '>' . $error_filename);
-        select(STDERR); $| = 1;
-        select(STDOUT); $| = 1;
-
-        if (! exec { $condor_submit } $condor_submit, $script_filename)
-        {
-            print "exec: $!\n";
-            exit(127);
+        my @transfer_input_files = $description->transferinputfiles();
+        if (defined($transfer_input_files[0]))
+            {
+            my $file_list_string = "";
+            foreach my $file (@transfer_input_files)
+            {
+                $file_list_string .= "$file, ";
+            }
+            $file_list_string =~ s/, $//;
+            $self->log("Adding \"transfer_input_files = $file_list_string\"\n");
+            $rc = print SCRIPT_FILE "transfer_input_files = $file_list_string\n";
+            if (!$rc)
+            {
+                return $self->respond_with_failure_extension(
+                    "print: $script_filename: $!",
+                    Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
+            }
         }
     }
 
-    if (@response_text)
+    my $transfer_output_files = $description->transferoutputfiles();
+    if (defined($transfer_output_files))
     {
-        if ($failure_text ne '') {
-            $self->log("Strange, $failure_text is defined!");
+        $self->log("Adding explicitly \"transfer_output_files = "
+                  ."$transfer_output_files\"\n");
+        $rc = print SCRIPT_FILE "transfer_output_files = $transfer_output_files\n";
+        if (!$rc)
+        {
+            return $self->respond_with_failure_extension(
+                "print: $script_filename: $!",
+                Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
         }
-	$response_line =(grep(/submitted to cluster/, @response_text))[0];
-	$job_id = (split(/\./, (split(/\s+/, $response_line))[5]))[0];
+    }
+    else
+    {
+        my @transfer_output_files = $description->transferoutputfiles();
+        if (defined($transfer_output_files[0]))
+        {
+            my $file_list_string = "";
+            foreach my $file (@transfer_output_files)
+            {
+                $file_list_string .= "$file, ";
+            }
+            $file_list_string =~ s/, $//;
+            $self->log("Adding \"transfer_output_files = "
+                      ."$file_list_string\"\n");
+            $rc = print SCRIPT_FILE "transfer_output_files = $file_list_string\n";
+            if (!$rc)
+            {
+                return $self->respond_with_failure_extension(
+                    "print: $script_filename: $!",
+                    Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
+            }
+        }
+    }
+
+    if ($universe eq 'parallel')
+    {
+        $rc = print SCRIPT_FILE "Output = " . $description->stdout() . "\n" .
+                                "Error = " . $description->stderr() . "\n" .
+                                "machine_count = " . $description->count() . "\n" .
+                                "queue\n";
+        if (!$rc)
+        {
+            return $self->respond_with_failure_extension(
+                "print: $script_filename: $!",
+                Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
+        }
+    }
+    else
+    {
+        for (my $i = 0; $i < $description->count(); $i++) {
+            if ($multi_output)
+            {
+                $rc = print SCRIPT_FILE
+                        "Output = " . $self->{STDIO_MERGER}->add_file('out') .
+                        "\n" .
+                        "Error = " .  $self->{STDIO_MERGER}->add_file('err') .
+                        "\n";
+                if (!$rc)
+                {
+                    return $self->respond_with_failure_extension(
+                        "print: $script_filename: $!",
+                        Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
+                }
+            }
+            else
+            {
+                $rc = print SCRIPT_FILE
+                        "Output = " . $description->stdout() .  "\n" .
+                        "Error = " . $description->stderr() . "\n";
+                if (!$rc)
+                {
+                    return $self->respond_with_failure_extension(
+                        "print: $script_filename: $!",
+                        Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
+                }
+            }
+            $rc = print SCRIPT_FILE "queue 1\n";
+            if (!$rc)
+            {
+                return $self->respond_with_failure_extension(
+                    "print: $script_filename: $!",
+                    Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
+            }
+        }
+    }
+
+    $rc = close(SCRIPT_FILE);
+    if (!$rc)
+    {
+        return $self->respond_with_failure_extension(
+            "close: $script_filename: $!",
+            Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
+    }
+
+    $self->log("About to submit condor job");
+    local(*SUBMIT_IN);
+    local(*SUBMIT_OUT);
+    local(*SUBMIT_ERR);
+    $pid = IPC::Open3::open3(
+            \*SUBMIT_IN, \*SUBMIT_OUT, \*SUBMIT_ERR,
+            $condor_submit, $script_filename);
+    if (!$pid)
+    {
+        return $self->respond_with_failure_extension(
+            "open3: $condor_submit: $!",
+            Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
+    }
+
+    close(SUBMIT_IN);
+
+    local $/;
+
+    $condor_submit_out = <SUBMIT_OUT>;
+    $condor_submit_err = <SUBMIT_ERR>;
+
+    close(SUBMIT_OUT);
+    close(SUBMIT_ERR);
+
+    waitpid($pid, 0);
+    $status = $?>>8;
+
+    $self->log("condor_submit status: $status");
+    $self->log("condor_submit output: $condor_submit_out");
+    $self->log("condor_submit error: $condor_submit_err");
+
+    if ($status == 0)
+    {
+        $response_line = (grep(/submitted to cluster/,
+                split(/\n/, $condor_submit_out)))[0];
+
+        $job_id = (split(/\./, (split(/\s+/, $response_line))[5]))[0];
 
 	if($job_id ne '')
 	{
 	    $status = Globus::GRAM::JobState::PENDING;
 
-            if ($description->emit_condor_processes()) {
-                $job_id = join(',', map { sprintf("%03d.%03d.%03d",
-                        $job_id, $_, 0) } (0..($description->count()-1)));
-            }
+            $job_id = join(',', map { sprintf("%03d.%03d.%03d",
+                    $job_id, $_, 0) } (0..($description->count()-1)));
 	    return {JOB_STATE => Globus::GRAM::JobState::PENDING,
 		    JOB_ID    => $job_id};
 	}
-    } elsif ($failure_text ne '') {
+    }
+    elsif ($condor_submit_err ne '')
+    {
         $self->log("Writing extended error information to stderr");
         local(*ERR);
         open(ERR, '>' . $description->stderr());
-        print ERR $failure_text;
+        print ERR $condor_submit_err;
         close(ERR);
 
-        $failure_text =~ s/\n/\\n/g;
+        $condor_submit_err =~ s/\n/\\n/g;
 
-        $self->respond({GT3_FAILURE_MESSAGE => $failure_text });
+        return $self->respond_with_failure_extension(
+                "condor_submit: $condor_submit_err",
+                Globus::GRAM::Error::JOB_EXECUTION_FAILED());
     }
     return Globus::GRAM::Error::JOB_EXECUTION_FAILED;
 }
@@ -584,130 +843,111 @@ sub poll
     my $description = $self->{JobDescription};
     my $state;
     my $job_id = $description->job_id();
-    my ($cluster, $proc, $subproc) = ($job_id, 0, 0);
+    my @job_ids = split(/,/, $description->job_id());
+    my ($cluster, $rest) = split(/\./, $job_ids[0], 2);
     my $num_done;
     my $num_run;
     my $num_evict;
     my $num_abort;
+    local(*CONDOR_LOG_FILE);
 
     $self->log("polling job " . $description->jobid());
 
-    if (! $description->emit_condor_processes()) {
-        local(*CONDOR_LOG_FILE);
-
-        if ( open(CONDOR_LOG_FILE, '<' . $self->{condor_logfile}) )
+    if ( open(CONDOR_LOG_FILE, '<' . $self->{condor_logfile}) )
+    {
+        while (<CONDOR_LOG_FILE>)
         {
-            while (<CONDOR_LOG_FILE>)
-            {
-                if (/<c>/) {
-                    if (defined($record)) {
-                        if ($record->{Cluster} == $cluster)
-                        {
-                            # record Matches our job id
-                            if ($record->{EventTypeNumber} == 1)
-                            {
-                                # execute event
-                                $num_run++;
-                            } elsif ($record->{EventTypeNumber} == 4) {
-                                $num_evict++;
-                            } elsif ($record->{EventTypeNumber} == 5) {
-                                $num_done++;
-                            } elsif ($record->{EventTypeNumber} == 9) {
-                                $num_abort++;
-                            }
-                        }
-                    } 
-                    $record = {};
-                } elsif (/<a n="([^"]+)">/) { #"/) {
-                    my $attr = $1;
-
-                    if (/<s>([^<]+)<\/s>/) {
-                        $record->{$attr} = $1;
-                    } elsif (/<i>([^<]+)<\/i>/) {
-                        $record->{$attr} = int($1);
-                    } elsif (/<b v="([tf])"\/>/) {
-                        $record->{$attr} = ($1 eq 't');
-                    } elsif (/<r>([^<]+)<\/r>/) {
-                        $record->{$attr} = $1;
-                    }
-                } elsif (/<\/c>/) {
-                }
-            }
-
-            if (defined($record)) {
-                if ($record->{Cluster} == $cluster)
-                {
-                    # record Matches our job id
-                    if ($record->{EventTypeNumber} == 1)
+            if (/<c>/) {
+                if (defined($record)) {
+                    if ($record->{Cluster} == $cluster)
                     {
-                        # execute event
-                        $num_run++;
-                    } elsif ($record->{EventTypeNumber} == 4) {
-                        $num_evict++;
-                    } elsif ($record->{EventTypeNumber} == 5) {
-                        $num_done++;
-                    } elsif ($record->{EventTypeNumber} == 9) {
-                        $num_abort++;
+                        # record Matches our job id
+                        if ($record->{EventTypeNumber} == 1)
+                        {
+                            # execute event
+                            $num_run++;
+                        } elsif ($record->{EventTypeNumber} == 4) {
+                            $num_evict++;
+                        } elsif ($record->{EventTypeNumber} == 5) {
+                            $num_done++;
+                        } elsif ($record->{EventTypeNumber} == 9) {
+                            $num_abort++;
+                        }
                     }
                 }
-            } 
-            @status = grep(/^[0-9]* \(0*${job_id}/, <CONDOR_LOG_FILE>);
-            close(CONDOR_LOG_FILE);
-        }
-        else
-        {
-            $self->nfssync( $description->stdout(), 0 )
-                if $description->stdout() ne '';
-            $self->nfssync( $description->stderr(), 0 )
-                if $description->stderr() ne '';
+                $record = {};
+            } elsif (/<a n="([^"]+)">/) { #"/) {
+                my $attr = $1;
 
-            # Should we really delete a file that we have not
-            # been able to read.  This leaves room for a race 
-            # condition So the following code is commented out:
-
-            #if ( ${self}->{individual_condor_log} ) {
-            #    $self->log_to_gratia();
-            #    unlink($self->{condor_logfile});
-            #}
-            return { JOB_STATE => Globus::GRAM::JobState::DONE };
-        }
-
-        if($num_abort > 0)
-        {
-            # Don't delete the condor log when not reporting DONE
-            return Globus::GRAM::Error::SYSTEM_CANCELLED();
-        }
-        elsif($num_done == $description->count())
-        {
-            $self->nfssync( $description->stdout(), 0 )
-                if $description->stdout() ne '';
-            $self->nfssync( $description->stderr(), 0 )
-                if $description->stderr() ne '';
-
-            if ( ${self}->{individual_condor_log} ) {
-                $self->log_to_gratia();
-                unlink($self->{condor_logfile});
+                if (/<s>([^<]+)<\/s>/) {
+                    $record->{$attr} = $1;
+                } elsif (/<i>([^<]+)<\/i>/) {
+                    $record->{$attr} = int($1);
+                } elsif (/<b v="([tf])"\/>/) {
+                    $record->{$attr} = ($1 eq 't');
+                } elsif (/<r>([^<]+)<\/r>/) {
+                    $record->{$attr} = $1;
+                }
+            } elsif (/<\/c>/) {
             }
-            $state = Globus::GRAM::JobState::DONE;
         }
-        elsif($num_run == 0)
-        {
-            $state = Globus::GRAM::JobState::PENDING;
-        }
-        elsif($num_run > $num_evict)
-        {
-            $state = Globus::GRAM::JobState::ACTIVE;
-        }
-        else
-        {
-            $state = Globus::GRAM::JobState::SUSPENDED;
-        }
+
+        if (defined($record)) {
+            if ($record->{Cluster} == $cluster)
+            {
+                # record Matches our job id
+                if ($record->{EventTypeNumber} == 1)
+                {
+                    # execute event
+                    $num_run++;
+                } elsif ($record->{EventTypeNumber} == 4) {
+                    $num_evict++;
+                } elsif ($record->{EventTypeNumber} == 5) {
+                    $num_done++;
+                } elsif ($record->{EventTypeNumber} == 9) {
+                    $num_abort++;
+                }
+            }
+        } 
+        @status = grep(/^[0-9]* \(0*${job_id}/, <CONDOR_LOG_FILE>);
+        close(CONDOR_LOG_FILE);
     }
     else
     {
-        $state = Globus::GRAM::JobState::DONE;
+        $self->nfssync( $description->stdout(), 0 )
+            if $description->stdout() ne '';
+        $self->nfssync( $description->stderr(), 0 )
+            if $description->stderr() ne '';
+        return { JOB_STATE => Globus::GRAM::JobState::DONE };
     }
 
+    if($num_abort > 0)
+    {
+        $self->log_to_gratia();
+        return Globus::GRAM::Error::SYSTEM_CANCELLED();
+    }
+    elsif($num_done == $description->count())
+    {
+        $self->nfssync( $description->stdout(), 0 )
+            if $description->stdout() ne '';
+        $self->nfssync( $description->stderr(), 0 )
+            if $description->stderr() ne '';
+
+        $self->log_to_gratia();
+        $state = Globus::GRAM::JobState::DONE;
+    }
+    elsif($num_run == 0)
+    {
+        $state = Globus::GRAM::JobState::PENDING;
+    }
+    elsif($num_run > $num_evict)
+    {
+        $state = Globus::GRAM::JobState::ACTIVE;
+    }
+    else
+    {
+        $state = Globus::GRAM::JobState::SUSPENDED;
+    }
 
     if($self->{STDIO_MERGER}) {
         $self->{STDIO_MERGER}->poll($state == Globus::GRAM::JobState::DONE);
@@ -740,21 +980,22 @@ sub cancel
     }
 }
 
+sub respond_with_failure_extension
+{
+    my $self = shift;
+    my $msg = shift;
+    my $rc = shift;
+
+    $self->respond({GT3_FAILURE_MESSAGE => $msg });
+    return $rc;
+}
+
 # Patched by the VDT
 sub log_to_gratia
 {
     my $self = shift;
     my $log_filename = $self->{condor_logfile};
-
-    # Select the gratia location
-    my $env = "$ENV{VDT_LOCATION}";
-    if ( "x$env" eq "x" ) {
-      $env = "$ENV{GLOBUS_LOCATION}/..";
-    }
-    if ( "x$env" eq "x" ) {
-       $env = "/var/tmp";
-    }
-    my $log_dir = "$env/gratia/var/data/";
+    my $log_dir = "/var/lib/gratia/data/";
     
     if ( -d $log_dir ) {
       # For now assume that the existence of the directory means that
@@ -775,44 +1016,17 @@ sub log_to_gratia
     return 1; # Should return a proper Globus success code
 }
 
-sub cache_cleanup
-{
-    my $self = shift;
-    my $description = $self->{JobDescription};
-
-    if ( ${self}->{individual_condor_log} ) {
-        $self->log("Deleting Condor user log");
-        $self->log_to_gratia();
-        unlink($self->{condor_logfile});
+# Append to a path if it exists, create it if it does not
+sub append_path_array {
+    my ($arr_ref, $var, $path) = @_;
+    
+    foreach my $val (@$arr_ref) {
+        if($val->[0] eq "$var") {
+            $val->[1] .= ":$path";
+            return;
+        }
     }
-
-    return $self->SUPER::cache_cleanup($self);
-}
-
-
-sub isWSGramCondorG {
-    my $self = shift;
-    my $description = $self->{JobDescription};
-    my $jobcredentialendpoint = "";
-    $jobcredentialendpoint = $description->jobcredentialendpoint();
-    if ( !($self->isWSGramGlobus() ) && ($jobcredentialendpoint ne "") ) {
-	return 1;
-    }
-    else {
-	return 0;
-    }
-}
-
-sub isWSGramGlobus {
-    my $self = shift;
-    my $description = $self->{JobDescription};
-    my $extensions = $description->extensions();
-    if ($extensions =~ /globusrun/) {
-	return 1;
-    }
-    else {
-	return 0;
-    }
+    push @$arr_ref, [$var, $path];
 }
 
 1;
