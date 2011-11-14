@@ -21,6 +21,7 @@ restrict -6 ::1
 <% if scope.lookupvar('ntp::params::server_local') == true -%>
 # acting as a server, listening on our local networks
 restrict 129.93.239.128 mask 255.255.255.192 nomodify notrap
+restrict 129.93.244.192 mask 255.255.255.192 nomodify notrap
 restrict 172.16.0.0 mask 255.255.0.0 nomodify notrap
 <% end -%>
 
