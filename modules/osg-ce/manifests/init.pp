@@ -1,71 +1,14 @@
 #
 # Class: osg-ce
 #
-# manages osg-ce
-#
 class osg-ce {
 
-	file { "config.ini":
-		ensure  => present,
-		path    => "/opt/osg/osg-1.2/osg/etc/config.ini",
-		owner   => "root", group => "root", mode => 644,
-		content => template("osg-ce/config.ini.erb"),
-	}
-
-	file { "gip.conf":
-		ensure  => absent,
-		path    => "/opt/osg/osg-1.2/gip/etc/gip.conf",
-		owner   => "root", group => "root", mode => 644,
-		source  => "puppet:///modules/osg-ce/gip.conf",
-	}
-
-	file { "alter-attributes.conf":
-		ensure  => present,
-		path    => "/opt/osg/osg-1.2/gip/etc/alter-attributes.conf",
-		owner   => "root", group => "root", mode => 644,
-		content => template("osg-ce/alter-attributes.conf.erb"),
-	}
-
-	file { "xinetd-globus-gatekeeper":
-		ensure  => present,
-		path    => "/opt/osg/osg-1.2/vdt/services/xinetd-globus-gatekeeper",
-		owner   => "root", group => "root", mode => 644,
-		source  => "puppet:///modules/osg-ce/xinetd-globus-gatekeeper",
-	}
-
-	file { "condor.pm":
-		ensure  => present,
-		path    => "/opt/osg/osg-1.2/globus/lib/perl/Globus/GRAM/JobManager/condor.pm",
-		owner   => "root", group => "root", mode => 644,
-		source  => "puppet:///modules/osg-ce/condor.pm",
-	}
-
-	file { "condor_groupacct.pm":
-		ensure  => present,
-		path    => "/opt/osg/osg-1.2/globus/lib/perl/Globus/GRAM/JobManager/condor_groupacct.pm",
-		owner   => "root", group => "root", mode => 644,
-		source  => "puppet:///modules/osg-ce/condor_groupacct.pm",
-	}
-
-	file { "ea_table.txt":
-		ensure  => present,
-		path    => "/opt/osg/osg-1.2/vdt-app-data/ea_table.txt",
-		owner   => "root", group => "root", mode => 644,
-		source  => "puppet:///modules/osg-ce/ea_table.txt",
-	}
-
-	file { "uid_table.txt":
-		ensure  => present,
-		path    => "/opt/osg/osg-1.2/vdt-app-data/uid_table.txt",
-		owner   => "root", group => "root", mode => 644,
-		source  => "puppet:///modules/osg-ce/uid_table.txt",
-	}
-
-
+	include osg-ce::params, osg-ce::install, osg-ce::config, osg-ce::service
 
 	# must hard mount OSGAPP and OSGDATA to make RSV probes happy
 	# automounting will not show correct permissions
-	file { "/opt/osg/app": ensure => directory }
+	file { "/opt/osg": ensure => directory }
+	file { "/opt/osg/app": ensure => directory, require => File["/opt/osg"], }
 	mount { "/opt/osg/app":
 		device  => "nfs04:/mnt/raid/opt/osg/app",
 		fstype  => "nfs",
@@ -75,7 +18,7 @@ class osg-ce {
 		require => File["/opt/osg/app"],
 	}
 
-	file { "/opt/osg/data": ensure => directory }
+	file { "/opt/osg/data": ensure => directory, require => File["/opt/osg"], }
 	mount { "/opt/osg/data":
 		device  => "nfs04:/mnt/raid/opt/data",
 		fstype  => "nfs",
