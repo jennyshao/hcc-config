@@ -3,10 +3,10 @@ class osg-ce::service {
 	$require = Class["osg-ce::config"]
 
 	service { $osg-ce::params::ce_service_name:
-		ensure => stopped,
+		ensure => running,
 		hasstatus => true,
 		hasrestart => true,
-		enable => false,
+		enable => true,
 		require => Class["osg-ce::config"],
 	}
 

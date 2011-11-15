@@ -31,6 +31,10 @@ gsiftp_host = DEFAULT
 ;; Valid options are True or False
 advertise_gums = FALSE
 
+cluster_name = red.unl.edu
+<% osgCEList.delete_if { |ce| ce == fqdn } -%>
+other_ces = <% osgCEList.each do |ce| %><% if ce == osgCEList.last %><%= ce %><% else %><%= ce %>, <% end %><% end %>
+
 
 ;===================================================================
 ;                          Subclusters
