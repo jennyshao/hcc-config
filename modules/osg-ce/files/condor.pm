@@ -318,7 +318,7 @@ sub submit
         append_path_array(\@environment, 'PATH', $ENV{PATH});
     }
 
-    $environment_string = join(';',
+    $environment_string = join(' ',
                                map {$_->[0] . "=" . $_->[1]} @environment);
 
     @arguments = $description->arguments();
