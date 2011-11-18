@@ -269,6 +269,7 @@ sub submit
         }
     }
 
+    my $gram_contact = '';
     # NFS lite start
     if ($isNFSLite && !$isManagedFork) {
 
@@ -288,6 +289,8 @@ sub submit
                 $_->[1] = '$_CONDOR_SCRATCH_DIR';
             } elsif ($_->[0] eq "X509_USER_PROXY") {
                 $_->[0] = "CHANGED_X509"; 
+            } elsif ($_->[0] eq "GLOBUS_GRAM_JOB_CONTACT") {
+                $gram_contact = $_->[1];
             }
         } @environment;
     
