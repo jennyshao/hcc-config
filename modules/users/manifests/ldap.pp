@@ -30,45 +30,57 @@ class users::ldap {
     if $users::params::automount == "yes" { include "autofs::ldap" }
 
 # Systems' config files for LDAP 
-    file { "nsswitch.conf":
-        path    => "/etc/nsswitch.conf",
-        mode    => "644",
-        owner   => "root",
-        group   => "root",
-        require => [ File["ldap.conf"] ],
-        ensure  => present,
-        content => template("users/ldap/nsswitch.conf.erb"),
-    }
+	file { "nsswitch.conf":
+		path    => "/etc/nsswitch.conf",
+		mode    => "644",
+		owner   => "root",
+		group   => "root",
+		# require => [ File["ldap.conf"] ],
+		ensure  => present,
+		content => $lsbmajdistrelease ? {
+			6 => template("users/ldap/nsswitch.conf-rhel6.erb"),
+			default => template("users/ldap/nsswitch.conf.erb"),
+		}
+	}
 
-    file { "ldap.conf":
-        path    => $users::params::configfile_ldap ,
-        mode    => "644",
-        owner   => "root",
-        group   => "root",
-        ensure  => present,
-        content => template("users/ldap/ldap.conf.erb"),
-    }
+	# rhel6 does not use ldap.conf files
+	case $lsbmajdistrelease {
+		6: {
+			# do nothing
+			include sssd
+		}
+		default: {
+			file { "ldap.conf":
+				path    => $users::params::configfile_ldap ,
+				mode    => "644",
+				owner   => "root",
+				group   => "root",
+				ensure  => present,
+				content => template("users/ldap/ldap.conf.erb"),
+			}
 
-# Openldap client config
-    file { "openldap-ldap.conf":
-        path    => $operatingsystem ? {
-            debian => "/etc/ldap/ldap.conf",
-            ubuntu => "/etc/ldap/ldap.conf",
-            redhat => "/etc/openldap/ldap.conf",
-            centos => "/etc/openldap/ldap.conf",
-            scientific => "/etc/openldap/ldap.conf",
-        },
-        mode    => "644",
-        owner   => "root",
-        group   => "root",
-        ensure  => present,
-        content => template("users/ldap/openldap-ldap.conf.erb"),
-    # TOTO - Breaks on ubuntu804 - Verify
-    #    notify  => $users_automount ? {
-    #        "yes"   => "Service[autofs]",
-    #        default => undef,
-    #    },
-    }
+			file { "openldap-ldap.conf":
+				path    => $operatingsystem ? {
+					debian => "/etc/ldap/ldap.conf",
+					ubuntu => "/etc/ldap/ldap.conf",
+					redhat => "/etc/openldap/ldap.conf",
+					centos => "/etc/openldap/ldap.conf",
+					scientific => "/etc/openldap/ldap.conf",
+				},
+				mode    => "644",
+				owner   => "root",
+				group   => "root",
+				ensure  => present,
+				content => template("users/ldap/openldap-ldap.conf.erb"),
+
+				# TOTO - Breaks on ubuntu804 - Verify
+				#    notify  => $users_automount ? {
+				#        "yes"   => "Service[autofs]",
+				#        default => undef,
+				#    },
+			}
+		}
+	}
 
     case $users_ldap_ssl {
         yes: {
