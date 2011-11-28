@@ -137,8 +137,8 @@ glexec:
 ## "gumsclient". 
 
 ## Policy 1: GUMS but not SAZ (most common)
-#verifyproxy -> gumsclient
-#gumsclient -> glexectracking
+verifyproxy -> gumsclient
+gumsclient -> glexectracking
 
 ## Policy 2: GUMS & SAZ
 #verifyproxy -> sazclient
