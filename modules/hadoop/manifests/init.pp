@@ -25,10 +25,11 @@ class hadoop {
 		onlyif => [ "test `ls -ld /hadoop-data1 | awk '{print \$3}'` != hdfs" ],
 	}
 
-	# ensure log location is owned correctly (still broken in hadoop-0.20-osg packages)
+	# log location owned by hadoop group and group writable
+	# this should happen automatically with the newer hadoop RPMs
 	file { "/var/log/hadoop-0.20":
 		ensure => directory,
-		owner => "hdfs", group => "hadoop", mode => 0755,
+		owner => "root", group => "hadoop", mode => 0775,
 		require => Package["hadoop"],
 	}
 
