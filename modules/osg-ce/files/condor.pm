@@ -592,6 +592,15 @@ sub submit
         }
     }
 
+    $rc = print SCRIPT_FILE "+WantIOProxy=TRUE\n";
+    if (!$rc)
+    {
+        return $self->respond_with_failure_extension(
+            "print: $script_filename: $!",
+            Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
+    }
+
+
     # NFS Lite mode
     if ($isNFSLite && !$isManagedFork) {
         print SCRIPT_FILE "should_transfer_files = YES\n";
