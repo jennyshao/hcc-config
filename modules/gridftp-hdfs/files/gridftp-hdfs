@@ -1,0 +1,17 @@
+##############################################################################
+##############################################################################
+#
+#       DO NOT EDIT - file is being maintained by puppet
+#
+##############################################################################
+##############################################################################
+
+# Enables gridftp sending transfer status via syslog - used with HadoopViz
+export GRIDFTP_SYSLOG=1
+
+# Saves computed-on-the-fly checksums for the listed hashes into /cksums.
+export GRIDFTP_HDFS_CHECKSUMS="MD5,ADLER32,CRC32,CKSUM"
+
+# Reduce the amount of memory used for transfers
+export LIBHDFS_OPTS=-Xmx64m
+

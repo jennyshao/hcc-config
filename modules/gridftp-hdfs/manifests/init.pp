@@ -15,8 +15,8 @@ class gridftp-hdfs {
 	package { "gratia-probe-gridftp-transfer": ensure => present, }
 	package { "sysklogd": ensure => present, }
 
-	service { "gridftp-hdfs":
-		name       => "gridftp-hdfs",
+	service { "globus-gridftp-server":
+		name       => "globus-gridftp-server",
 		ensure     => running,
 		enable     => true,
 		hasrestart => true,
@@ -52,6 +52,15 @@ class gridftp-hdfs {
 		source  => "puppet:///modules/gridftp-hdfs/gridftp.conf",
 		require => Package["osg-gridftp-hdfs.x86_64"],
 	}
+
+   # Configuration customizations for the HDFS server.
+   # Sets the checksum algorithms and syslog support for HadoopViz
+   file { "gridftp-hdfs":
+      path    => "/etc/sysconfig/gridftp-hdfs",
+      owner   => "root", group => "root", mode => 644,
+      source  => "puppet:///modules/gridftp-hdfs/gridftp-hdfs",
+      require => Package["osg-gridftp-hdfs.x86_64"],
+   }
 
 	file { "gridftp_killer.py":
 		path    => "/root/gridftp_killer.py",
