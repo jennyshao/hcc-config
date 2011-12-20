@@ -74,3 +74,6 @@ QMF_BROKER_HOST = red-web.unl.edu
 QMF_BROKER_PORT = 5672
 ENABLE_RUNTIME_CONFIG = TRUE
 
+# This setting provides a per-job tmp directory.
+MOUNT_UNDER_SCRATCH = /tmp /var/tmp
+
