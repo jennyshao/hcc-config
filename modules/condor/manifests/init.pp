@@ -27,6 +27,7 @@ class condor {
 
 	package { condor: name => "condor.x86_64", ensure => installed }
 	package { condor-vm-gahp: name => "condor-vm-gahp.x86_64", ensure => installed }
+	#package { condor-qmf: name => "condor-vm-gahp.x86_64", ensure => installed }
 
 	# NOTE: this ensure condor isn't set to run on reboot but does not necessiarly start it
    service { "condor":
@@ -34,9 +35,22 @@ class condor {
       enable => false,
       hasrestart => true,
       hasstatus => true,
-      require => [ Package["condor"], Class["hadoop"], Class["hostcert"], ],
+      require => [ Package["condor"], Class["hadoop"], Class["hostcert"], File["varcondor"], ],
    }
 
+	# packages aren't making /var/run/condor for some reason, force here, require for service
+	file { "varcondor":
+		path => "/var/run/condor",
+		ensure => directory,
+		owner => "condor", group => "condor", mode => "0755",
+	}
+
+	file { "/etc/sysconfig/condor":
+		owner   => "root", group => "root", mode => "0644",
+		ensure  => present,
+		source  => "puppet:///modules/condor/sysconfig-condor",
+		require => Package["condor"],
+	}
 
 	# create condor_config.local if missing, but do not maintain it
 	file { "/etc/condor/condor_config.local":
@@ -50,7 +64,7 @@ class condor {
 		ensure => directory,
 		owner   => "root", group => "root", mode => 0644,
 		recurse => true,
-		purge   => true,
+#		purge   => true,
 		force   => true,
 		require => Package["condor"],
 	}
@@ -75,6 +89,13 @@ class condor {
 			require => Package["condor"],
 		}
 
+      file { "/etc/condor/qpid_passfile_worker":
+         ensure => present,
+         owner => "root", group => "root", mode => 600,
+         source => "puppet:///modules/condor/qpid_passfile_worker",
+         require => Package["condor"],
+      }
+
 		# if a condorCustom09 class is defined, use it
 		# this is for our custom START expressions like 09-thpc and 09-r410
 		if $condorCustom09 {
@@ -96,6 +117,13 @@ class condor {
 			source => "puppet:///modules/condor/config.d/03-red-collector",
 			require => Package["condor"],
 		}
+
+      file { "/etc/condor/qpid_passfile_collector":
+         ensure => present,
+         owner => "root", group => "root", mode => 600,
+         source => "puppet:///modules/condor/qpid_passfile_collector",
+         require => Package["condor"],
+      }
 	}
 
 
@@ -107,6 +135,14 @@ class condor {
 			source => "puppet:///modules/condor/config.d/04-red-submitter",
 			require => Package["condor"],
 		}
+
+      file { "/etc/condor/qpid_passfile_submitter":
+         ensure => present,
+         owner => "root", group => "root", mode => 600,
+         source => "puppet:///modules/condor/qpid_passfile_submitter",
+         require => Package["condor"],
+      }
+
 	}
 
 

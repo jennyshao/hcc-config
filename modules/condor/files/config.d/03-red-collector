@@ -30,9 +30,12 @@ GROUP_NAMES = \
               other.hcc
 
 # --- condor group priorities ---
-# redid the priorities; BB, 4/26/2011
-# ~2000 cores - 144 owned by t3 ~= 1856 cores for alottment.
-# 144 cores owned by t3
+# ~2350 cores total, 144 owned by t3 (~6.12 % of slots)
+#
+# 80% cms
+#   - 
+# 20% other
+
 # of the 1856 cores owned by CMS T2, but only 1200 are pledged.
 # cms prod = 540 (about 45%)
 # lcgadmin = 2
@@ -43,8 +46,8 @@ GROUP_NAMES = \
 #          uscms = Remaining
 # other = 10%
 #     HCC = 100
-GROUP_QUOTA_DYNAMIC_cms = .9
-GROUP_QUOTA_DYNAMIC_other = .1
+GROUP_QUOTA_DYNAMIC_cms = .97
+GROUP_QUOTA_DYNAMIC_other = .03
 
 # CMS children
 GROUP_QUOTA_DYNAMIC_cms.prod = .5
@@ -87,4 +90,12 @@ DAEMON_LIST   = MASTER, COLLECTOR, NEGOTIATOR
 
 COLLECTOR_QUERY_WORKERS = 16
 
+## Configure integration with QPID
+QMF_PUBLISH_SUBMISSIONS = TRUE
+QMF_BROKER_USERNAME = collector
+QMF_BROKER_PASSWORD_FILE = /etc/condor/qpid_passfile_collector
+QMF_BROKER_AUTH_MECH = PLAIN
+QMF_BROKER_HOST = red-web.unl.edu
+QMF_BROKER_PORT = 5672
+ENABLE_RUNTIME_CONFIG = TRUE
 
