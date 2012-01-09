@@ -108,7 +108,7 @@ case "${pam::params::oslayout}" {
 	package { yubico-pam:
 		ensure => "present",
 		name => $lsbmajdistrelease ? {
-			6 => "yubico-pam",
+			6 => "pam_yubico",
 			default => "yubico-pam",
 		}
 	}
