@@ -1,0 +1,4 @@
+
+CVMFS_REPOSITORIES=cms.cern.ch
+CVMFS_HTTP_PROXY="http://red-squid1.unl.edu:3128;http://red-squid.unl.edu:3128"
+
