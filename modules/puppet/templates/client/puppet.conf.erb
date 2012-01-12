@@ -24,10 +24,16 @@
 	# The default value is '$confdir/classes.txt'.
 	classfile = $vardir/classes.txt
 
+	# Where puppetd caches the local configuration.  An
+	# extension indicating the cache format is added automatically.
+	# The default value is '$confdir/localconfig'.
+	localconfig = $vardir/localconfig
+
 	# pluginsource = puppet://$server/plugins
 	# plugindest = $vardir/lib/plugins
 	# factpath = $vardir/lib/puppet/facter
 	pluginsync = true
+
 
 # disabled at the moment, breaks something with 2.7.6
 # - gattebury
