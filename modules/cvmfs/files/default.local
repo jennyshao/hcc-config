@@ -1,4 +1,5 @@
 
-CVMFS_REPOSITORIES=cms.cern.ch
-CVMFS_HTTP_PROXY="http://red-squid1.unl.edu:3128;http://red-squid.unl.edu:3128"
+CVMFS_REPOSITORIES=cms.cern.ch,cms.hep.wisc.edu
+CVMFS_HTTP_PROXY="http://red-squid1.unl.edu:3128|http://red-squid2.unl.edu:3128"
+export CMS_LOCAL_SITE=/etc/cvmfs/SITECONF
 
