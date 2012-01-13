@@ -20,6 +20,8 @@ then
     eval cd $MY_INITIAL_DIR
 fi
 
+export GLOBUS_LOCATION=/usr
+
 export OSG_WN_TMP=$_CONDOR_SCRATCH_DIR
 export PATH=/bin:/usr/bin:$PATH
 exec "$@"
