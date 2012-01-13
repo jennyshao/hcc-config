@@ -8,14 +8,5 @@
 
 
 # limit to 12 slots to maintain 2g/core memory
-#NUM_SLOTS=12
-
-# dedicate 8/12 slots to T3 users only
-#START = $(START) && ((SlotID <= 4) || ((SlotID > 4) && (TARGET.IsT3User == TRUE)))
-
-
-########
-
-# dedicating all cores to t3 only for now, ~1.5gb core
-START = $(START) && (TARGET.IsT3User == TRUE)
+NUM_SLOTS=12
 

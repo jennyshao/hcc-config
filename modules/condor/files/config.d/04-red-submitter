@@ -20,7 +20,7 @@ MAX_PERIODIC_EXPR_INTERVAL = 1200
 
 # hold jobs using absurd amounts of disk (100+ GB)
 SYSTEM_PERIODIC_HOLD = \
-   (JobStatus == 1 || JobStatus == 2) && ((DiskUsage > 100000000 || ResidentSetSize > 1600000))
+   (JobStatus == 1 || JobStatus == 2) && ((DiskUsage > 100000000 || ResidentSetSize > 2000000))
 
 # Report why the stupid thing went on hold.
 SYSTEM_PERIODIC_HOLD_REASON = strcat("Job in status ", JobStatus, " put on hold by SYSTEM_PERIODIC_HOLD due to ", ifThenElse(isUndefined(DiskUsage) || DiskUsage < 100000000, strcat("memory usage ", ResidentSetSize), strcat("disk usage ", DiskUsage)), ".")
@@ -68,7 +68,7 @@ MAX_HISTORY_LOG = 104857600
 MAX_HISTORY_ROTATIONS = 10
 
 ## Configure integration with QPID
-QMF_PUBLISH_SUBMISSIONS = TRUE
+QMF_PUBLISH_SUBMISSIONS = FALSE
 QMF_BROKER_USERNAME = submitter
 QMF_BROKER_PASSWORD_FILE = /etc/condor/qpid_passfile_submitter
 QMF_BROKER_AUTH_MECH = PLAIN

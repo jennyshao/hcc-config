@@ -75,5 +75,7 @@ QMF_BROKER_PORT = 5672
 ENABLE_RUNTIME_CONFIG = TRUE
 
 # This setting provides a per-job tmp directory.
-MOUNT_UNDER_SCRATCH = /tmp /var/tmp
+#MOUNT_UNDER_SCRATCH = /tmp /var/tmp
+
+USE_PSS = true
 
