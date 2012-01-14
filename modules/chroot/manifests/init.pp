@@ -227,12 +227,39 @@ class chroot {
       require => File["chroot_var_lib"],
    }
 
-   mount { "chroot_mount_sss":
-      name     => "${chroot::params::chroot_root}/var/lib/sss",
-      device   => "/var/lib/sss",
+   file { "chroot_sss_pipes":
+      path    => "${chroot::params::chroot_root}/var/lib/sss/pipes",
+      mode    => "0644", owner => "root", group => "root",
+      ensure  => directory,
+      require => File["chroot_sss"],
+   }
+
+   file { "chroot_sss_nss":
+      path    => "${chroot::params::chroot_root}/var/lib/sss/pipes/nss",
+      mode    => "0666", owner => "root", group => "root",
+      seluser => "unconfined_u",
+      seltype => "sssd_var_lib_t",
+      ensure  => present, # No ensure=>file, as it is a socket
+      require => File["chroot_sss_pipes"],
+   }
+
+   #mount { "chroot_mount_sss":
+   #   name     => "${chroot::params::chroot_root}/var/lib/sss",
+   #   device   => "/var/lib/sss",
+   #   ensure   => mounted,
+   #   options  => "bind",
+   #   require  => [Exec["mock_cmd"], File["chroot_sss"]],
+   #   fstype   => none,
+   #   atboot   => true,
+   #   remounts => true,
+   #}
+
+   mount { "chroot_mount_sss_nss":
+      name     => "${chroot::params::chroot_root}/var/lib/sss/pipes/nss",
+      device   => "/var/lib/sss/pipes/nss",
       ensure   => mounted,
       options  => "bind",
-      require  => [Exec["mock_cmd"], File["chroot_sss"]],
+      require  => [Exec["mock_cmd"], File["chroot_sss_nss"]],
       fstype   => none,
       atboot   => true,
       remounts => true,
@@ -267,6 +294,16 @@ class chroot {
       content => template("globus/lcmaps.db.erb"),
    }
 
+## Mirror the Condor job wrapper
+##
+   file { "chroot_condor_job_wrapper":
+      path    => "${chroot::params::chroot_root}/usr/local/bin/condor_nfslite_job_wrapper.sh",
+      mode    => "0755", owner => "root", group => "root",
+      ensure  => file,
+      require => Exec["mock_cmd"],
+      source  => "puppet:///modules/condor/condor_nfslite_job_wrapper.sh",
+   }  
+   
 ## Finally, the mock invocation
 ## 
    package { "mock":

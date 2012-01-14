@@ -1,0 +1,5 @@
+
+NAMED_CHROOT = SL5=<%= scope.lookupvar('chroot::params::chroot_root') %>
+
+START = ($(START)) && (IsT3User =!= True) && (RequestedChroot isnt null)
+

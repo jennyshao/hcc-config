@@ -3,7 +3,7 @@ import os
 
 config_opts['root'] = '<%= scope.lookupvar('chroot::params::chroot_base') %>'
 config_opts['target_arch'] = 'x86_64'
-config_opts['chroot_setup_cmd'] = 'install acl attr authconfig bc bind-utils bzip2 cyrus-sasl-plain lsof quota rhel-instnum cpuspeed dos2unix m2crypto sssd nc prctl setarch time tree unix2dos unzip wget which zip zlib osg-wn-client HEP_OSlibs_SL5 glexec lcmaps-plugins-condor-update lcmaps-plugins-process-tracking'
+config_opts['chroot_setup_cmd'] = 'install acl attr authconfig bc bind-utils bzip2 cyrus-sasl-plain lsof quota rhel-instnum cpuspeed dos2unix m2crypto sssd nc prctl setarch time tree unix2dos unzip wget which zip zlib osg-wn-client HEP_OSlibs_SL5 glexec lcmaps-plugins-condor-update lcmaps-plugins-process-tracking strace'
 
 config_opts['yum.conf'] = """
 [main]

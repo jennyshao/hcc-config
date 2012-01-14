@@ -6,6 +6,7 @@
 # does -not- restart/install, only config management for now
 #
 # TODO: split logic into separate sub classes (workers, submitters, collectors, etc...)
+# TODO: Make config.d files templates.
 #
 # FILE					exists on...
 # -------------------------------
@@ -24,6 +25,7 @@ class condor {
 
 	include hostcert
 	include hadoop
+   include chroot::params # To fill in the 09-el6 template.
 
 	package { condor: name => "condor.x86_64", ensure => installed }
 	package { condor-vm-gahp: name => "condor-vm-gahp.x86_64", ensure => installed }
@@ -79,6 +81,14 @@ class condor {
 		require => Package["condor"],
 	}
 
+   # Report to QMF
+   # exists on all nodes (also is written by condor-qmf RPM)
+   file { "/etc/condor/config.d/60condor-qmf.config":
+      ensure  => file,
+      owner   => "root", group => "root", mode => 644,
+      source  => "puppet:///modules/condor/config.d/60condor-qmf.config",
+      require => Package["condor"],
+   }
 
 	# exists on worker nodes
 	if $isCondorWorker {
@@ -98,13 +108,27 @@ class condor {
 
 		# if a condorCustom09 class is defined, use it
 		# this is for our custom START expressions like 09-thpc and 09-r410
-		if $condorCustom09 {
-			file { "/etc/condor/config.d/09-${condorCustom09}":
-				ensure => present,
-				owner  => "root", group => "root", mode => 644,
-				source => "puppet:///modules/condor/config.d/09-${condorCustom09}",
-				require => Package["condor"],
-			}
+		case $condorCustom09 {
+
+         # EL6 nodes require a template to find the relevant chroot.
+         # TODO: make everything a template.
+         "el6": {
+            file { "/etc/condor/config.d/09-${condorCustom09}":
+               ensure  => present,
+               owner   => "root", group => "root", mode => 644,
+               content => template("condor/09-el6.erb"),
+               require => Package["condor"],
+            }
+         }
+
+         default: {
+			   file { "/etc/condor/config.d/09-${condorCustom09}":
+   				ensure => present,
+	   			owner  => "root", group => "root", mode => 644,
+		   		source => "puppet:///modules/condor/config.d/09-${condorCustom09}",
+			   	require => Package["condor"],
+		   	}
+         }
 		}
 	}
 
