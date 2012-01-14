@@ -101,6 +101,7 @@ verifyproxy = "lcmaps_verify_proxy.mod"
 # This was added by BB, Sept 29, 2011
 tracking = "lcmaps_process_tracking.mod"
 condor_updates = "lcmaps_condor_update.mod"
+mount_under_scratch = "lcmaps_mount_under_scratch.mod"
 
 #-----------------------------------------------------------------------------
 #
@@ -153,7 +154,8 @@ glexec:
 ## Policy 1: GUMS but not SAZ (most common)
 verifyproxy -> gumsclient
 gumsclient -> condor_updates
-condor_updates -> tracking
+condor_updates -> mount_under_scratch
+mount_under_scratch -> tracking
 
 ## Policy 2: GUMS & SAZ
 #verifyproxy -> sazclient
