@@ -75,7 +75,11 @@ QMF_BROKER_PORT = 5672
 ENABLE_RUNTIME_CONFIG = TRUE
 
 # This setting provides a per-job tmp directory.
-#MOUNT_UNDER_SCRATCH = /tmp /var/tmp
+# lcmaps-plugins-mount-under-scratch must be enabled to play nicely with glexec
+MOUNT_UNDER_SCRATCH = /tmp /var/tmp
 
+# Newer versions of Condor disable PSS by default.
 USE_PSS = true
+
+NAMED_CHROOT = SL5=/
 
