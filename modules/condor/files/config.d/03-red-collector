@@ -64,7 +64,6 @@ GROUP_QUOTA_DYNAMIC_cms.other.user.t3 = .2
 GROUP_QUOTA_DYNAMIC_other.hcc = 1
 
 GROUP_ACCEPT_SURPLUS = True
-GROUP_AUTOREGROUP = True
 
 # Note: there used to be group priorities here.
 # However, they are meaningless in 7.6.x
