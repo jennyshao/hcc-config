@@ -6,7 +6,7 @@ class minimal {
 	include hosts
 	include resolver
 
-	# puppet settings possibly
+	# puppet settings
 	include puppet
 
 	# package management possibly

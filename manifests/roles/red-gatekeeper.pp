@@ -1,14 +1,12 @@
 class role_red-gatekeeper {
 
-   $pakitiTag = "T2_US_Nebraska"
+	$isCondorSubmitter = true
+	$mountsHDFS = true
 
-	include condor
-	include fetch-crl
-	include pakiti
-	include ganglia::diskstat
-	include osg-ce
-
-	include sudo
 	include nrpe
+   include ganglia
+	include condor
+	include osg-ce
+	include cvmfs
 
 }

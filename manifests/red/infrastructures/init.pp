@@ -50,6 +50,7 @@ node basenode {
 	$users_auth = "ldap"		# use ldap by default
 #	$users_ldap_servers = [ "red-ldap1.unl.edu", "red-ldap2.unl.edu" ]
 	$users_ldap_servers = [ "red-ldap2.unl.edu" ]
+#	$users_ldap_servers = [ "hcc-ldap03.unl.edu" ]
 	$users_ldap_basedn = "dc=rcf,dc=unl,dc=edu"
 	$users_ldap_ssl = "yes"
 

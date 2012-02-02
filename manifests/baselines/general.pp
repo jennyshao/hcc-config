@@ -10,7 +10,7 @@ class general {
 	# modules that everything should use
 	include ntp
 	include timezone
-	include snmp
+#	include snmp
 	include at
 	include cron
 
@@ -20,10 +20,21 @@ class general {
    include sudo
    include autofs
 
+	include idmapd
+
 	# role specific classes are included here
 	if ( $role ) { include "role_$role" }
 
 	# include testing classes if $testing = "yes"
 	if ( $testing == "yes" ) { include "testing" }
+
+	service { "yum":
+		ensure => stopped,
+		enable => false,
+	}
+
+	package { [ "htop", "dstat", "sysstat", "nmap", "strace", "gdb", "screen", "iotop" ]:
+		ensure => present,
+	}
 
 }
