@@ -29,7 +29,7 @@ class condor {
 
 	package { condor: name => "condor.x86_64", ensure => installed }
 	package { condor-vm-gahp: name => "condor-vm-gahp.x86_64", ensure => installed }
-	#package { condor-qmf: name => "condor-vm-gahp.x86_64", ensure => installed }
+	package { condor-qmf: name => "condor-qmf.x86_64", ensure => installed }
 
 	# NOTE: this ensure condor isn't set to run on reboot but does not necessiarly start it
    service { "condor":
