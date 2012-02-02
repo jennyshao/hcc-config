@@ -1,271 +1,57 @@
 
-# nodes 000-060 have no HDFS (thpc nodes)
-node /^node0[0-5][0-9]$|^node060$/ inherits red-private {
-	$role = "red-worker57"
-	$condorCustom09 = "thpc"
-	include general
-}
-
-
-node /demo\d\d\d/ inherits red-private {
-	$sshExtraAdmins = [ 'acaprez', 'aguru', 'jwang' ]
-	$sudoExtraAdmins = [ 'acaprez', 'aguru', 'tharvill', 'jthiltge', 'jsamuels', 'jwang' ]
-	$role = "red-worker57"
-	include general
-
-	# mount sh-util for benchmarking
-   file { "/util": ensure => directory }
-   mount { "/util":
-      device  => "sh-util:/mnt/util/PF",
-      fstype  => "nfs",
-      ensure  => mounted,
-      options => "rw,noatime,tcp,nolock,hard,intr,rsize=32768,wsize=32768",
-      atboot  => true,
-      require => File["/util"],
-   }
-}
-
-##############################################################################
-
-node /node\d\d\d/ inherits red-private {
-	$role = "red-worker57"
-	include general
-}
-
-node 'node001' inherits red-private {
-	$role = "red-worker57"
-	$condorCustom09 = "thpc"
-	include general
-}
-
-node 'node002' inherits red-private {
-	$role = "red-worker57"
-	$condorCustom09 = "thpc"
-	include general
-}
-
-node 'node003' inherits red-private {
-	$role = "red-worker57"
-	$condorCustom09 = "thpc"
-	include general
-}
-
-node 'node004' inherits red-private {
-	$role = "red-worker57"
-	$condorCustom09 = "thpc"
-	include general
-}
-
-node 'node005' inherits red-private {
-	$role = "red-worker57"
-	$condorCustom09 = "thpc"
-	include general
-}
-
-node 'node006' inherits red-private {
-	$role = "red-worker57"
-	$condorCustom09 = "thpc"
-	include general
-}
-
-node 'node007' inherits red-private {
-	$role = "red-worker57"
-	$condorCustom09 = "thpc"
-	include general
-}
-
-node 'node008' inherits red-private {
-	$role = "red-worker57"
-	$condorCustom09 = "thpc"
-	include general
-}
-
-node 'node009' inherits red-private {
-	$role = "red-worker57"
-	$condorCustom09 = "thpc"
-	include general
-}
-
-node 'node010' inherits red-private {
-	$role = "red-worker57"
-	$condorCustom09 = "thpc"
-	include general
-}
-
-node 'node011' inherits red-private {
-	$role = "red-worker57"
-	$condorCustom09 = "thpc"
-	include general
-}
-
-node 'node012' inherits red-private {
-	$role = "red-worker57"
-	$condorCustom09 = "thpc"
-	include general
-}
-
-node 'node013' inherits red-private {
-	$role = "red-worker57"
-	$condorCustom09 = "thpc"
-	include general
-}
-
-node 'node014' inherits red-private {
-	$role = "red-worker57"
-	$condorCustom09 = "thpc"
-	include general
-}
-
-node 'node015' inherits red-private {
-	$role = "red-worker57"
-	$condorCustom09 = "thpc"
-	include general
-}
-
-node 'node016' inherits red-private {
-	$role = "red-worker57"
-	$condorCustom09 = "thpc"
-	include general
-}
-
-node 'node017' inherits red-private {
-	$role = "red-worker57"
-	$condorCustom09 = "thpc"
-	include general
-}
-
-node 'node018' inherits red-private {
-	$role = "red-worker57"
-	$condorCustom09 = "thpc"
-	include general
-}
-
-node 'node019' inherits red-private {
-	$role = "red-worker57"
-	$condorCustom09 = "thpc"
-	include general
-}
-
-node 'node020' inherits red-private {
-	$role = "red-worker57"
-	$condorCustom09 = "thpc"
-	include general
-}
-
-node 'node021' inherits red-private {
-	$role = "red-worker57"
-	$condorCustom09 = "thpc"
-	include general
-}
-
-node 'node022' inherits red-private {
-	$role = "red-worker57"
-	$condorCustom09 = "thpc"
-	include general
-}
-
-node 'node023' inherits red-private {
-	$role = "red-worker57"
-	$condorCustom09 = "thpc"
-	include general
-}
-
-node 'node024' inherits red-private {
-	$role = "red-worker57"
-	$condorCustom09 = "thpc"
-	include general
-}
-
-node 'node025' inherits red-private {
-	$role = "red-worker57"
-	$condorCustom09 = "thpc"
-	include general
-}
-
-node 'node026' inherits red-private {
-	$role = "red-worker57"
-	$condorCustom09 = "thpc"
-	include general
-}
-
-node 'node027' inherits red-private {
-	$role = "red-worker57"
-	$condorCustom09 = "thpc"
-	include general
-}
-
-node 'node028' inherits red-private {
-	$role = "red-worker57"
-	$condorCustom09 = "thpc"
-	include general
-}
-
-node 'node029' inherits red-private {
-	$role = "red-worker57"
-	$condorCustom09 = "thpc"
-	include general
-}
-
-node 'node030' inherits red-private {
-	$role = "red-worker57"
-	$condorCustom09 = "thpc"
-	include general
-}
-
-node 'node031' inherits red-private {
-	$role = "red-worker57"
-	$condorCustom09 = "thpc"
-	include general
-}
-
-
-
-
 node 'node103' inherits red-private {
 	$role = "red-worker57"
 	$isHDFSDatanode = true
+	$condorCustom09 = "r710"
 	include general
 }
 
 node 'node104' inherits red-private {
 	$role = "red-worker57"
 	$isHDFSDatanode = true
+	$condorCustom09 = "r710"
 	include general
 }
 
 node 'node105' inherits red-private {
 	$role = "red-worker57"
 	$isHDFSDatanode = true
+	$condorCustom09 = "r710"
 	include general
 }
 
 node 'node106' inherits red-private {
 	$role = "red-worker57"
 	$isHDFSDatanode = true
+	$condorCustom09 = "r710"
 	include general
 }
 
 node 'node107' inherits red-private {
 	$role = "red-worker57"
 	$isHDFSDatanode = true
+	$condorCustom09 = "r710"
 	include general
 }
 
 node 'node108' inherits red-private {
 	$role = "red-worker57"
 	$isHDFSDatanode = true
+	$condorCustom09 = "r710"
 	include general
 }
 
 node 'node109' inherits red-private {
 	$role = "red-worker57"
 	$isHDFSDatanode = true
+	$condorCustom09 = "r710"
 	include general
 }
 
 node 'node110' inherits red-private {
 	$role = "red-worker57"
 	$isHDFSDatanode = true
+	$condorCustom09 = "r710"
 	include general
 }
 
@@ -671,150 +457,175 @@ node 'node229' inherits red-private {
 node 'node230' inherits red-private {
 	$role = "red-worker57"
 	$isHDFSDatanode = true
+	$condorCustom09 = "r710"
 	include general
 }
 
 node 'node231' inherits red-private {
 	$role = "red-worker57"
 	$isHDFSDatanode = true
+	$condorCustom09 = "r710"
 	include general
 }
 
 node 'node232' inherits red-private {
 	$role = "red-worker57"
 	$isHDFSDatanode = true
+	$condorCustom09 = "r710"
 	include general
 }
 
 node 'node233' inherits red-private {
 	$role = "red-worker57"
 	$isHDFSDatanode = true
+	$condorCustom09 = "r710"
 	include general
 }
 
 node 'node234' inherits red-private {
 	$role = "red-worker57"
 	$isHDFSDatanode = true
+	$condorCustom09 = "r710"
 	include general
 }
 
 node 'node235' inherits red-private {
 	$role = "red-worker57"
 	$isHDFSDatanode = true
+	$condorCustom09 = "r710"
 	include general
 }
 
 node 'node236' inherits red-private {
 	$role = "red-worker57"
 	$isHDFSDatanode = true
+	$condorCustom09 = "r710"
 	include general
 }
 
 node 'node237' inherits red-private {
 	$role = "red-worker57"
 	$isHDFSDatanode = true
+	$condorCustom09 = "r710"
 	include general
 }
 
 node 'node238' inherits red-private {
 	$role = "red-worker57"
 	$isHDFSDatanode = true
+	$condorCustom09 = "r710"
 	include general
 }
 
 node 'node239' inherits red-private {
 	$role = "red-worker57"
 	$isHDFSDatanode = true
+	$condorCustom09 = "r710"
 	include general
 }
 
 node 'node240' inherits red-private {
 	$role = "red-worker57"
 	$isHDFSDatanode = true
+	$condorCustom09 = "r710"
 	include general
 }
 
 node 'node241' inherits red-private {
 	$role = "red-worker57"
 	$isHDFSDatanode = true
+	$condorCustom09 = "r710"
 	include general
 }
 
 node 'node242' inherits red-private {
 	$role = "red-worker57"
 	$isHDFSDatanode = true
+	$condorCustom09 = "r710"
 	include general
 }
 
 node 'node243' inherits red-private {
 	$role = "red-worker57"
 	$isHDFSDatanode = true
+	$condorCustom09 = "r710"
 	include general
 }
 
 node 'node244' inherits red-private {
 	$role = "red-worker57"
 	$isHDFSDatanode = true
+	$condorCustom09 = "r710"
 	include general
 }
 
 node 'node245' inherits red-private {
 	$role = "red-worker57"
 	$isHDFSDatanode = true
+	$condorCustom09 = "r710"
 	include general
 }
 
 node 'node246' inherits red-private {
 	$role = "red-worker57"
 	$isHDFSDatanode = true
+	$condorCustom09 = "r710"
 	include general
 }
 
 node 'node247' inherits red-private {
 	$role = "red-worker57"
 	$isHDFSDatanode = true
+	$condorCustom09 = "r710"
 	include general
 }
 
 node 'node248' inherits red-private {
 	$role = "red-worker57"
 	$isHDFSDatanode = true
+	$condorCustom09 = "r710"
 	include general
 }
 
 node 'node249' inherits red-private {
 	$role = "red-worker57"
 	$isHDFSDatanode = true
+	$condorCustom09 = "r710"
 	include general
 }
 
 node 'node250' inherits red-private {
 	$role = "red-worker57"
 	$isHDFSDatanode = true
+	$condorCustom09 = "r710"
 	include general
 }
 
 node 'node251' inherits red-private {
 	$role = "red-worker57"
 	$isHDFSDatanode = true
+	$condorCustom09 = "r710"
 	include general
 }
 
 node 'node252' inherits red-private {
 	$role = "red-worker57"
 	$isHDFSDatanode = true
+	$condorCustom09 = "r710"
 	include general
 }
 
 node 'node253' inherits red-private {
 	$role = "red-worker57"
 	$isHDFSDatanode = true
+	$condorCustom09 = "r710"
 	include general
 }
 
 node 'node254' inherits red-private {
 	$role = "red-worker57"
 	$isHDFSDatanode = true
+	$condorCustom09 = "r710"
 	include general
 }
 
@@ -858,4 +669,20 @@ node /^red-d11n\d+\.red\.hcc\.unl\.edu$/ inherits red-private {
 	include general
 }
 
+node /^red-d15n\d+\.red\.hcc\.unl\.edu$/ inherits red-private {
+	$role = "red-worker57"
+	$isHDFSDatanode = true
+	include general
+}
 
+node /^red-d16n\d+\.red\.hcc\.unl\.edu$/ inherits red-private {
+	$role = "red-worker57"
+	$isHDFSDatanode = true
+	include general
+}
+
+node /^red-d18n\d+\.red\.hcc\.unl\.edu$/ inherits red-private {
+	$role = "red-worker57"
+	$isHDFSDatanode = true
+	include general
+}
