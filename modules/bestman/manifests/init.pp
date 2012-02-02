@@ -36,19 +36,19 @@ class bestman {
 	}
 
 
-	# custom http certs for betman
+	# custom http certs for bestman -- grab from puppetmaster directly since
+	# some things require /etc/grid-security/http/http* to be owned strangely
+	# (this is in contrast to how the hostcert module does it)
 	file { "bestman-httpcert.pem":
 		path    => "/etc/grid-security/http/bestman-httpcert.pem",
 		owner   => "bestman", group => "bestman", mode => 644,
-		require => File["/etc/grid-security/http/httpcert.pem"],
-		source  => "/etc/grid-security/http/httpcert.pem",
+		source  => "puppet:///hostcert/${hostname}-httpcert.pem",
 	}
 
 	file { "bestman-httpkey.pem":
 		path    => "/etc/grid-security/http/bestman-httpkey.pem",
 		owner   => "bestman", group => "bestman", mode => 600,
-		require => File["/etc/grid-security/http/httpkey.pem"],
-		source  => "/etc/grid-security/http/httpkey.pem",
+		source  => "puppet:///hostcert/${hostname}-httpkey.pem",
 	}
 
 }
