@@ -1,0 +1,32 @@
+modules {
+  module {
+    name = "hcctemps"
+    language = "python"
+    param "cpu1_temp" { value = 1}
+    param "cpu2_temp" { value = 2}
+    param "ambient_temp" { value = 5 }
+    param "planar_temp" { value = 6 }
+    param "tcase" { value = 76 }
+  }
+}
+
+collection_group {
+  collect_every = 30
+  time_threshold = 60
+  metric {
+    name = "cpu1_temp"
+    title = "CPU1 Temperature"
+  }
+  metric {
+    name = "cpu2_temp"
+    title = "CPU2 Temperature"
+  }
+  metric {
+    name = "ambient_temp"
+    title = "Ambient Temperature"
+  }
+  metric {
+    name = "planar_temp"
+    title = "Planar Temperature"
+  }
+}

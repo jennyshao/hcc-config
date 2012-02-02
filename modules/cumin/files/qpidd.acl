@@ -1,0 +1,7 @@
+
+group valid-users cumin@QPID collector@QPID worker@QPID submitter@QPID
+
+acl allow valid-users all all
+acl deny anonymous@QPID all all
+acl deny all all
+
