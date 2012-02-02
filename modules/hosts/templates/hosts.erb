@@ -15,75 +15,45 @@
 
 172.16.5.1        node000.red.hcc.unl.edu node000
 
-#-----------------------------------------#
-#--- big scary master hostfile for red ---#
-#---    everything should use this!    ---#
-#-----------------------------------------#
+172.16.200.67     red-ashu red-ashu.red.hcc.unl.edu
 
+
+#--- sandhills filesystems ---#
 10.147.100.217    sh-util
 10.147.100.218    sh-util-mgmt
 10.147.100.201    workfs
 10.147.200.1      homefs
 
 
-# SGI
-172.16.99.1       demo000	demo000.red.hcc.unl.edu
-172.16.99.2       demo000mgmt
-
-# Penguin
-172.16.99.3       demo001	demo001.red.hcc.unl.edu
-172.16.99.4       demo001mgmt
-
-# Dell
-172.16.99.5       demo002	demo002.red.hcc.unl.edu
-172.16.99.6       demo002mgmt
-
-# Seneca
-172.16.99.7       demo003	demo003.red.hcc.unl.edu
-172.16.99.8       demo003mgmt
-
-# IBM (top)
-172.16.99.9       demo004	demo004.red.hcc.unl.edu
-172.16.99.10      demo004mgmt
-
-# IBM (bottom)
-172.16.99.11      demo005	demo005.red.hcc.unl.edu
-172.16.99.12      demo005mgmt
-
+#--- red infrastructure ---#
 172.16.0.1        red-net1-int
 172.16.0.2        red-net2-int
 172.16.0.3        red-net1-mgmt
 172.16.0.4        red-net2-mgmt
 172.16.0.5        red-nat
 
+172.16.104.4		nfs04
+172.16.105.8		nfs04_vault
 
 172.16.200.3      red-mon-int
 172.16.200.5		redkick
 
-172.16.104.4		nfs04
-172.16.105.8		nfs04_vault
 
 172.16.100.8      hadoop-name
 172.16.100.9      hadoop-tracker
 172.16.101.9      hadoop-tracker-mgmt
-172.16.101.4      reddev-el4-64
 
-
-172.16.200.11     red-filer1
-172.16.200.12     red-filer1-mgmt
-172.16.200.13     red-filer1-disk
-172.16.200.14     red-filer2
-172.16.200.15     red-filer2-mgmt
-172.16.200.16     red-filer2-disk
 172.16.200.17     red-web-mgmt
 172.16.200.29     red-dump
 172.16.200.30     red-dump-disk
 172.16.200.42     bluetape
 
-172.16.95.1       red-vm0	red-vm0.red.hcc.unl.edu
-172.16.200.19		red-vm0mgmt
-172.16.200.46     red-vm6	red-vm6.red.hcc.unl.edu
-172.16.200.47     red-vm6mgmt
+172.16.200.76     red-vm6 red-vm6.red.hcc.unl.edu
+172.17.200.76     red-vm6-mgmt
+172.16.200.77     red-vm7 red-vm7.red.hcc.unl.edu
+172.17.200.77     red-vm7-mgmt
+172.16.200.78     red-vm8 red-vm8.red.hcc.unl.edu
+172.17.200.78     red-vm8-mgmt
 
 172.16.200.54     hcc-gridnfs hcc-gridnfs.red.hcc.unl.edu
 172.16.200.55     hcc-gridnfs-mgmt
@@ -129,10 +99,11 @@
 172.16.102.233    rd10-pdu2
 172.16.102.232    rd11-pdu1
 172.16.102.231    rd11-pdu2
-172.16.102.227    rd13-pdu1
 172.16.102.242    rd22-pdu1
 172.16.102.243    rd22-pdu2
 
+172.17.253.15     rd13-pdu1
+172.17.253.16     rd13-pdu2
 
 
 # -- HADOOP STORAGE VAULTS
@@ -728,6 +699,66 @@
 172.16.3.58   red-d11n18   red-d11n18.red.hcc.unl.edu
 172.16.3.59   red-d11n19   red-d11n19.red.hcc.unl.edu
 172.16.3.60   red-d11n20   red-d11n20.red.hcc.unl.edu
+
+172.16.15.1    red-d15n1    red-d15n1.red.hcc.unl.edu
+172.16.15.2    red-d15n2    red-d15n2.red.hcc.unl.edu
+172.16.15.3    red-d15n3    red-d15n3.red.hcc.unl.edu
+172.16.15.4    red-d15n4    red-d15n4.red.hcc.unl.edu
+172.16.15.5    red-d15n5    red-d15n5.red.hcc.unl.edu
+172.16.15.6    red-d15n6    red-d15n6.red.hcc.unl.edu
+172.16.15.7    red-d15n7    red-d15n7.red.hcc.unl.edu
+172.16.15.8    red-d15n8    red-d15n8.red.hcc.unl.edu
+172.16.15.9    red-d15n9    red-d15n9.red.hcc.unl.edu
+172.16.15.10   red-d15n10   red-d15n10.red.hcc.unl.edu
+172.16.15.11   red-d15n11   red-d15n11.red.hcc.unl.edu
+172.16.15.12   red-d15n12   red-d15n12.red.hcc.unl.edu
+172.16.15.13   red-d15n13   red-d15n13.red.hcc.unl.edu
+172.16.15.14   red-d15n14   red-d15n14.red.hcc.unl.edu
+172.16.15.15   red-d15n15   red-d15n15.red.hcc.unl.edu
+172.16.15.16   red-d15n16   red-d15n16.red.hcc.unl.edu
+172.16.15.17   red-d15n17   red-d15n17.red.hcc.unl.edu
+172.16.15.18   red-d15n18   red-d15n18.red.hcc.unl.edu
+
+
+172.16.16.1    red-d16n1    red-d16n1.red.hcc.unl.edu
+172.16.16.2    red-d16n2    red-d16n2.red.hcc.unl.edu
+172.16.16.3    red-d16n3    red-d16n3.red.hcc.unl.edu
+172.16.16.4    red-d16n4    red-d16n4.red.hcc.unl.edu
+172.16.16.5    red-d16n5    red-d16n5.red.hcc.unl.edu
+172.16.16.6    red-d16n6    red-d16n6.red.hcc.unl.edu
+172.16.16.7    red-d16n7    red-d16n7.red.hcc.unl.edu
+172.16.16.8    red-d16n8    red-d16n8.red.hcc.unl.edu
+172.16.16.9    red-d16n9    red-d16n9.red.hcc.unl.edu
+172.16.16.10   red-d16n10   red-d16n10.red.hcc.unl.edu
+172.16.16.11   red-d16n11   red-d16n11.red.hcc.unl.edu
+172.16.16.12   red-d16n12   red-d16n12.red.hcc.unl.edu
+172.16.16.13   red-d16n13   red-d16n13.red.hcc.unl.edu
+172.16.16.14   red-d16n14   red-d16n14.red.hcc.unl.edu
+172.16.16.15   red-d16n15   red-d16n15.red.hcc.unl.edu
+172.16.16.16   red-d16n16   red-d16n16.red.hcc.unl.edu
+172.16.16.17   red-d16n17   red-d16n17.red.hcc.unl.edu
+172.16.16.18   red-d16n18   red-d16n18.red.hcc.unl.edu
+
+
+172.16.18.1    red-d18n1    red-d18n1.red.hcc.unl.edu
+172.16.18.2    red-d18n2    red-d18n2.red.hcc.unl.edu
+172.16.18.3    red-d18n3    red-d18n3.red.hcc.unl.edu
+172.16.18.4    red-d18n4    red-d18n4.red.hcc.unl.edu
+172.16.18.5    red-d18n5    red-d18n5.red.hcc.unl.edu
+172.16.18.6    red-d18n6    red-d18n6.red.hcc.unl.edu
+172.16.18.7    red-d18n7    red-d18n7.red.hcc.unl.edu
+172.16.18.8    red-d18n8    red-d18n8.red.hcc.unl.edu
+172.16.18.9    red-d18n9    red-d18n9.red.hcc.unl.edu
+172.16.18.10   red-d18n10   red-d18n10.red.hcc.unl.edu
+172.16.18.11   red-d18n11   red-d18n11.red.hcc.unl.edu
+172.16.18.12   red-d18n12   red-d18n12.red.hcc.unl.edu
+172.16.18.13   red-d18n13   red-d18n13.red.hcc.unl.edu
+172.16.18.14   red-d18n14   red-d18n14.red.hcc.unl.edu
+172.16.18.15   red-d18n15   red-d18n15.red.hcc.unl.edu
+172.16.18.16   red-d18n16   red-d18n16.red.hcc.unl.edu
+172.16.18.17   red-d18n17   red-d18n17.red.hcc.unl.edu
+172.16.18.18   red-d18n18   red-d18n18.red.hcc.unl.edu
+
 
 172.16.4.1	red-d8n1mgmt
 172.16.4.2	red-d8n2mgmt
