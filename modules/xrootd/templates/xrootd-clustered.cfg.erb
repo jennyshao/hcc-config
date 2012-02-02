@@ -55,7 +55,5 @@ cms.fxhold 60s
 if exec xrootd
   xrd.report xrootd.t2.ucsd.edu:9931 every 30s all
   xrootd.monitor all auth flush 30s mbuff 1472 window 5s dest files io info user xrootd.t2.ucsd.edu:9930
-  # Temporary line for a CSE435 project.  Commented, but not removed, post semester-end.
-  #xrootd.monitor all auth flush 30s mbuff 1472 window 5s dest files io info user hcc-group4.unl.edu:9930
 fi
 
