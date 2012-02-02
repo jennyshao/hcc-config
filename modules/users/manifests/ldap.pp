@@ -46,8 +46,33 @@ class users::ldap {
 	# rhel6 does not use ldap.conf files
 	case $lsbmajdistrelease {
 		6: {
-			# do nothing
 			include sssd
+
+			# need ldap.conf files for pam_yubico
+			
+			file { "ldap.conf":
+				path    => $users::params::configfile_ldap ,
+				mode    => "644",
+				owner   => "root",
+				group   => "root",
+				ensure  => present,
+				content => template("users/ldap/ldap.conf.erb"),
+			}
+
+			file { "openldap-ldap.conf":
+				path    => $operatingsystem ? {
+					debian => "/etc/ldap/ldap.conf",
+					ubuntu => "/etc/ldap/ldap.conf",
+					redhat => "/etc/openldap/ldap.conf",
+					centos => "/etc/openldap/ldap.conf",
+					scientific => "/etc/openldap/ldap.conf",
+				},
+				mode    => "644",
+				owner   => "root",
+				group   => "root",
+				ensure  => present,
+				content => template("users/ldap/openldap-ldap.conf.erb"),
+			}
 		}
 		default: {
 			file { "ldap.conf":
