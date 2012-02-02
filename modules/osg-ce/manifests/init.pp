@@ -10,20 +10,20 @@ class osg-ce {
 	file { "/opt/osg": ensure => directory }
 	file { "/opt/osg/app": ensure => directory, require => File["/opt/osg"], }
 	mount { "/opt/osg/app":
-		device  => "nfs04:/mnt/raid/opt/osg/app",
-		fstype  => "nfs",
+		device  => "hcc-gridnfs:/osg/app",
+		fstype  => "nfs4",
 		ensure  => mounted,
-		options => "rw,noatime,tcp,nolock,hard,intr,rsize=32768,wsize=32768",
+		options => "rw,noatime,hard,intr,rsize=32768,wsize=32768",
 		atboot  => true,
 		require => File["/opt/osg/app"],
 	}
 
 	file { "/opt/osg/data": ensure => directory, require => File["/opt/osg"], }
 	mount { "/opt/osg/data":
-		device  => "nfs04:/mnt/raid/opt/data",
-		fstype  => "nfs",
+		device  => "hcc-gridnfs:/osg/data",
+		fstype  => "nfs4",
 		ensure  => mounted,
-		options => "rw,noatime,tcp,nolock,hard,intr,rsize=32768,wsize=32768",
+		options => "rw,noatime,hard,intr,rsize=32768,wsize=32768",
 		atboot  => true,
 		require => File["/opt/osg/data"],
 	}

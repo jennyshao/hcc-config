@@ -55,6 +55,13 @@ class osg-ce::config {
 		content => template("osg-ce/lcmaps.db.erb"),
 	}
 
+	file { "gsi-authz.conf":
+		ensure  => present,
+		path    => "/etc/grid-security/gsi-authz.conf",
+		owner   => "root", group => "root", mode => '0644',
+		source  => "puppet:///modules/osg-ce/gsi-authz.conf",
+	}
+
 	#######
 	file { "gums-client.properties":
 		ensure  => present,
