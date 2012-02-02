@@ -1,0 +1,27 @@
+
+   Tier3 CMS @ Nebraska
+
+   CONDOR INSTRUCTIONS:
+   http://t2.unl.edu/t3-center-at-nebraska/condor-on-t3/
+
+
+   Environment setup:
+
+		OSG: the client is now installed from RPMs
+		You shouldn't need to source a setup.sh anymore
+
+		CRAB: source /opt/CRAB/CRAB_2_7_9/crab.sh
+		The old /mnt/unl/CRAB area is a symlink to the above,
+		please update your scripts if needed
+
+		CMSSW: source /opt/osg/app/cmssoft/cms/cmsset_default.sh
+
+
+   You can access our CMS data from any Internet connected computer;
+   Open /store/foo as root://xrootd.unl.edu//store/foo; works in
+   cmsRun or ROOT.
+
+   Support email = cms-support@cse.unl.edu
+
+
+

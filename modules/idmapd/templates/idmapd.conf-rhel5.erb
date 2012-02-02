@@ -1,0 +1,32 @@
+##############################################################################
+##############################################################################
+#
+#  DO NOT EDIT - file is being maintained by puppet
+#
+#  idmapd.conf for rhel5
+#
+##############################################################################
+##############################################################################
+
+
+[General]
+
+Verbosity = 0
+Pipefs-Directory = /var/lib/nfs/rpc_pipefs
+Domain = hcc.unl.edu
+
+[Mapping]
+
+Nobody-User = nobody
+Nobody-Group = nobody
+
+[Translation]
+Method = nsswitch
+
+[Static]
+
+# A "static" list of GSS-Authenticated names to
+# local user name mappings
+
+#someuser@REALM = localuser
+
