@@ -10,19 +10,29 @@
 # the magical mythical land o' configs (should not normally be mounted anywhere)
 /opt/kickstart -rw,noatime,tcp,nolock,hard,intr,rsize=32768,wsize=32768 red-man.unl.edu:/opt/kickstart
 
+# OSGAPP and OSGDATA
+#/opt/osg/app -fstype=nfs4,rw,noatime,rsize=32768,wsize=32768 hcc-gridnfs:/osg/app
+#/opt/osg/data -fstype=nfs4,rw,noatime,rsize=32768,wsize=32768 hcc-gridnfs:/osg/data
 
-# currently mounting OSGAPP/DATA static on CEs due to silly RSV probe permission checking
-#/opt/osg/app -rw,noatime,tcp,nolock,hard,intr,rsize=32768,wsize=32768 nfs04:/mnt/raid/opt/osg/app
-#/opt/osg/data -rw,noatime,tcp,nolock,hard,intr,rsize=32768,wsize=32768 nfs04:/mnt/raid/opt/data
+# t3 homedirs
+/home/bloom -fstype=nfs4,rw,noatime,rsize=32768,wsize=32768 t3-nfs:/home/bloom
+/home/bockelman -fstype=nfs4,rw,noatime,rsize=32768,wsize=32768 t3-nfs:/home/bockelman
+/home/cse496 -fstype=nfs4,rw,noatime,rsize=32768,wsize=32768 t3-nfs:/home/cse496
+/home/dominguez -fstype=nfs4,rw,noatime,rsize=32768,wsize=32768 t3-nfs:/home/dominguez
+/home/hep -fstype=nfs4,rw,noatime,rsize=32768,wsize=32768 t3-nfs:/home/hep
+/home/snow -fstype=nfs4,rw,noatime,rsize=32768,wsize=32768 t3-nfs:/home/snow
+/home/swanson -fstype=nfs4,rw,noatime,rsize=32768,wsize=32768 t3-nfs:/home/swanson
+/home/t3-ksu -fstype=nfs4,rw,noatime,rsize=32768,wsize=32768 t3-nfs:/home/t3-ksu
+/home/t3-ku -fstype=nfs4,rw,noatime,rsize=32768,wsize=32768 t3-nfs:/home/t3-ku
 
+#<%= scope.lookupvar('chroot::params::chroot_root') %>/home/bloom -fstype=nfs4,rw,noatime,rsize=32768,wsize=32768 t3-nfs:/home/bloom
+#<%= scope.lookupvar('chroot::params::chroot_root') %>/home/bockelman -fstype=nfs4,rw,noatime,rsize=32768,wsize=32768 t3-nfs:/home/bockelman
+#<%= scope.lookupvar('chroot::params::chroot_root') %>/home/cse496 -fstype=nfs4,rw,noatime,rsize=32768,wsize=32768 t3-nfs:/home/cse496
+#<%= scope.lookupvar('chroot::params::chroot_root') %>/home/dominguez -fstype=nfs4,rw,noatime,rsize=32768,wsize=32768 t3-nfs:/home/dominguez
+#<%= scope.lookupvar('chroot::params::chroot_root') %>/home/hep -fstype=nfs4,rw,noatime,rsize=32768,wsize=32768 t3-nfs:/home/hep
+#<%= scope.lookupvar('chroot::params::chroot_root') %>/home/snow -fstype=nfs4,rw,noatime,rsize=32768,wsize=32768 t3-nfs:/home/snow
+#<%= scope.lookupvar('chroot::params::chroot_root') %>/home/swanson -fstype=nfs4,rw,noatime,rsize=32768,wsize=32768 t3-nfs:/home/swanson
+#<%= scope.lookupvar('chroot::params::chroot_root') %>/home/t3-ksu -fstype=nfs4,rw,noatime,rsize=32768,wsize=32768 t3-nfs:/home/t3-ksu
+#<%= scope.lookupvar('chroot::params::chroot_root') %>/home/t3-ku -fstype=nfs4,rw,noatime,rsize=32768,wsize=32768 t3-nfs:/home/t3-ku
 
-# Tier3 and other homedirs
-/mnt/unl	-rw,noatime,tcp,nolock,hard,intr,rsize=32768,wsize=32768	172.16.200.24:/mnt/unl
-/mnt/ksu	-rw,noatime,tcp,nolock,hard,intr,rsize=32768,wsize=32768	172.16.200.24:/mnt/ksu
-/home/hep -rw,noatime,tcp,nolock,hard,intr,rsize=32768,wsize=32768 172.16.200.24:/mnt/unl/home
-/home/t3-ku -rw,noatime,tcp,nolock,hard,intr,rsize=32768,wsize=32768 172.16.200.24:/mnt/ksu/t3-ku
-
-/home/cse496 -rw,noatime,tcp,nolock,hard,intr,rsize=32768,wsize=32768 172.16.200.24:/mnt/unl/home/cse496/
-/home/clundst -rw,noatime,tcp,nolock,hard,intr,rsize=32768,wsize=32768 172.16.200.24:/home/clundst/
-/home/swanson -rw,noatime,tcp,nolock,hard,intr,rsize=32768,wsize=32768 172.16.200.24:/home/swanson/
 

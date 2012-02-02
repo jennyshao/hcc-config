@@ -5,6 +5,8 @@
 #
 class autofs {
 
+   include chroot::params
+
 	package { autofs: name => "autofs", ensure => present }
 
 	service { "autofs":
