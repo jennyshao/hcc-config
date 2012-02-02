@@ -6,10 +6,13 @@
 class cvmfs {
 
    include cvmfs::params
+   include autofs
 
 	package { "cvmfs":
-		name => "${cvmfs::params::cvmfs_package_name}",
-		ensure => present,
+		name    => "${cvmfs::params::cvmfs_package_name}",
+		ensure  => present,
+      require => User["cvmfs"],
+      notify  => Service["autofs"],
 	}
 
 	# we run cvmfs as a dedicated user
@@ -25,7 +28,7 @@ class cvmfs {
 		system => true,
 		gid => "${cvmfs::params::cvmfs_group}",
       groups => ["${cvmfs::params::cvmfs_group}", "fuse"],
-		require => Package["cvmfs"],
+		require => Group["cvmfs"],
 		managehome => false,
 		shell => '/sbin/nologin',
 	}
@@ -39,6 +42,7 @@ class cvmfs {
       group   => "root",
       source  => "puppet:///modules/cvmfs/cms.hep.wisc.edu.pub",
       ensure  => present,
+      require => Package["cvmfs"],
    }
 
    file { "wisc_conf":
@@ -48,6 +52,7 @@ class cvmfs {
       group   => "root",
       source  => "puppet:///modules/cvmfs/cms.hep.wisc.edu.conf",
       ensure  => present,
+      require => Package["cvmfs"],
    }
 
 	file { "default.local":
@@ -67,6 +72,7 @@ class cvmfs {
       mode    => "0644", owner => "root", group => "root",
       recurse => true,
       ensure  => directory,
+      require => Package["cvmfs"],
    }
 
    file { "JobConfig_dir":
@@ -92,6 +98,7 @@ class cvmfs {
       source  => "puppet:///modules/cvmfs/cern.ch.local",
       mode    => "0644", owner => "root", group => "root",
       ensure  => present,
+      require => Package["cvmfs"],
    }
 
    file { "fuse.conf":
