@@ -24,7 +24,7 @@ class ssh {
 		ensure  => present,
 		require => Package["openssh-server"],
 		notify  => Service["sshd"],
-		content => template("ssh/sshd_config.erb"),
+		content => [ template("ssh/sshd_config-$hostname.erb"), template("ssh/sshd_config.erb"), ],
 	}
 
 	file { "sshdir":
