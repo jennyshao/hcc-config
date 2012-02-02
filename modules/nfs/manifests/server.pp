@@ -4,7 +4,7 @@
 
 class nfs::server {
 
-	package { "nfs-utils": ensure => present, }
+	include nfs
 
 	service { "nfs":
 		ensure     => running,
