@@ -9,8 +9,15 @@ class role_red-worker-el6 {
 
 	include condor
 	include ganglia
-#	include cgroups
 	include fetch-crl
-#  include wn-glexec
+   include osg-wn-client
+   include glexec
+   include cvmfs
+   include osg-ca-certs
+   include hadoop
+
+## These are not yet working
+#  include pakiti
+#	include cgroups
 
 }

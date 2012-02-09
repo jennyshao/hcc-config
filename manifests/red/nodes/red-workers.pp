@@ -669,10 +669,18 @@ node /^red-d11n\d+\.red\.hcc\.unl\.edu$/ inherits red-private {
 	include general
 }
 
-node /^red-d15n\d+\.red\.hcc\.unl\.edu$/ inherits red-private {
+## Note the clever regexp footwork in the next two stanzas to avoid
+## defining red-d15n1 and red-d15n2.
+node /^red-d15n\d\d+\.red\.hcc\.unl\.edu$/ inherits red-private {
 	$role = "red-worker57"
 	$isHDFSDatanode = true
 	include general
+}
+
+node /^red-d15n[3456789]{1,1}\.red\.hcc\.unl\.edu$/ inherits red-private {
+   $role = "red-worker57"
+   $isHDFSDatanode = true
+   include general
 }
 
 node /^red-d16n\d+\.red\.hcc\.unl\.edu$/ inherits red-private {

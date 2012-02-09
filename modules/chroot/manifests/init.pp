@@ -286,7 +286,7 @@ class chroot {
 
 ## Customize lcmaps.db
 ##
-   file { "lcmaps.db":
+   file { "chroot_lcmaps.db":
       name    => "${chroot::params::chroot_root}/etc/lcmaps.db",
       require => Exec["mock_cmd"],
       ensure  => present,
