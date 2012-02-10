@@ -21,7 +21,7 @@ class chroot {
       path    => "${chroot::params::chroot_base}",
       mode    => "0644", owner => "root", group => "root",
       ensure  => directory,
-      require => [Exec["mock_cmd"], File["/chroot"]],
+      require => [Exec["chroot_initial_cmd"], File["/chroot"]],
    }
 
    file { "chroot_dir":
@@ -37,7 +37,7 @@ class chroot {
       path    => "${chroot::params::chroot_root}/etc",
       mode => "0644", owner => "root", group => "root",
       ensure  => directory,
-      require => [Exec["mock_cmd"], File["chroot_dir"]],
+      require => [Exec["chroot_initial_cmd"], File["chroot_dir"]],
    }
 
    file { "chroot_resolv.conf":
@@ -53,7 +53,7 @@ class chroot {
       device   => "/etc/resolv.conf",
       ensure   => mounted,
       options  => "bind",
-      require  => [Exec["mock_cmd"], File["chroot_resolv.conf"]],
+      require  => [Exec["chroot_initial_cmd"], File["chroot_resolv.conf"]],
       fstype   => none,
       atboot   => true,
       remounts => true,
@@ -75,7 +75,7 @@ class chroot {
       device   => "/etc/passwd",
       ensure   => mounted,
       options  => "bind",
-      require  => [Exec["mock_cmd"], File["chroot_passwd"]],
+      require  => [Exec["chroot_initial_cmd"], File["chroot_passwd"]],
       fstype   => none,
       atboot   => true,
       remounts => true,
@@ -94,7 +94,7 @@ class chroot {
       device   => "/etc/group",
       ensure   => mounted,
       options  => "bind",
-      require  => [Exec["mock_cmd"], File["chroot_group"]],
+      require  => [Exec["chroot_initial_cmd"], File["chroot_group"]],
       fstype   => none,
       atboot   => true,
       remounts => true,
@@ -107,7 +107,7 @@ class chroot {
       mode    => "1777", owner => "root", group => "root",
       seltype => "tmp_t",
       ensure  => directory,
-      require => [Exec["mock_cmd"], File["chroot_dir"]],
+      require => [Exec["chroot_initial_cmd"], File["chroot_dir"]],
    }
 
    mount { "chroot_mount_tmp":
@@ -115,7 +115,7 @@ class chroot {
       device   => "/tmp",
       ensure   => mounted,
       options  => "bind",
-      require  => [Exec["mock_cmd"], File["chroot_tmp"]],
+      require  => [Exec["chroot_initial_cmd"], File["chroot_tmp"]],
       fstype   => none,
       atboot   => true,
       remounts => true,
@@ -125,7 +125,7 @@ class chroot {
       path    => "${chroot::params::chroot_root}/var",
       mode    => "0644", owner => "root", group => "root",
       ensure  => directory,
-      require => [Exec["mock_cmd"], File["chroot_dir"]],
+      require => [Exec["chroot_initial_cmd"], File["chroot_dir"]],
    }
 
    file { "chroot_var_tmp":
@@ -140,7 +140,7 @@ class chroot {
       device   => "/var/tmp",
       ensure   => mounted,
       options  => "bind",
-      require  => [Exec["mock_cmd"], File["chroot_var_tmp"]],
+      require  => [Exec["chroot_initial_cmd"], File["chroot_var_tmp"]],
       fstype   => none,
       atboot   => true,
       remounts => true,
@@ -150,7 +150,7 @@ class chroot {
       path    => "${chroot::params::chroot_root}/proc",
       mode    => "0644", owner => "root", group => "root",
       ensure  => directory,
-      require => [Exec["mock_cmd"], File["chroot_dir"]],
+      require => [Exec["chroot_initial_cmd"], File["chroot_dir"]],
    }
 
    mount { "chroot_mount_proc":
@@ -158,7 +158,7 @@ class chroot {
       device   => "proc",
       ensure   => mounted,
       options  => "defaults",
-      require  => [Exec["mock_cmd"], File["chroot_proc"]],
+      require  => [Exec["chroot_initial_cmd"], File["chroot_proc"]],
       fstype   => "proc",
       atboot   => true,
       remounts => true,
@@ -168,7 +168,7 @@ class chroot {
       path    => "${chroot::params::chroot_root}/dev",
       mode    => "0644", owner => "root", group => "root",
       ensure  => directory,
-      require => [Exec["mock_cmd"], File["chroot_dir"]],
+      require => [Exec["chroot_initial_cmd"], File["chroot_dir"]],
    }
 
    mount { "chroot_mount_dev":
@@ -176,7 +176,7 @@ class chroot {
       device   => "/dev",
       ensure   => mounted,
       options  => "bind",
-      require  => [Exec["mock_cmd"], File["chroot_dev"]],
+      require  => [Exec["chroot_initial_cmd"], File["chroot_dev"]],
       fstype   => none,
       atboot   => true,
       remounts => true,
@@ -186,7 +186,7 @@ class chroot {
       path    => "${chroot::params::chroot_root}/sys",
       mode    => "0644", owner => "root", group => "root",
       ensure  => directory,
-      require => [Exec["mock_cmd"], File["chroot_dir"]],
+      require => [Exec["chroot_initial_cmd"], File["chroot_dir"]],
    }
 
    mount { "chroot_mount_sys":
@@ -194,7 +194,7 @@ class chroot {
       device   => "/sys",
       ensure   => mounted,
       options  => "bind",
-      require  => [Exec["mock_cmd"], File["chroot_sys"]],
+      require  => [Exec["chroot_initial_cmd"], File["chroot_sys"]],
       fstype   => none,
       atboot   => true,
       remounts => true,
@@ -207,7 +207,7 @@ class chroot {
       path    => "${chroot::params::chroot_root}/home",
       mode    => "0644", owner => "root", group => "root",
       ensure  => directory,
-      require => Exec["mock_cmd"],
+      require => Exec["chroot_initial_cmd"],
       notify  => Service["autofs"],
    }  
 
@@ -248,7 +248,7 @@ class chroot {
    #   device   => "/var/lib/sss",
    #   ensure   => mounted,
    #   options  => "bind",
-   #   require  => [Exec["mock_cmd"], File["chroot_sss"]],
+   #   require  => [Exec["chroot_initial_cmd"], File["chroot_sss"]],
    #   fstype   => none,
    #   atboot   => true,
    #   remounts => true,
@@ -259,7 +259,7 @@ class chroot {
       device   => "/var/lib/sss/pipes/nss",
       ensure   => mounted,
       options  => "bind",
-      require  => [Exec["mock_cmd"], File["chroot_sss_nss"]],
+      require  => [Exec["chroot_initial_cmd"], File["chroot_sss_nss"]],
       fstype   => none,
       atboot   => true,
       remounts => true,
@@ -278,7 +278,7 @@ class chroot {
       device   => "/etc/nsswitch.conf",
       ensure   => mounted,
       options  => "bind",
-      require  => [Exec["mock_cmd"], File["chroot_nsswitch"]],
+      require  => [Exec["chroot_initial_cmd"], File["chroot_nsswitch"]],
       fstype   => none,
       atboot   => true,
       remounts => true,
@@ -288,7 +288,7 @@ class chroot {
 ##
    file { "chroot_lcmaps.db":
       name    => "${chroot::params::chroot_root}/etc/lcmaps.db",
-      require => Exec["mock_cmd"],
+      require => Exec["chroot_initial_cmd"],
       ensure  => present,
       mode    => "0600", owner => "root", group => "root",
       content => template("globus/lcmaps.db.erb"),
@@ -300,45 +300,46 @@ class chroot {
       path    => "${chroot::params::chroot_root}/usr/local/bin/condor_nfslite_job_wrapper.sh",
       mode    => "0755", owner => "root", group => "root",
       ensure  => file,
-      require => Exec["mock_cmd"],
+      require => Exec["chroot_initial_cmd"],
       source  => "puppet:///modules/condor/condor_nfslite_job_wrapper.sh",
    }  
    
-## Finally, the mock invocation
+## Finally, the chroot-tool invocation
 ## 
-   package { "mock":
-		name    => "mock",
+   package { "chroot_tool":
+		name    => "chroot-tool",
 		ensure  => present,
    }
 
-   file { "mock_cfg":
-      name     => "/etc/mock/mock-local.cfg",
+   file { "chroot_tool_cfg":
+      path     => "/etc/chroot-tool/tool.cfg",
       mode     => "0644", owner => "root", group => "root",
-      ensure   => present,
-      content  => template("chroot/mock-local.cfg.erb"),
-      require  => Package["mock"],
+      ensure   => file,
+      content  => template("chroot/tool.cfg.erb"),
+      require  => Package["chroot_tool"],
    }
 
-	user { "chroot_creator":
-		name => "${chroot::params::chroot_user}",
-		ensure => present,
-		system => true,
-      groups => ["mock"],
-		require => Package["mock"],
-		managehome => false,
-		shell => '/sbin/nologin',
-	}
+   file { "chroot_tool_yum_conf":
+      path     => "/etc/chroot-tool/yum.conf",
+      mode     => "0644", owner => "root", group => "root",
+      ensure   => file,
+      content  => template("chroot/yum.conf.erb"),
+      require  => Package["chroot_tool"],
+   }
 
-   exec { "mock_cmd":
-      name     => "/usr/bin/mock -r mock-local --init && touch ${chroot::params::chroot_root}/builddir/mock_successful",
-      require  => [User["chroot_creator"], File["mock_cfg"]],
-      #creates  => "${chroot::params::chroot_root}/builddir/mock_successful",
-      onlyif   => ["test ! -d ${chroot::params::chroot_base}", "test ! -d ${chroot::params::chroot_base}.tmp",
-                   "test ! -f ${chroot::params::chroot_root}/builddir/mock_successful", "test ! -f ${chroot::params::chroot_base}/buildroot.lock"],
-      user     => "chroot_creator",
-      group    => "mock",
+   exec { "chroot_initial_cmd":
+      name     => "test -d ${chroot::params::chroot_root} ||  chroot-tool create && chroot-tool install acl attr authconfig bc bind-utils bzip2 cyrus-sasl-plain lsof libcgroup quota rhel-instnum cpuspeed dos2unix m2crypto sssd nc prctl redhat-lsb setarch time tree unix2dos unzip wget which zip zlib && chroot-tool secure",
+      require  => [File["chroot_tool_cfg"], File["chroot_tool_yum_conf"]],
       provider => "shell",
       cwd      => "/",
+      logoutput => "on_failure",
+   }
+
+   exec { "chroot_grid_cmd":
+      name      => "test -f ${chroot::params::chroot_root}/usr/sbin/glexec || chroot-tool install osg-wn-client HEP_OSlibs_SL5 glexec lcmaps-plugins-condor-update lcmaps-plugins-process-tracking lcmaps-plugins-mount-under-scratch",
+      require   => [Exec["chroot_initial_cmd"]],
+      provider  => "shell",
+      cwd       => "/",
       logoutput => "on_failure",
    }
 
