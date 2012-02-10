@@ -600,6 +600,13 @@ sub submit
             Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
     }
 
+    $rc = print SCRIPT_FILE "+RequestedChroot=\"SL5\"\n";
+    if (!$rc)
+    {       
+        return $self->respond_with_failure_extension(
+            "print: $script_filename: $!",
+            Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
+    }
 
     # NFS Lite mode
     if ($isNFSLite && !$isManagedFork) {
