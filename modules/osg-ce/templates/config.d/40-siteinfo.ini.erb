@@ -24,7 +24,9 @@ host_name = <%= fqdn %>
 ; registration at the goc 
 ; 
 ; YOU WILL NEED TO CHANGE THIS
-resource = Red
+<% if fqdn == 'red.unl.edu' -%>resource = Red<% end -%>
+<% if fqdn == 'red-gw1.unl.edu' -%>resource = red-gateway1<% end -%>
+<% if fqdn == 'red-gw2.unl.edu' -%>resource = red-gateway2<% end -%>
 
 
 ; The resource_group setting should be set to the same value as used in the OIM 
