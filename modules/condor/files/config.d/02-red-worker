@@ -61,9 +61,8 @@ FILETRANSFER_PLUGINS = /usr/local/bin/srm-plugin,/usr/local/bin/vm-nfs-plugin
 
 # for cgroups
 # BASE_CGROUP = /condor
-# USE_PID_NAMESPACES = true
 # USE_FS_NAMESPACES = true
-# PROCD_LOG = $(LOG)/ProcdLog
+PROCD_LOG = $(LOG)/ProcdLog
 
 ## Configure integration with QPID
 QMF_PUBLISH_SUBMISSIONS = TRUE
@@ -77,6 +76,12 @@ ENABLE_RUNTIME_CONFIG = TRUE
 # This setting provides a per-job tmp directory.
 # lcmaps-plugins-mount-under-scratch must be enabled to play nicely with glexec
 MOUNT_UNDER_SCRATCH = /tmp /var/tmp
+
+# Only let the job see its own processes, no others.
+#USE_PID_NAMESPACES = true
+
+# cgroup-based soft memory limits.  Soft is default.
+#MEMORY_LIMIT = "soft"
 
 # Newer versions of Condor disable PSS by default.
 USE_PSS = true
