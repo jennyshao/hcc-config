@@ -3,3 +3,9 @@ NAMED_CHROOT = SL5=<%= scope.lookupvar('chroot::params::chroot_root') %> SL6=/
 
 START = ($(START)) && (IsT3User =!= True) && (RequestedChroot isnt null)
 
+BASE_CGROUP = /condor
+
+SLOT_TYPE_1=100%
+SLOT_TYPE_1_PARTITIONABLE=TRUE
+NUM_SLOTS_TYPE_1=1
+

@@ -608,6 +608,30 @@ sub submit
             Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
     }
 
+    $rc = print SCRIPT_FILE "request_cpus=1\n";
+    if (!$rc)
+    {
+        return $self->respond_with_failure_extension(
+            "print: $script_filename: $!",
+            Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
+    }
+
+    $rc = print SCRIPT_FILE "request_memory=2048\n";
+    if (!$rc)
+    {
+        return $self->respond_with_failure_extension(
+            "print: $script_filename: $!",
+            Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
+    }
+
+    $rc = print SCRIPT_FILE "request_disk=10240\n";
+    if (!$rc)
+    {
+        return $self->respond_with_failure_extension(
+            "print: $script_filename: $!",
+            Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
+    }
+
     # NFS Lite mode
     if ($isNFSLite && !$isManagedFork) {
         print SCRIPT_FILE "should_transfer_files = YES\n";
