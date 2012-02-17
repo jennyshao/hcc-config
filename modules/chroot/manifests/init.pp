@@ -31,6 +31,41 @@ class chroot {
       require => File["chroot_dir_base"],
    }
 
+## glexec stuff
+##
+   file { "chroot_glexex_log_dir":
+      path    => "${chroot::params::chroot_root}/var/log/glexec",
+      mode => "0644", owner => "root", group => "root",
+      ensure  => directory,
+      require => [Exec["chroot_initial_cmd"], File["chroot_dir"]],
+   }
+
+   file { "chroot_glexex_conf":
+      path    => "${chroot::params::chroot_root}/etc/glexec.conf",
+      mode => "0640", owner => "root", group => "glexec",
+      ensure  => file,
+      require => [Exec["chroot_grid_cmd"], File["etc_dir"]],
+   }
+
+   file { "chroot_glexec_bin":
+      path    => "${chroot::params::chroot_root}/usr/sbin/glexec",
+      mode => "6755", owner => "root", group => "glexec",
+      ensure  => file,
+      seltype => "bin_t",
+      require => [Exec["chroot_grid_cmd"], File["chroot_dir"]],
+   }
+
+   mount { "chroot_mount_grid_security":
+      name     => "${chroot::params::chroot_root}/etc/grid-security",
+      device   => "/etc/grid-security",
+      ensure   => mounted,
+      options  => "bind",
+      require  => [File["etc_dir"]],
+      fstype   => none,
+      atboot   => true,
+      remounts => true,
+   }
+
 ## resolv.conf
 ##
    file { "etc_dir":
@@ -54,6 +89,26 @@ class chroot {
       ensure   => mounted,
       options  => "bind",
       require  => [Exec["chroot_initial_cmd"], File["chroot_resolv.conf"]],
+      fstype   => none,
+      atboot   => true,
+      remounts => true,
+   }
+
+   file { "chroot_hosts":
+      path    => "${chroot::params::chroot_root}/etc/hosts",
+      mode    => "0644", owner => "root", group => "root",
+      ensure  => file,
+      seltype => "net_conf_t",
+      seluser => "system_u",
+      require => File["etc_dir"],
+   }
+
+   mount { "chroot_mount_hosts":
+      name     => "${chroot::params::chroot_root}/etc/hosts",
+      device   => "/etc/hosts",
+      ensure   => mounted,
+      options  => "bind",
+      require  => [Exec["chroot_initial_cmd"], File["chroot_hosts"]],
       fstype   => none,
       atboot   => true,
       remounts => true,
@@ -200,6 +255,80 @@ class chroot {
       remounts => true,
    }
 
+## Hadoop?  Don't mind if I do!
+## 
+   file { "chroot_hadoop":
+      path    => "${chroot::params::chroot_root}/mnt/hadoop",
+      mode    => "0644", owner => "root", group => "root",
+      ensure  => directory,
+      require => [Exec["chroot_initial_cmd"], File["chroot_dir"]],
+   }
+
+   # See comment below on why this is not a bind mount 
+   mount { "chroot_mount_hadoop":
+      name     => "${chroot::params::chroot_root}/mnt/hadoop",
+      device  => "hdfs",
+      fstype  => "fuse",
+      ensure  => mounted,
+      options => "server=hadoop-name,port=9000,rdbuffer=32768,allow_other",
+      atboot  => true,
+      remounts => false,
+      require => [ File["chroot_hadoop"], File["/etc/hadoop-0.20/conf.red/hdfs-site.xml"], File["/usr/bin/hadoop-fuse-dfs"], ],
+   }
+
+## OSG_APP, OSG_DATA, oh my!
+##
+   file { "chroot_opt":
+      path    => "${chroot::params::chroot_root}/opt",
+      mode    => "0644", owner => "root", group => "root",
+      ensure  => directory,
+      require => [Exec["chroot_initial_cmd"], File["chroot_dir"]],
+   }
+
+   file { "chroot_opt_osg":
+      path    => "${chroot::params::chroot_root}/opt/osg",
+      mode    => "0644", owner => "root", group => "root",
+      ensure  => directory,
+      require => [Exec["chroot_initial_cmd"], File["chroot_opt"]],
+   }  
+
+   file { "chroot_opt_osg_app":
+      path    => "${chroot::params::chroot_root}/opt/osg/app",
+#      mode    => "0744", owner => "root", group => "root",
+      ensure  => directory,
+      require => [File["chroot_opt_osg"]],
+   }  
+ 
+   # Bind mounts do not work because puppet will just do the bind mount twice,
+   # but ignore the actual NFS server
+   mount { "chroot_mount_opt_osg_app":
+      name    => "${chroot::params::chroot_root}/opt/osg/app",
+      device  => "hcc-gridnfs:/osg/app",
+      fstype  => "nfs4",
+      ensure  => mounted,
+      options => "rw,noatime,hard,intr,rsize=32768,wsize=32768",
+      atboot  => true,
+      require => [ File["chroot_opt_osg_app"] ],
+   }
+
+   file { "chroot_opt_osg_data":
+      path    => "${chroot::params::chroot_root}/opt/osg/data",
+#      mode    => "0644", owner => "root", group => "root",
+      ensure  => directory,
+      require => [File["chroot_opt_osg"]],
+   }  
+
+   # See above comment for why this is not a bind mount      
+   mount { "chroot_mount_opt_osg_data":
+      name    => "${chroot::params::chroot_root}/opt/osg/data",
+      device  => "hcc-gridnfs:/osg/data",
+      fstype  => "nfs4",
+      ensure  => mounted,
+      options => "rw,noatime,hard,intr,rsize=32768,wsize=32768",
+      atboot  => true,
+      require  => [File["chroot_opt_osg_data"]],
+   }  
+
 ## Home
 ## Home is managed by autofs, so no bind mount.
 ##
@@ -230,36 +359,18 @@ class chroot {
    file { "chroot_sss_pipes":
       path    => "${chroot::params::chroot_root}/var/lib/sss/pipes",
       mode    => "0644", owner => "root", group => "root",
+      seluser => "system_u",
+      seltype => "sssd_var_lib_t",
       ensure  => directory,
       require => File["chroot_sss"],
    }
 
-   file { "chroot_sss_nss":
-      path    => "${chroot::params::chroot_root}/var/lib/sss/pipes/nss",
-      mode    => "0666", owner => "root", group => "root",
-      seluser => "unconfined_u",
-      seltype => "sssd_var_lib_t",
-      ensure  => present, # No ensure=>file, as it is a socket
-      require => File["chroot_sss_pipes"],
-   }
-
-   #mount { "chroot_mount_sss":
-   #   name     => "${chroot::params::chroot_root}/var/lib/sss",
-   #   device   => "/var/lib/sss",
-   #   ensure   => mounted,
-   #   options  => "bind",
-   #   require  => [Exec["chroot_initial_cmd"], File["chroot_sss"]],
-   #   fstype   => none,
-   #   atboot   => true,
-   #   remounts => true,
-   #}
-
    mount { "chroot_mount_sss_nss":
-      name     => "${chroot::params::chroot_root}/var/lib/sss/pipes/nss",
-      device   => "/var/lib/sss/pipes/nss",
+      name     => "${chroot::params::chroot_root}/var/lib/sss/pipes",
+      device   => "/var/lib/sss/pipes",
       ensure   => mounted,
       options  => "bind",
-      require  => [Exec["chroot_initial_cmd"], File["chroot_sss_nss"]],
+      require  => [Exec["chroot_initial_cmd"], File["chroot_sss_pipes"]],
       fstype   => none,
       atboot   => true,
       remounts => true,

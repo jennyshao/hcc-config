@@ -24,12 +24,14 @@
 # By default, mount all controllers to /cgroup/<controller>
 
 mount {
-	cpuset	= /mnt/cgroups/cpuset;
-	cpu	= /mnt/cgroups/cpu;
-	cpuacct	= /mnt/cgroups/cpuacct;
-	memory	= /mnt/cgroups/memory;
-	freezer	= /mnt/cgroups/freezer;
-	net_cls	= /mnt/cgroups/net_cls;
+	cpuset	= /cgroup/cpuset;
+	cpu	= /cgroup/cpu;
+	cpuacct	= /cgroup/cpuacct;
+	memory	= /cgroup/memory;
+	devices	= /cgroup/devices;
+	freezer	= /cgroup/freezer;
+	net_cls	= /cgroup/net_cls;
+	blkio	= /cgroup/blkio;
 }
 
 group condor {

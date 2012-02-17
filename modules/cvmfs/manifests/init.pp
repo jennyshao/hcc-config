@@ -15,6 +15,11 @@ class cvmfs {
       notify  => Service["autofs"],
 	}
 
+   package { "fuse":
+      name    => "fuse.x86_64",
+      ensure  => present,
+   }
+
 	# we run cvmfs as a dedicated user
 	group { "cvmfs":
 		name => "${cvmfs::params::cvmfs_group}",
@@ -28,7 +33,7 @@ class cvmfs {
 		system => true,
 		gid => "${cvmfs::params::cvmfs_group}",
       groups => ["${cvmfs::params::cvmfs_group}", "fuse"],
-		require => Group["cvmfs"],
+		require => [Group["cvmfs"], Package["fuse"]],
 		managehome => false,
 		shell => '/sbin/nologin',
 	}
