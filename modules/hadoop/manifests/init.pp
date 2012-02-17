@@ -129,7 +129,8 @@ class hadoop {
 
 		# hadoop mountpoint
 		file { "/mnt/hadoop": ensure => directory }
-		mount { "/mnt/hadoop":
+		mount { "mount_hadoop":
+         name    => "/mnt/hadoop",
 			device  => "hdfs",
 			fstype  => "fuse",
 			ensure  => mounted,
