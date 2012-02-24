@@ -127,6 +127,17 @@ class hadoop {
 			require => Package["hadoop"],
 		}
 
+      # EL6 nodes have SELinux on by default; install sub-package
+      if $lsbmajdistrelease == "6" {
+
+         package { "hadoop-fuse-selinux":
+            name    => "hadoop-0.20-fuse-selinux",
+            ensure  => present,
+            require => Package["hadoop-fuse"],
+         }
+
+      }
+
 		# hadoop mountpoint
 		file { "/mnt/hadoop": ensure => directory }
 		mount { "mount_hadoop":
