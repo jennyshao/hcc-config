@@ -276,6 +276,39 @@ class chroot {
       require => [ File["chroot_hadoop"], File["/etc/hadoop-0.20/conf.red/hdfs-site.xml"], File["/usr/bin/hadoop-fuse-dfs"], ],
    }
 
+## Files for making CMS CVMFS work.
+##
+   file { "chroot_cvmfs_dir":
+      path    => "${chroot::params::chroot_root}/etc/cvmfs",
+      mode    => "0644", owner => "root", group => "root",
+      recurse => true,
+      ensure  => directory,
+   }
+
+   file { "chroot_SITECONF_dir":
+      path    => "${chroot::params::chroot_root}/etc/cvmfs/SITECONF",
+      mode    => "0644", owner => "root", group => "root",
+      recurse => true,
+      ensure  => directory,
+      require => File["chroot_cvmfs_dir"],
+   }
+
+   file { "chroot_JobConfig_dir":
+      path    => "${chroot::params::chroot_root}/etc/cvmfs/SITECONF/JobConfig",
+      mode    => "0644", owner => "root", group => "root",
+      recurse => true,
+      ensure  => directory,
+      require => File["chroot_SITECONF_dir"],
+   }  
+      
+   file { "chroot_site-local-config.xml":
+      path    => "${chroot::params::chroot_root}/etc/cvmfs/SITECONF/JobConfig/site-local-config.xml",
+      source  => "puppet:///modules/cvmfs/site-local-config.xml",
+      mode    => "0644", owner => "root", group => "root",
+      ensure  => present,
+      require => File["chroot_JobConfig_dir"],
+   }  
+
 ## OSG_APP, OSG_DATA, oh my!
 ##
    file { "chroot_opt":

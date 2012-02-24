@@ -10,10 +10,16 @@ class cvmfs {
 
 	package { "cvmfs":
 		name    => "${cvmfs::params::cvmfs_package_name}",
-		ensure  => present,
+		ensure  => latest,
       require => User["cvmfs"],
       notify  => Service["autofs"],
 	}
+
+   package { "cvmfs-keys":
+      name    => "cvmfs-keys",
+      ensure  => present,
+      require => Package["cvmfs"],
+   }
 
    package { "fuse":
       name    => "fuse.x86_64",
