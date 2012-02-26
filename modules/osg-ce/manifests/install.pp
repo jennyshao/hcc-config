@@ -4,4 +4,8 @@ class osg-ce::install {
 		ensure => present,
 	}
 
+   package { "osg-info-services":
+      ensure => present,
+   }
+
 }

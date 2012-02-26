@@ -70,10 +70,15 @@ class osg-ce::config {
 		content => template("osg-ce/gums-client.properties.erb"),
 	}
 
-	file { "/var/gip": ensure => directory }
-	file { "/var/gip/tmp":
-		ensure => directory,
-		owner => "daemon", group => "daemon", mode => '0750',
+   # GIP upgrades currently break the permissions on these directories.
+   # As of GIP 1.3.4; Feb 26, 2012; BB
+	file { "/var/cache/gip":
+      ensure => directory,
+      owner => "tomcat", group => "tomcat", mode => "0644",
+   }
+   file { "/var/log/gip":
+      ensure => directory,
+      owner => "tomcat", group => "tomcat", mode => "0644",
 	}
 
 	#######
