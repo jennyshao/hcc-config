@@ -616,12 +616,12 @@ sub submit
             Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
     }
 
-    my memory_request = "1900";
+    my $memory_request = "1900";
     if($description->min_memory() ne '')
     {
-        memory_request = $description->min_memory();
+        $memory_request = $description->min_memory();
     }
-    $rc = print SCRIPT_FILE "request_memory=" . memory_request . "\n";
+    $rc = print SCRIPT_FILE "request_memory=" . $memory_request . "\n";
     if (!$rc)
     {
         return $self->respond_with_failure_extension(
