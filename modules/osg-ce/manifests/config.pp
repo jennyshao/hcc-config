@@ -81,6 +81,22 @@ class osg-ce::config {
       owner => "tomcat", group => "tomcat", mode => "0644",
 	}
 
+   # Customizations to advertise load-balanced gridftp server
+	file { "add-attributes.conf":
+		ensure	=> present,
+		path		=> "/etc/gip/add-attributes.conf",
+		owner		=>"root", group => "root", mode => "0644",
+		content	=> template("osg-ce/add-attributes.conf.erb"),
+	}
+
+	# Custom authorizations for the Condor queues.
+   file { "alter-attributes.conf":
+      ensure   => present,
+      path     => "/etc/gip/alter-attributes.conf",
+      owner    =>"root", group => "root", mode => "0644",
+      content  => template("osg-ce/alter-attributes.conf.erb"),
+   }
+
 	#######
 
 
