@@ -12,27 +12,9 @@ node /^red-gridftp\d+\.unl\.edu$/ inherits red-public {
 	include sudo
 	include nrpe
 	include ganglia
-#	include ganglia::diskstat
 	include hostcert
 	include gridftp-hdfs
 	include xrootd
-
-}
-
-node "red-fdt.unl.edu" inherits red-public {
-
-   include general
-   include users
-   include autofs
-   include pam
-   include openssh
-   include sudo
-   include nrpe
-   include ganglia
-#   include ganglia::diskstat
-   include hostcert
-   include gridftp-hdfs
-   include xrootd
 
 }
 

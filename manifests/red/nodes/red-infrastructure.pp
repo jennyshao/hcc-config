@@ -1,19 +1,33 @@
 ### red infrastructure nodes (single nodes, groups go in their own .pp file)
 
 node 'red-test.unl.edu' inherits red-public {
-   $role = "red-srm"
 	include general
+	include tester
+
+	$yum_extrarepo = [ "epel" , "nebraska", "osg" ]
+	include yum
+}
+
+node 'red-dir1.unl.edu', 'red-dir2.unl.edu' inherits red-public {
+	include general
+	include ganglia
+}
+
+node 'red-squid1.unl.edu', 'red-squid2.unl.edu' inherits red-public {
+	include general
+	include ganglia
+	include nrpe
+}
+
+node 'hcc-voms.unl.edu' inherits red-public {
+	include general
+	include ganglia
 }
 
 node 'red-condor.unl.edu' inherits red-public {
 	$isCondorCollector = true
 	$role = "red-collector"
 	include general
-	include users
-	include pam
-	include openssh
-	include sudo
-	include autofs
 	include ganglia
 }
 
@@ -41,6 +55,12 @@ node 'glidein.unl.edu' inherits red-public {
 	$pakitiTag = "T2_US_Nebraska"
 	# general discluded intentionally
 	include hosts
+}
+
+node 'osg-test4.unl.edu' inherits red-public {
+	include general
+	include nrpe
+	include ganglia
 }
 
 node 't3-nfs.red.hcc.unl.edu' inherits red-private {
@@ -124,3 +144,10 @@ node 'red-ldap1.unl.edu' inherits red-public {
 	include minimal
 	include general
 }
+
+node 'hadoop-tracker.red.hcc.unl.edu' inherits red-private {
+	include minimal
+	include general
+	include hadoop
+}
+
