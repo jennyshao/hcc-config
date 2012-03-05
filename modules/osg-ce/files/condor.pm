@@ -456,10 +456,13 @@ sub submit
             map { "Arch == \"$_\"" } split(/\s+/, $condor_arch)) . ")";
         push(@requirements, $r);
     }
-    if($description->min_memory() ne '')
-    {
-        push(@requirements, " Memory >= " . $description->min_memory());
-    }
+
+    # Default requirements for Condor <= 7.7.5:
+    #   ( ( TARGET.Memory * 1024 ) >= ImageSize ) && ( ( RequestMemory * 1024 ) >= ImageSize )
+    # This causes strange issues when ImageSize is wildly off (as it usually is), such as un-runnable jobs
+    # Note this requirement will fix the above and take care of the RSL min_memory (as RequestMemory
+    # is set to min_memory above, if it exists).
+    push(@requirements, " TARGET.Memory >= RequestMemory " );
 
     if ($overflowEnabled)
     {
@@ -471,7 +474,6 @@ sub submit
         $requirements = ("True");
     }
  
-
     if (scalar(@requirements) > 0)
     {
         $rc = print SCRIPT_FILE "Requirements = ", join(" && ", @requirements) ."\n";
