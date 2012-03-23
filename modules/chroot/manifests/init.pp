@@ -447,6 +447,22 @@ class chroot {
       require => Exec["chroot_initial_cmd"],
       source  => "puppet:///modules/condor/condor_nfslite_job_wrapper.sh",
    }  
+
+# Make sure the execute directory exists
+   file { "chroot_var_lib_condor":
+      path    => "${chroot::params::chroot_root}/var/lib/condor",
+      mode    => "0644", owner => "root", group => "root",
+      ensure  => directory,
+      require => File["chroot_var_lib"],
+   }
+
+   file { "chroot_var_lib_condor_execute":
+      path    => "${chroot::params::chroot_root}/var/lib/condor/execute",
+      mode    => "0644", owner => "root", group => "root",
+      ensure  => directory,
+      require => File["chroot_var_lib_condor"],
+   }
+
    
 ## Finally, the chroot-tool invocation
 ## 
