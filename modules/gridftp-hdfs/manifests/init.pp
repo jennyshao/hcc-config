@@ -11,9 +11,12 @@ class gridftp-hdfs {
 	include globus
 	include hadoop
 
+	require hostcert
+
 	package { "osg-gridftp-hdfs.x86_64": ensure => present, }
 	package { "gratia-probe-gridftp-transfer": ensure => present, }
 	package { "sysklogd": ensure => present, }
+	package { "arptables_jf": ensure => present, }
 
 	service { "globus-gridftp-server":
 		name       => "globus-gridftp-server",
@@ -31,6 +34,7 @@ class gridftp-hdfs {
 		hasrestart => true,
 		subscribe  => File["gridftp-syslog.conf"],
 	}
+
 
 	file { "gridftp-syslog.conf":
 		path    => "/etc/syslog.conf",
@@ -67,6 +71,29 @@ class gridftp-hdfs {
 		owner   => "root", group => "root", mode => 744,
 		source  => "puppet:///modules/gridftp-hdfs/gridftp_killer.py",
 	}
+
+
+	# gridftp specific certificates
+	file { "gridftp":
+		path => "/etc/grid-security/gridftp",
+		ensure => directory,
+		owner   => "root", group => "root", mode => 0755,
+	}
+
+	file { "gridftpcert":
+		path  => "/etc/grid-security/gridftp/gridftp-hostcert.pem",
+		owner => "root", group => "root", mode => 0644,
+		source => "puppet:///hostcert/red-gridftp-hostcert.pem",
+		require => Class["hostcert"],
+	}
+
+	file { "gridftpkey":
+		path  => "/etc/grid-security/gridftp/gridftp-hostkey.pem",
+		owner => "root", group => "root", mode => 0400,
+		source => "puppet:///hostcert/red-gridftp-hostkey.pem",
+		require => Class["hostcert"],
+	}
+
 
 	# runs gridftp_killer.py which should kill transfers over 12 hours old
 	cron { "gridftp_killer":
