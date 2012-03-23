@@ -22,7 +22,7 @@ class cumin {
 
    service { "cumin":
       name => "cumin",
-      enable => true,
+      enable => false,
       hasrestart => true,
       hasstatus => true,
       require => [ Package["cumin"], Class["hostcert"] ],
@@ -38,7 +38,7 @@ class cumin {
 
    service { "qpidd":
       name => "qpidd",
-      enable => true,
+      enable => false,
       hasrestart => true,
       hasstatus => true,
       require => [ Package["cumin"], Class["hostcert"] ],
