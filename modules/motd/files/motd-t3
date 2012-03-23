@@ -10,7 +10,7 @@
 		OSG: the client is now installed from RPMs
 		You shouldn't need to source a setup.sh anymore
 
-		CRAB: source /opt/CRAB/CRAB_2_7_9/crab.sh
+		CRAB: source /opt/CRAB/CRAB_2_8_0/crab.sh
 		The old /mnt/unl/CRAB area is a symlink to the above,
 		please update your scripts if needed
 

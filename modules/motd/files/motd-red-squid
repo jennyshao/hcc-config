@@ -1,0 +1,24 @@
+
+[0;31m
+                                      ^
+                                    /   \
+                                    \   /
+                                    |   |
+                                    |   |
+                                    | 0 |
+                                   // ||\\
+                                  (( // ||
+                                   \\))  \\
+                                 //||    ))
+                                 ( ))   //
+                                  //   ((
+[0m
+[1;31m
+                                 red-squid1
+[0m
+
+	frontier installed in /home/dbfrontier/frontier-cache (symlink)
+	squid cache + logs live in /data/
+
+	firewall script is /root/firewall-red-squid + selinux is on
+
