@@ -1,0 +1,9 @@
+[dag]
+name=DAG rpms
+baseurl=http://ftp.scientificlinux.org/linux/extra/dag/redhat/el5/en/$basearch/dag/
+		http://ftp1.scientificlinux.org/linux/extra/dag/redhat/el5/en/$basearch/dag/
+		http://ftp2.scientificlinux.org/linux/extra/dag/redhat/el5/en/$basearch/dag/
+		ftp://ftp.scientificlinux.org/linux/extra/dag/redhat/el5/en/$basearch/dag/
+enabled=0
+# To use priorities you must have yum-priorities installed
+priority=30

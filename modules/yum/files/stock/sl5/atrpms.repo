@@ -1,0 +1,10 @@
+[atrpms]
+name=ATrpms rpms
+baseurl=http://ftp.scientificlinux.org/linux/extra/atrpms/sl5-$basearch/stable
+	http://ftp1.scientificlinux.org/linux/extra/atrpms/sl5-$basearch/stable
+	http://ftp2.scientificlinux.org/linux/extra/atrpms/sl5-$basearch/stable
+	ftp://ftp.scientificlinux.org/linux/extra/atrpms/sl5-$basearch/stable
+enabled=0
+# To use priorities you must have yum-priorities installed
+priority=40
+
