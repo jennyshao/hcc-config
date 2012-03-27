@@ -44,6 +44,6 @@ class yum::repo::osg {
 			priority => 98,
 			require => File['RPM-GPG-KEY-OSG'] ;
 
-	}	# end managed_yumrepo
+	}	# end yum::managed_yumrepo
 
 }

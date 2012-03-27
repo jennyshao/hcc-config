@@ -25,6 +25,6 @@ class yum::repo::nebraska {
 	 	gpgcheck => 0,
 		priority => 9 ;
 
-	}	# end managed_repo
+	}	# end yum::managed_repo
 
 }

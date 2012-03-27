@@ -82,6 +82,6 @@ class yum::repo::epel {
 			priority => 99,
 			require => File['RPM-GPG-KEY-EPEL'] ;
 
-	}	# end managed_yumrepo
+	}	# end yum::managed_yumrepo
 
 }
