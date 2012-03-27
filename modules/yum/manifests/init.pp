@@ -4,7 +4,7 @@
 
 class yum {
 
-	require yum::params
+	include yum::params
 
 	case $operatingsystem {
 
@@ -17,7 +17,6 @@ class yum {
 			if $yum::params::extrarepo =~ /epel/ { include yum::repo::epel }
 			if $yum::params::extrarepo =~ /nebraska/ { include yum::repo::nebraska }
 			if $yum::params::extrarepo =~ /osg/ { include yum::repo::osg }
-			if $my_project { include "yum::${my_project}" }
 		}
 
 		redhat: {
