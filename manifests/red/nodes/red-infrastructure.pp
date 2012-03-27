@@ -2,15 +2,35 @@
 
 node 'red-test.unl.edu' inherits red-public {
 	include general
-	include tester
+	$role = "red-gridftp"
+	$yum_extrarepo = [ 'epel', 'nebraska', 'osg' ]
+#	include tester
+	include general
 
-	$yum_extrarepo = [ "epel" , "nebraska", "osg" ]
+}
+
+node 'hcc-ganglia.unl.edu' inherits red-public {
+	include general
+	$yum_extrarepo = [ 'epel', 'nebraska' ]
 	include yum
+}
+
+node 'red-net1.unl.edu', 'red-net2.unl.edu' inherits red-private {
+	include general
+	include ganglia
+}
+
+node 'hcc-uniquant.unl.edu' inherits red-public {
+	$sshExtraAdmins = [ 'acaprez', 'aguru' ]
+	$sudoExtraAdmins = [ 'acaprez', 'aguru' ]
+
+	include general
 }
 
 node 'red-dir1.unl.edu', 'red-dir2.unl.edu' inherits red-public {
 	include general
 	include ganglia
+	include lvs
 }
 
 node 'red-squid1.unl.edu', 'red-squid2.unl.edu' inherits red-public {
@@ -106,16 +126,17 @@ node 't3.unl.edu' inherits red-public {
 	$mountsHDFS = true
 	$isCondorSubmitter = true
    $ntp_server_local = true
-
+   $yum_extrarepo = [ 'epel', 'nebraska', 'osg' ]
 
 	# ldap override so users can change password
-	$users_ldap_servers = [ "hcc-ldap01.unl.edu", "hcc-ldap03.unl.edu" ]
+	$users_ldap_servers = [ "hcc-ldap03.unl.edu" ]
 
-	include minimal
 	include general
 
 	include condor
 	include hadoop
+
+	include cvmfs
 
 	# OSGAPP and OSGDATA hard mounted to keep users sane
 	file { "/opt/osg": ensure => directory }
@@ -149,5 +170,15 @@ node 'hadoop-tracker.red.hcc.unl.edu' inherits red-private {
 	include minimal
 	include general
 	include hadoop
+}
+
+node 'rcf-gratia.unl.edu' inherits red-public {
+
+	$sshExtraAdmins = [ 'acaprez', 'aguru', 'jwang', 'dweitzel', 'bbockelm' ]
+	$sudoExtraAdmins = [ 'acaprez', 'aguru', 'tharvill', 'jthiltge', 'jsamuels', 'jwang', 'dweitzel', 'bbockelm' ]
+
+	include general
+	include ganglia
+
 }
 
