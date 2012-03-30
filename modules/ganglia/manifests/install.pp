@@ -1,7 +1,6 @@
 class ganglia::install {
 
-	package { "ganglia":
-		name => "${ganglia::params::ganglia_package_name}",
+	package { $ganglia::params::ganglia_package_name:
 		ensure => present,
 	}
 

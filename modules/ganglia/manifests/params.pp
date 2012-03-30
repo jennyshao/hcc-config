@@ -1,6 +1,6 @@
 class ganglia::params {
 
-	$ganglia_package_name = "ganglia-gmond"
+	$ganglia_package_name = [ 'ganglia-gmond', 'ganglia-gmond-modules-python' ]
 	$ganglia_service_name = "gmond"
 	$ganglia_process_name = "gmond"
 	$ganglia_config_file = "/etc/ganglia/gmond.conf"
