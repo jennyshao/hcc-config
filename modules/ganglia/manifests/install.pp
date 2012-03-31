@@ -1,7 +1,7 @@
 class ganglia::install {
 
 	package { $ganglia::params::ganglia_package_name:
-		ensure => present,
+		ensure => latest,
 	}
 
 	# we run gmond as a dedicated user
