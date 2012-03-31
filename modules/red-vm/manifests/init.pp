@@ -3,6 +3,12 @@
 #
 class red-vm {
 
+#	package {
+#		"cman":	ensure => present,
+#		"iscsi-initiator-utils":	ensure => present,
+#	}
+
+
 	file { "multipath.conf":
 		ensure => present,
 		path => "/etc/multipath.conf",
