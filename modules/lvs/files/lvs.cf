@@ -1,0 +1,88 @@
+serial_no = 76
+primary = 129.93.239.133
+service = lvs
+backup_active = 1
+backup = 129.93.239.134
+heartbeat = 1
+heartbeat_port = 539
+keepalive = 6
+deadtime = 18
+network = direct
+debug_level = NONE
+monitor_links = 1
+syncdaemon = 1
+virtual red_gridftp_pool {
+     active = 1
+     address = 129.93.239.157 em1:1
+     vip_nmask = 255.255.255.192
+     port = 2811
+     send = "quit"
+     expect = "220"
+     use_regex = 0
+     load_monitor = none
+     scheduler = wrr
+     protocol = tcp
+     timeout = 6
+     reentry = 15
+     quiesce_server = 0
+     server red-gridftp1.unl.edu {
+         address = 129.93.239.184
+         active = 1
+         weight = 1
+     }
+     server red-gridftp2.unl.edu {
+         address = 129.93.239.171
+         active = 1
+         weight = 1
+     }
+     server red-gridftp3.unl.edu {
+         address = 129.93.239.173
+         active = 1
+         weight = 1
+     }
+     server red-gridftp4.unl.edu {
+         address = 129.93.239.167
+         active = 1
+         weight = 1
+     }
+     server red-gridftp5.unl.edu {
+         address = 129.93.239.168
+         active = 1
+         weight = 1
+     }
+     server red-gridftp6.unl.edu {
+         address = 129.93.239.130
+         active = 1
+         weight = 1
+     }
+     server red-gridftp7.unl.edu {
+         address = 129.93.239.136
+         active = 1
+         weight = 1
+     }
+     server red-gridftp8.unl.edu {
+         address = 129.93.239.138
+         active = 1
+         weight = 1
+     }
+     server red-gridftp9.unl.edu {
+         address = 129.93.239.178
+         active = 1
+         weight = 1
+     }
+     server red-gridftp10.unl.edu {
+         address = 129.93.239.165
+         active = 1
+         weight = 1
+     }
+     server red-gridftp11.unl.edu {
+         address = 129.93.239.172
+         active = 1
+         weight = 1
+     }
+     server red-gridftp12.unl.edu {
+         address = 129.93.239.180
+         active = 1
+         weight = 1
+     }
+}

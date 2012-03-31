@@ -63,14 +63,14 @@ udp_send_channel {
 
 /* You can specify as many tcp_accept_channels as you like to share
    an xml description of the state of the cluster */
-#tcp_accept_channel {
-#  port = 8649
-#}
+tcp_accept_channel {
+  port = 8650
+}
 
 /* Channel to receive sFlow datagrams */
-#udp_recv_channel {
-#  port = 6343
-#}
+udp_recv_channel {
+  port = 8650
+}
 
 /* Optional sFlow settings */
 #sflow {
