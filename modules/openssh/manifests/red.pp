@@ -15,11 +15,17 @@
 class openssh::red inherits openssh {
 
 	File["sshd_config"] {
+#		content => $lsbmajdistrelease ? {
+#			6 => [ template("openssh/sshd_config-$hostname.erb"), template("openssh/sshd_config-rhel6.erb"), ],
+#			default => [ template("openssh/sshd_config-$hostname.erb"), template("openssh/sshd_config.erb"), ],
+#		}
+
 		content => $lsbmajdistrelease ? {
-			6 => template("openssh/sshd_config-rhel6.erb"),
-			default => template("openssh/sshd_config.erb"),
+			6 => inline_template(file("/etc/puppet/modules/openssh/templates/sshd_config-$hostname.erb", "/etc/puppet/modules/openssh/templates/sshd_config-rhel6.erb")),
+			default => inline_template(file("/etc/puppet/modules/openssh/templates/sshd_config-$hostname.erb", "/etc/puppet/modules/openssh/templates/sshd_config.erb")),
 		}
 	}
+
 
 #    File["sshd_config"] {
 #        source => [ 
