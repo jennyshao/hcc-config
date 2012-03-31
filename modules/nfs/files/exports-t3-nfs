@@ -14,3 +14,5 @@
 /export 129.93.244.192/255.255.255.192(fsid=0,async,no_root_squash,rw)
 /export 172.16.0.0/255.255.0.0(fsid=0,async,no_root_squash,rw)
 /export 10.147.0.0/255.255.0.0(fsid=0,async,no_root_squash,rw)
+
+/export/fsimage 172.16.0.0/255.255.0.0(async,no_root_squash,rw)
