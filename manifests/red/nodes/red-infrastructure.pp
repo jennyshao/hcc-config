@@ -55,13 +55,9 @@ node 'red-mon.unl.edu' inherits red-public {
 
 	$sshExtraAdmins = [ 'dweitzel', 'aguru', 'acaprez' ]
    $pakitiTag = "T2_US_Nebraska"
+	$yum_extrarepo = [ 'epel', 'nebraska', 'osg' ]
 
 	include general
-   include users
-   include pam
-   include openssh
-   include sudo
-	include autofs
 
    include hostcert
    include osg-ca-certs
@@ -103,15 +99,6 @@ node 't3-nfs.red.hcc.unl.edu' inherits red-private {
 	# t3 home storage is mounted on /export so link to allow local logins
 	# have to use force to remove /home dir if it exists already
 	file { '/home': ensure => link, target => '/export/home', force => true, }
-
-	yumrepo { 'nebraska-el6':
-		baseurl => 'http://red-man.unl.edu/cobbler/repo_mirror/nebraska-el6/',
-		descr => 'Nebraska EL6 Packages',
-		enabled => 1,
-		gpgcheck => 0,
-		http_caching => none,
-		priority => 97,
-	}
 
 	ssh_authorized_key { "red-dump":
 		ensure => "present",
