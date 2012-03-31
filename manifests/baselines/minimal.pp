@@ -1,4 +1,6 @@
+#
 # minimal settings, just enough to run puppet
+#
 
 class minimal {
 
@@ -8,7 +10,5 @@ class minimal {
 
 	# puppet settings
 	include puppet
-
-	# package management possibly
 
 }
