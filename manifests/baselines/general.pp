@@ -1,32 +1,43 @@
+#
 # general baseline class for all nodes
-# this gets called from the actual node definitions
-# similar to exampe42 baselines
+#
 
 class general {
 
-	# general class imports all minimal settings
+	# minimal things needed to run puppet
 	include minimal
 
-	# modules that everything should use
+	# only things that EVERYTHING should use go here
 	include ntp
 	include timezone
-#	include snmp
 	include at
 	include cron
+	include ganglia
 
    include users
    include pam
    include openssh
    include sudo
    include autofs
-
 	include idmapd
 
 	# role specific classes are included here
 	if ( $role ) { include "role_$role" }
 
+
+	stage { "pre": before => Stage["main"] }
+	class {
+		"yum": stage => pre ;
+		"yum::prerequisites": stage => pre ;
+#		"yum::repo::nebraska":	stage => pre ;
+#		"yum::repo::epel":	stage => pre ;
+#		"yum::repo::osg":	stage => pre ;
+	}
+
+
 	# include testing classes if $testing = "yes"
 	if ( $testing == "yes" ) { include "testing" }
+
 
 	service { "yum":
 		ensure => stopped,
@@ -36,5 +47,8 @@ class general {
 	package { [ "htop", "dstat", "sysstat", "nmap", "strace", "gdb", "screen", "iotop" ]:
 		ensure => present,
 	}
+
+	service { "cups": ensure => stopped, enable => false, }
+	service { "avahi-daemon": ensure => stopped, enable => false, }
 
 }
