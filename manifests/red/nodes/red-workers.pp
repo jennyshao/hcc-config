@@ -51,6 +51,7 @@ $role = "red-worker-el6"
 node /^red-d8n[12345]$/ inherits red-private {
 $role = "red-worker-el6"
    $condorCustom09 = "el6"
+	$yum_extrarepo = [ 'epel', 'nebraska', 'osg' ]
    $isHDFSDatanode = true
    include general
    include cvmfs
@@ -288,6 +289,7 @@ node 'node250' inherits red-private {
 	$role = "red-worker57"
 	$isHDFSDatanode = true
 	$condorCustom09 = "r710"
+	$yum_extrarepo = [ 'epel', 'nebraska', 'osg' ]
 	include general
 }
 
@@ -295,6 +297,7 @@ node 'node251' inherits red-private {
 	$role = "red-worker57"
 	$isHDFSDatanode = true
 	$condorCustom09 = "r710"
+	$yum_extrarepo = [ 'epel', 'nebraska', 'osg' ]
 	include general
 }
 
@@ -302,12 +305,14 @@ node 'node252' inherits red-private {
 	$role = "red-worker57"
 	$isHDFSDatanode = true
 	$condorCustom09 = "r710"
+	$yum_extrarepo = [ 'epel', 'nebraska', 'osg' ]
 	include general
 }
 
 node 'node253' inherits red-private {
 	$role = "red-worker57"
 	$isHDFSDatanode = true
+	$yum_extrarepo = [ 'epel', 'nebraska', 'osg' ]
 	$condorCustom09 = "r710"
 	include general
 }
@@ -316,6 +321,7 @@ node 'node254' inherits red-private {
 	$role = "red-worker57"
 	$isHDFSDatanode = true
 	$condorCustom09 = "r710"
+	$yum_extrarepo = [ 'epel', 'nebraska', 'osg' ]
 	include general
 }
 
@@ -323,22 +329,26 @@ node 'node254' inherits red-private {
 node /^red-d8n[6-9].red\.hcc\.unl\.edu$/ inherits red-private {
 	$role = "red-worker57"
 	$isHDFSDatanode = true
+	$yum_extrarepo = [ 'epel', 'nebraska', 'osg' ]
 	include general
 } 
 
 node /^red-d8n[12][0-9].red\.hcc\.unl\.edu$/ inherits red-private {
 	$role = "red-worker57"
 	$isHDFSDatanode = true
+	$yum_extrarepo = [ 'epel', 'nebraska', 'osg' ]
 	include general
 } 
 node /^red-d9n\d+\.red\.hcc\.unl\.edu$/ inherits red-private {
 	$role = "red-worker57"
 	$isHDFSDatanode = true
+	$yum_extrarepo = [ 'epel', 'nebraska', 'osg' ]
 	include general
 }
 
 node /^red-d11n\d+\.red\.hcc\.unl\.edu$/ inherits red-private {
 	$role = "red-worker57"
 	$isHDFSDatanode = true
+	$yum_extrarepo = [ 'epel', 'nebraska', 'osg' ]
 	include general
 }
