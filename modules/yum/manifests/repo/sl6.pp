@@ -9,7 +9,7 @@ class yum::repo::sl6 {
 			baseurl => "http://rcfzilla.unl.edu/scientific-linux/\$releasever/\$basearch/os/ http://ftp.scientificlinux.org/linux/scientific/\$releasever/\$basearch/os/",
 			enabled => 1,
 			gpgcheck => 1,
-			gpgkey => 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-sl file:///etc/pki/rpm-gpg/RPM-GPG-KEY-dawson',
+			gpgkey => 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-sl',
 			priority => 10 ;
 
 		'sl-security':
@@ -17,7 +17,7 @@ class yum::repo::sl6 {
 			baseurl => "http://rcfzilla.unl.edu/scientific-linux/\$releasever/\$basearch/updates/security/ http://ftp.scientificlinux.org/linux/scientific/\$releasever/\$basearch/updates/security/",
 			enabled => 1,
 			gpgcheck => 1,
-			gpgkey => 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-sl file:///etc/pki/rpm-gpg/RPM-GPG-KEY-dawson',
+			gpgkey => 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-sl',
 			priority => 10 ;
 
 		'sl-source':
@@ -25,7 +25,7 @@ class yum::repo::sl6 {
 			baseurl => "http://rcfzilla.unl.edu/scientific-linux/\$releasever/SRPMS/ http://ftp.scientificlinux.org/linux/scientific/\$releasever/SRPMS/",
 			enabled => 0,
 			gpgcheck => 1,
-			gpgkey => 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-sl file:///etc/pki/rpm-gpg/RPM-GPG-KEY-dawson',
+			gpgkey => 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-sl',
 			priority => 10 ;
 
 
@@ -35,7 +35,7 @@ class yum::repo::sl6 {
 			baseurl => "http://rcfzilla.unl.edu/scientific-linux/\$releasever/\$basearch/updates/fastbugs/ http://ftp.scientificlinux.org/linux/scientific/\$releasever/\$basearch/updates/fastbugs/",
 			enabled => 0,
 			gpgcheck => 1,
-			gpgkey => 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-sl file:///etc/pki/rpm-gpg/RPM-GPG-KEY-dawson',
+			gpgkey => 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-sl',
 			priority => 10 ;
 
 		'sl-debuginfo':
@@ -43,7 +43,7 @@ class yum::repo::sl6 {
 			baseurl => "http://rcfzilla.unl.edu/scientific-linux/\$releasever/archive/debuginfo/ http://ftp.scientificlinux.org/linux/scientific/\$releasever/archive/debuginfo/",
 			enabled => 0,
 			gpgcheck => 1,
-			gpgkey => 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-sl file:///etc/pki/rpm-gpg/RPM-GPG-KEY-dawson',
+			gpgkey => 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-sl',
 			priority => 10 ;
 
 		'sl-testing':
@@ -51,7 +51,7 @@ class yum::repo::sl6 {
 			baseurl => "http://rcfzilla.unl.edu/scientific-linux/6rolling/testing/\$basearch/ http://ftp.scientificlinux.org/linux/scientific/6rolling/testing/\$basearch/",
 			enabled => 0,
 			gpgcheck => 0,
-			gpgkey => 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-sl file:///etc/pki/rpm-gpg/RPM-GPG-KEY-dawson',
+			gpgkey => 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-sl',
 			priority => 10 ;
 
 		'sl-testing-source':
@@ -59,7 +59,7 @@ class yum::repo::sl6 {
 			baseurl => "http://rcfzilla.unl.edu/scientific-linux/6rolling/testing/SRPMS/ http://ftp.scientificlinux.org/linux/scientific/6rolling/testing/SRPMS/",
 			enabled => 0,
 			gpgcheck => 0,
-			gpgkey => 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-sl file:///etc/pki/rpm-gpg/RPM-GPG-KEY-dawson',
+			gpgkey => 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-sl',
 			priority => 10 ;
 
 	}	# end yum::managed_yumrepo
