@@ -1,0 +1,18 @@
+##############################################################################
+##############################################################################
+#
+#  DO NOT EDIT - file is being maintained by puppet
+#
+##############################################################################
+##############################################################################
+
+
+# RSL Validation Information for the base RSL supported by the job
+# manager
+Attribute: directory
+Description: "Specifies the path of the directory the jobmanager will use as
+              the default directory for the requested job."
+Default: /var/lib/globus/job_home/$(LOGNAME)
+ValidWhen: GLOBUS_GRAM_JOB_SUBMIT
+DefaultWhen: GLOBUS_GRAM_JOB_SUBMIT
+

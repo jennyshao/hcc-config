@@ -34,12 +34,25 @@ class osg-ce::config {
 		owner   => "root", group => "root", mode => '0644',
 		source  => "puppet:///modules/osg-ce/globus-gram-job-manager.conf",
 	}
+
+	# Override RVF entries so we can relocate jobs.
 	file { "globus-gram-job-manager.rvf":
 		ensure  => present,
 		path    => "/usr/share/globus/globus_gram_job_manager/globus-gram-job-manager.rvf",
 		owner   => "root", group => "root", mode => '0644',
 		source  => "puppet:///modules/osg-ce/globus-gram-job-manager.rvf",
 	}
+
+   # globus-gram-job-manager 16.23 and later allow you to override the RVF from /etc
+   # Once all the CEs are on that version, the above entry can go away.
+   file { "/etc/globus/gram": ensure => directory, mode => '1755', owner=>"root", group =>"root" }
+   file { "job-manager.rvf":
+      ensure  => present,
+      path    => "/etc/globus/gram/job-manager.rvf",
+      owner   => "root", group => "root", mode => '0644',
+      source  => "puppet:///modules/osg-ce/job-manager.rvf",
+   }
+
 
 	file { "ProbeConfig":
 		ensure  => present,
