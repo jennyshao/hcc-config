@@ -52,8 +52,6 @@ all.pidpath /var/run/xrootd
 cms.delay startup 10
 cms.fxhold 60s
 
-if exec xrootd
-  xrd.report xrootd.t2.ucsd.edu:9931 every 30s all
-  xrootd.monitor all auth flush 30s mbuff 1472 window 5s dest files io info user xrootd.t2.ucsd.edu:9930
-fi
+xrd.report xrootd.t2.ucsd.edu:9931 every 30s all sync
+xrootd.monitor all auth flush 30s mbuff 1472 window 5s dest files io info user xrootd.t2.ucsd.edu:9930
 
