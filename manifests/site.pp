@@ -1,8 +1,4 @@
 # main entry point for puppet
-# default location is /etc/puppet/manifests/site.pp
-
-# example42 imports common module here (we don't use it yet)
-# import "common"
 
 
 # we define nodes based off the exampe42 medium example
