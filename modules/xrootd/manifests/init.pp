@@ -50,7 +50,7 @@ class xrootd {
 		hasrestart => true,
 		hasstatus => true,
 		require => [ Package["xrootd-server.x86_64"], File["xrdcert"], File["xrdkey"], Class["hadoop"], ],
-		subscribe => File["xrootd-clustered.cfg"],
+		subscribe => [File["xrootd-clustered.cfg"], File["storage.xml"], File["lcmaps.cfg"], File["Authfile"]],
 	}
 
 	file { "xrootd-clustered.cfg":
