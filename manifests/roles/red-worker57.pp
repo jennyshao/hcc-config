@@ -9,6 +9,7 @@ class role_red-worker57 {
 	$gangliaUDPRecvChannel = '8651'
 
 	$pakitiTag = "T2_US_Nebraska_Workers"
+	$yum_extrarepo = [ 'epel', 'nebraska', 'osg' ]
 
    include general
    include users
@@ -52,4 +53,11 @@ class role_red-worker57 {
 		require => [ File["/opt/osg"], File["/opt/osg/data"], ],
 	}
 
+	cron { "xfs_fsr":
+		ensure => present,
+		command => '/usr/sbin/xfs_fsr -t 72000',
+		user => 'root',
+		minute => '8',
+		hour => '2',
+	}
 }
