@@ -47,10 +47,8 @@ node basenode {
 	$timezone = "America/Chicago"
 
 	# ldap authentication
-	$users_auth = "ldap"		# use ldap by default
-#	$users_ldap_servers = [ "red-ldap1.unl.edu", "red-ldap2.unl.edu" ]
+	$users_auth = "ldap"
 	$users_ldap_servers = [ "red-ldap2.unl.edu" ]
-#	$users_ldap_servers = [ "hcc-ldap03.unl.edu" ]
 	$users_ldap_basedn = "dc=rcf,dc=unl,dc=edu"
 	$users_ldap_ssl = "yes"
 
@@ -64,13 +62,24 @@ node basenode {
 	$sshAdmins = [ 'gattebury', 'clundst', 'bbockelm', 'tharvill', 'jsamuels', 'jthiltge', 'root' ]
 	$sshExtraAdmins = ''
 
+
+	# make firewall persist (calls iptables-save on changes)
+	Firewall {
+		notify  => Exec["persist-firewall"],
+		require => Exec["purge-default-firewall"],
+	}
+
 }
 
 
 node red-private inherits basenode {
 	$zone = "red-private"
+   $gangliaClusterName = "red-workers"
+	$gangliaUDPSendChannel = [ 'red-mon.unl.edu', '8650' ]  # host, port
 }
 
 node red-public inherits basenode {
 	$zone = "red-public"
 }
+
+
