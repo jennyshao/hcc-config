@@ -18,10 +18,11 @@ globals {
   mute = no
   deaf = no
   allow_extra_data = yes
-  host_dmax = 0 /*secs */
+  host_dmax = 86400 /*secs. Expires (removes from web interface) hosts in 1 day */
+  host_tmax = 20 /*secs */
   cleanup_threshold = 300 /*secs */
   gexec = no
-  send_metadata_interval = 0 /*secs */
+  send_metadata_interval = 300 /*secs */
 }
 
 /*
@@ -40,31 +41,48 @@ host {
   location = "<%= gangliaHostLocation %>"
 }
 
-
-
+/* Feel free to specify as many udp_send_channels as you like.  Gmond
+   used to only support having a single channel */
 udp_send_channel {
+  bind_hostname = yes # Highly recommended, soon to be default.
+                       # This option tells gmond to use a source address
+                       # that resolves to the machine's hostname.  Without
+                       # this, the metrics may appear to come from any
+                       # interface and the DNS names associated with
+                       # those IPs will be used to create the RRDs.
   host = <%= @gangliaUDPSendChannel[0] %>
   port = <%= @gangliaUDPSendChannel[1] %>
 }
 
-/* must send our own metrics to ourself, architecture ftw */
-udp_send_channel {
-	host = <%= hostname %>
-	port = <%= gangliaUDPRecvChannel %>
-}
+/* You can specify as many udp_recv_channels as you like as well. */
+#udp_recv_channel {
+#  mcast_join = 239.2.11.71
+#  port = 8649
+#  bind = 239.2.11.71
+#}
 
-/* must listen locally to get our own metrics */
-udp_recv_channel {
-  port = <%= gangliaUDPRecvChannel %>
-  bind = 127.0.0.1
-}
+/* You can specify as many tcp_accept_channels as you like to share
+   an xml description of the state of the cluster */
+#tcp_accept_channel {
+#  port = 8649
+#}
 
-/* No reason to listen on anything but collector (red-mon)
-tcp_accept_channel {
-  port = <%= gangliaTCPAcceptChannel %>
-}
-*/
+/* Channel to receive sFlow datagrams */
+#udp_recv_channel {
+#  port = 6343
+#}
 
+/* Optional sFlow settings */
+#sflow {
+# udp_port = 6343
+# accept_vm_metrics = yes
+# accept_jvm_metrics = yes
+# multiple_jvm_instances = no
+# accept_http_metrics = yes
+# multiple_http_instances = no
+# accept_memcache_metrics = yes
+# multiple_memcache_instances = no
+#}
 
 /* Each metrics module that is referenced by gmond must be specified and
    loaded. If the module has been statically linked with gmond, it does
@@ -103,8 +121,6 @@ modules {
     path = "modsys.so"
   }
 }
-
-include ('/etc/ganglia/conf.d/*.conf')
 
 /* The old internal 2.5.x metric array has been replaced by the following
    collection_group directives.  What follows is the default behavior for
@@ -353,4 +369,6 @@ collection_group {
     title = "Maximum Disk Space Used"
   }
 }
+
+include ("/etc/ganglia/conf.d/*.conf")
 
