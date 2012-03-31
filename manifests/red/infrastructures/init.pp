@@ -31,6 +31,7 @@ node basenode {
 	# this lists all our CEs - used for config.ini generation
 	$osgCEList = [ 'red.unl.edu', 'red-gw1.unl.edu', 'red-gw2.unl.edu' ]
 
+	# default all ganglia to red-infrastructure group
 	$gangliaClusterName = 'red-infrastructure'
 	$gangliaClusterOwner = 'Holland Computing Center'
 	$gangliaClusterLatLong = 'N40.812957 W96.702991'
@@ -72,10 +73,10 @@ node basenode {
 }
 
 
+##############################################################################
+
 node red-private inherits basenode {
 	$zone = "red-private"
-   $gangliaClusterName = "red-workers"
-	$gangliaUDPSendChannel = [ 'red-mon.unl.edu', '8650' ]  # host, port
 }
 
 node red-public inherits basenode {
