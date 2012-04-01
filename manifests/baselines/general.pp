@@ -12,7 +12,6 @@ class general {
 	include timezone
 	include at
 	include cron
-	include ganglia
 
    include users
    include pam
@@ -23,6 +22,8 @@ class general {
 
 	# role specific classes are included here
 	if ( $role ) { include "role_$role" }
+
+	include ganglia
 
 
 	stage { "pre": before => Stage["main"] }
