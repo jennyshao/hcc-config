@@ -154,8 +154,8 @@ node 'red-ldap1.unl.edu' inherits red-public {
 }
 
 node 'hadoop-tracker.red.hcc.unl.edu' inherits red-private {
-	include minimal
 	include general
+	include nrpe
 	include hadoop
 }
 

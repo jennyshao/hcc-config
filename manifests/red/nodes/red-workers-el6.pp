@@ -9,7 +9,6 @@ node 'node000.red.hcc.unl.edu' inherits red-private {
 
 node /^node10[3456789]$/ inherits red-private {
 	$isHDFSDatanode = true
-#	$condorCustom09 = "r710"
    $role = "red-worker-el6"
 	include general
 }
