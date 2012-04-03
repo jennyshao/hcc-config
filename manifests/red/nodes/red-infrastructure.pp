@@ -74,27 +74,18 @@ node 'glidein.unl.edu' inherits red-public {
 }
 
 node 'osg-test4.unl.edu' inherits red-public {
+	$sshExtraAdmins = [ 'acaprez', 'aguru', 'jwang', 'dweitzel', 'bbockelm' ]
+	$sudoExtraAdmins = [ 'acaprez', 'aguru', 'tharvill', 'jthiltge', 'jsamuels', 'jwang', 'dweitzel', 'bbockelm' ]
+
 	include general
 	include nrpe
 	include ganglia
 }
 
 node 't3-nfs.red.hcc.unl.edu' inherits red-private {
-	include minimal
 
-	include ntp
-	include timezone
-	include at
-	include cron
-
-	include sssd
-	include openssh
-	include pam
-	include sudo
-	include nrpe
-
+	include general
 	include nfs::server
-	include motd
 
 	# t3 home storage is mounted on /export so link to allow local logins
 	# have to use force to remove /home dir if it exists already
