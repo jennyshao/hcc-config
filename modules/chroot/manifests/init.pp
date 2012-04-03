@@ -487,16 +487,22 @@ class chroot {
       require  => Package["chroot_tool"],
    }
 
-   exec { "chroot_initial_cmd":
-      name     => "test -d ${chroot::params::chroot_root} ||  chroot-tool create && chroot-tool install acl attr authconfig bc bind-utils bzip2 cyrus-sasl-plain lsof libcgroup quota rhel-instnum cpuspeed dos2unix m2crypto sssd nc prctl redhat-lsb setarch time tree unix2dos unzip wget which zip zlib && chroot-tool secure",
-      require  => [File["chroot_tool_cfg"], File["chroot_tool_yum_conf"]],
-      provider => "shell",
-      cwd      => "/",
-      logoutput => "on_failure",
-   }
+	# use existence of /chroot directory to determine if the chroot environment
+	# has been setup yet
+	exec { "chroot_initial_cmd":
+		command   => "chroot-tool create && chroot-tool install acl attr authconfig bc bind-utils bzip2 cyrus-sasl-plain lsof libcgroup quota rhel-instnum cpuspeed dos2unix m2crypto sssd nc prctl redhat-lsb setarch time tree unix2dos unzip wget which zip zlib && chroot-tool secure",
+		onlyif    => "test ! -d ${chroot::params::chroot_root}",
+		require   => [File["chroot_tool_cfg"], File["chroot_tool_yum_conf"]],
+		provider  => "shell",
+		cwd       => "/",
+		logoutput => "on_failure",
+	}
 
+	# use the existence of /usr/bin/glexec in the chroot to determine if the
+	# osg software has been installed
    exec { "chroot_grid_cmd":
-      name      => "test -f ${chroot::params::chroot_root}/usr/sbin/glexec || chroot-tool install osg-wn-client HEP_OSlibs_SL5 glexec lcmaps-plugins-condor-update lcmaps-plugins-process-tracking lcmaps-plugins-mount-under-scratch",
+		command   => "chroot-tool install osg-wn-client HEP_OSlibs_SL5 glexec lcmaps-plugins-condor-update lcmaps-plugins-process-tracking lcmaps-plugins-mount-under-scratch",
+		onlyif    => "test ! -f ${chroot::params::chroot_root}/usr/sbin/glexec",
       require   => [Exec["chroot_initial_cmd"]],
       provider  => "shell",
       cwd       => "/",
