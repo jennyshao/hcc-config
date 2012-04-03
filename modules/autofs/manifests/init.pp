@@ -24,7 +24,10 @@ class autofs {
 		mode    => 644,
 		owner   => "root",
 		group   => "root",
-		content => template("autofs/auto.master.erb"),
+
+		# allow host specific files
+		content => inline_template(file("/etc/puppet/modules/autofs/templates/auto.master-$hostname.erb", "/etc/puppet/modules/autofs/templates/auto.master.erb")),
+
 		require => Package[autofs],
 		ensure  => present,
 	}
