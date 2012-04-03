@@ -13,6 +13,7 @@ class cgroups {
 		enable     => true,
 		hasrestart => true,
 		hasstatus  => true,
+		require    => File["cgroup"],
 	}
 
 	service { "cgred":
@@ -21,7 +22,24 @@ class cgroups {
 		enable     => true,
 		hasrestart => true,
 		hasstatus  => true,
+		require    => File["cgroup"],
 	}
+
+
+	# /cgroup stopped getting created automatically
+	# somewhere between the R410 SL6 deploy and "now"
+	# generate manually
+	file { "cgroup":
+		path    => "/cgroup",
+		ensure  => directory,
+	}
+
+	# cgconfig won't start without correct attrs on /cgroup
+	exec { "cgroup-selinux":
+		command => "restorecon -R /cgroup",
+		unless  => "ls -dZ /cgroup | grep cgroup_t",
+	}
+
 
 	file { "cgconfig.conf":
 		path    => "/etc/cgconfig.conf",
