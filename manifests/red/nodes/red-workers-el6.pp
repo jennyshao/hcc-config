@@ -9,7 +9,13 @@ node 'node000.red.hcc.unl.edu' inherits red-private {
 
 node /^node10[3456789]$/ inherits red-private {
 	$isHDFSDatanode = true
-   $role = "red-worker-el6"
+	$role = "red-worker-el6"
+	include general
+}
+
+node 'node110.red.hcc.unl.edu' inherits red-private {
+	$isHDFSDatanode = true
+	$role = "red-worker-el6"
 	include general
 }
 
