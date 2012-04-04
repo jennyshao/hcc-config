@@ -9,3 +9,12 @@ SLOT_TYPE_1=100%
 SLOT_TYPE_1_PARTITIONABLE=TRUE
 NUM_SLOTS_TYPE_1=1
 
+
+<% if has_variable?("jobslots") then -%>
+# define number of job slots based on cobbler 'jobslots' variable
+NUM_SLOTS = <%= jobslots %>
+<% else %>
+#
+# WARNING: jobslots not defined in cobbler for this node
+#
+<% end %>

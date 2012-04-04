@@ -1,6 +1,7 @@
 class role_red-worker-el6 {
 
 	$isCondorWorker = true
+	$condorCustom09 = "el6"
 
    $mountsHDFS = true
 
