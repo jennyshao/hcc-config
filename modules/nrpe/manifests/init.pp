@@ -22,6 +22,7 @@ class nrpe {
 		owner => "root", group => "root", mode => 644,
 		content => template("nrpe/nrpe.cfg.erb"),
 		require => Package["nrpe"],
+		notify => Service["nrpe"],
 	}
 
 	file { "sudo-nrpe":
