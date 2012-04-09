@@ -65,13 +65,13 @@ FILETRANSFER_PLUGINS = /usr/local/bin/srm-plugin,/usr/local/bin/vm-nfs-plugin
 PROCD_LOG = $(LOG)/ProcdLog
 
 ## Configure integration with QPID
-QMF_PUBLISH_SUBMISSIONS = TRUE
-QMF_BROKER_USERNAME = worker
-QMF_BROKER_PASSWORD_FILE = /etc/condor/qpid_passfile_worker
-QMF_BROKER_AUTH_MECH = PLAIN
-QMF_BROKER_HOST = red-web.unl.edu
-QMF_BROKER_PORT = 5672
-ENABLE_RUNTIME_CONFIG = TRUE
+#QMF_PUBLISH_SUBMISSIONS = TRUE
+#QMF_BROKER_USERNAME = worker
+#QMF_BROKER_PASSWORD_FILE = /etc/condor/qpid_passfile_worker
+#QMF_BROKER_AUTH_MECH = PLAIN
+#QMF_BROKER_HOST = red-web.unl.edu
+#QMF_BROKER_PORT = 5672
+#ENABLE_RUNTIME_CONFIG = TRUE
 
 # This setting provides a per-job tmp directory.
 # lcmaps-plugins-mount-under-scratch must be enabled to play nicely with glexec

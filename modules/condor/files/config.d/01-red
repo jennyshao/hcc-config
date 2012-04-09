@@ -30,3 +30,6 @@ DELEGATE_JOB_GSI_CREDENTIALS = False
 
 SHADOW_RENICE_INCREMENT = 10
 
+# On updates, do a peaceful restart to preserve running jobs.
+MASTER_NEW_BINARY_RESTART=PEACEFUL
+
