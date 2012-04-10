@@ -5,27 +5,29 @@
 # manages install and chroots
 #
 
-class chroot {
-
-   include chroot::params
+class chroot (
+ $chroot_top = $chroot::params::chroot_top,
+ $chroot_base = $chroot::params::chroot_base,
+ $chroot_root = $chroot::params::chroot_root
+) inherits chroot::params {
 
 ## Base directory
 ##
    file { "/chroot":
-      path   => "${chroot::params::chroot_top}",
+      path   => "${chroot_top}",
       mode   => "0644", owner => "root", group => "root",
       ensure => directory,
    }
 
    file { "chroot_dir_base":
-      path    => "${chroot::params::chroot_base}",
+      path    => "${chroot_base}",
       mode    => "0644", owner => "root", group => "root",
       ensure  => directory,
       require => [Exec["chroot_initial_cmd"], File["/chroot"]],
    }
 
    file { "chroot_dir":
-      path    => "${chroot::params::chroot_root}",
+      path    => "${chroot_root}",
       mode    => "0644", owner => "root", group => "root",
       ensure  => directory,
       require => File["chroot_dir_base"],
@@ -34,21 +36,21 @@ class chroot {
 ## glexec stuff
 ##
    file { "chroot_glexex_log_dir":
-      path    => "${chroot::params::chroot_root}/var/log/glexec",
+      path    => "${chroot_root}/var/log/glexec",
       mode => "0644", owner => "root", group => "root",
       ensure  => directory,
       require => [Exec["chroot_initial_cmd"], File["chroot_dir"]],
    }
 
    file { "chroot_glexex_conf":
-      path    => "${chroot::params::chroot_root}/etc/glexec.conf",
+      path    => "${chroot_root}/etc/glexec.conf",
       mode => "0640", owner => "root", group => "glexec",
       ensure  => file,
       require => [Exec["chroot_grid_cmd"], File["etc_dir"]],
    }
 
    file { "chroot_glexec_bin":
-      path    => "${chroot::params::chroot_root}/usr/sbin/glexec",
+      path    => "${chroot_root}/usr/sbin/glexec",
       mode => "6755", owner => "root", group => "glexec",
       ensure  => file,
       seltype => "bin_t",
@@ -56,7 +58,7 @@ class chroot {
    }
 
    mount { "chroot_mount_grid_security":
-      name     => "${chroot::params::chroot_root}/etc/grid-security",
+      name     => "${chroot_root}/etc/grid-security",
       device   => "/etc/grid-security",
       ensure   => mounted,
       options  => "bind",
@@ -69,14 +71,14 @@ class chroot {
 ## resolv.conf
 ##
    file { "etc_dir":
-      path    => "${chroot::params::chroot_root}/etc",
+      path    => "${chroot_root}/etc",
       mode => "0644", owner => "root", group => "root",
       ensure  => directory,
       require => [Exec["chroot_initial_cmd"], File["chroot_dir"]],
    }
 
    file { "chroot_resolv.conf":
-      path    => "${chroot::params::chroot_root}/etc/resolv.conf",
+      path    => "${chroot_root}/etc/resolv.conf",
       mode    => "0644", owner => "root", group => "root",
       ensure  => file,
       seltype => "net_conf_t",
@@ -84,7 +86,7 @@ class chroot {
    }
 
    mount { "chroot_mount_resolv.conf":
-      name     => "${chroot::params::chroot_root}/etc/resolv.conf",
+      name     => "${chroot_root}/etc/resolv.conf",
       device   => "/etc/resolv.conf",
       ensure   => mounted,
       options  => "bind",
@@ -95,7 +97,7 @@ class chroot {
    }
 
    file { "chroot_hosts":
-      path    => "${chroot::params::chroot_root}/etc/hosts",
+      path    => "${chroot_root}/etc/hosts",
       mode    => "0644", owner => "root", group => "root",
       ensure  => file,
       seltype => "net_conf_t",
@@ -104,7 +106,7 @@ class chroot {
    }
 
    mount { "chroot_mount_hosts":
-      name     => "${chroot::params::chroot_root}/etc/hosts",
+      name     => "${chroot_root}/etc/hosts",
       device   => "/etc/hosts",
       ensure   => mounted,
       options  => "bind",
@@ -118,7 +120,7 @@ class chroot {
 ##
 
    file { "chroot_passwd":
-      path    => "${chroot::params::chroot_root}/etc/passwd",
+      path    => "${chroot_root}/etc/passwd",
       mode    => "0644", owner => "root", group => "root",
       ensure  => file,
       seltype => "etc_t",
@@ -126,7 +128,7 @@ class chroot {
    }
 
    mount { "chroot_mount_passwd":
-      name     => "${chroot::params::chroot_root}/etc/passwd",
+      name     => "${chroot_root}/etc/passwd",
       device   => "/etc/passwd",
       ensure   => mounted,
       options  => "bind",
@@ -137,7 +139,7 @@ class chroot {
    }
 
    file { "chroot_group":
-      path    => "${chroot::params::chroot_root}/etc/group",
+      path    => "${chroot_root}/etc/group",
       mode    => "0644", owner => "root", group => "root",
       ensure  => file,
       seltype => "etc_t",
@@ -145,7 +147,7 @@ class chroot {
    }
 
    mount { "chroot_mount_group":
-      name     => "${chroot::params::chroot_root}/etc/group",
+      name     => "${chroot_root}/etc/group",
       device   => "/etc/group",
       ensure   => mounted,
       options  => "bind",
@@ -158,7 +160,7 @@ class chroot {
 ## System directories
 ##
    file { "chroot_tmp":
-      path    => "${chroot::params::chroot_root}/tmp",
+      path    => "${chroot_root}/tmp",
       mode    => "1777", owner => "root", group => "root",
       seltype => "tmp_t",
       ensure  => directory,
@@ -166,7 +168,7 @@ class chroot {
    }
 
    mount { "chroot_mount_tmp":
-      name     => "${chroot::params::chroot_root}/tmp",
+      name     => "${chroot_root}/tmp",
       device   => "/tmp",
       ensure   => mounted,
       options  => "bind",
@@ -177,21 +179,21 @@ class chroot {
    }
 
    file { "chroot_var":
-      path    => "${chroot::params::chroot_root}/var",
+      path    => "${chroot_root}/var",
       mode    => "0644", owner => "root", group => "root",
       ensure  => directory,
       require => [Exec["chroot_initial_cmd"], File["chroot_dir"]],
    }
 
    file { "chroot_var_tmp":
-      path    => "${chroot::params::chroot_root}/var/tmp",
+      path    => "${chroot_root}/var/tmp",
       mode    => "1777", owner => "root", group => "root",
       ensure  => directory,
       require => File["chroot_var"],
    }  
       
    mount { "chroot_mount_var_tmp":
-      name     => "${chroot::params::chroot_root}/var/tmp",
+      name     => "${chroot_root}/var/tmp",
       device   => "/var/tmp",
       ensure   => mounted,
       options  => "bind",
@@ -202,14 +204,14 @@ class chroot {
    }  
 
    file { "chroot_proc":
-      path    => "${chroot::params::chroot_root}/proc",
+      path    => "${chroot_root}/proc",
       mode    => "0644", owner => "root", group => "root",
       ensure  => directory,
       require => [Exec["chroot_initial_cmd"], File["chroot_dir"]],
    }
 
    mount { "chroot_mount_proc":
-      name     => "${chroot::params::chroot_root}/proc",
+      name     => "${chroot_root}/proc",
       device   => "proc",
       ensure   => mounted,
       options  => "defaults",
@@ -220,14 +222,14 @@ class chroot {
    }
 
    file { "chroot_dev":
-      path    => "${chroot::params::chroot_root}/dev",
+      path    => "${chroot_root}/dev",
       mode    => "0644", owner => "root", group => "root",
       ensure  => directory,
       require => [Exec["chroot_initial_cmd"], File["chroot_dir"]],
    }
 
    mount { "chroot_mount_dev":
-      name     => "${chroot::params::chroot_root}/dev",
+      name     => "${chroot_root}/dev",
       device   => "/dev",
       ensure   => mounted,
       options  => "bind",
@@ -238,14 +240,14 @@ class chroot {
    }
 
    file { "chroot_sys":
-      path    => "${chroot::params::chroot_root}/sys",
+      path    => "${chroot_root}/sys",
       mode    => "0644", owner => "root", group => "root",
       ensure  => directory,
       require => [Exec["chroot_initial_cmd"], File["chroot_dir"]],
    }
 
    mount { "chroot_mount_sys":
-      name     => "${chroot::params::chroot_root}/sys",
+      name     => "${chroot_root}/sys",
       device   => "/sys",
       ensure   => mounted,
       options  => "bind",
@@ -258,7 +260,7 @@ class chroot {
 ## Hadoop?  Don't mind if I do!
 ## 
    file { "chroot_hadoop":
-      path    => "${chroot::params::chroot_root}/mnt/hadoop",
+      path    => "${chroot_root}/mnt/hadoop",
       mode    => "0644", owner => "root", group => "root",
       ensure  => directory,
       require => [Exec["chroot_initial_cmd"], File["chroot_dir"]],
@@ -266,7 +268,7 @@ class chroot {
 
    # See comment below on why this is not a bind mount 
    mount { "chroot_mount_hadoop":
-      name     => "${chroot::params::chroot_root}/mnt/hadoop",
+      name     => "${chroot_root}/mnt/hadoop",
       device  => "hdfs",
       fstype  => "fuse",
       ensure  => mounted,
@@ -279,14 +281,14 @@ class chroot {
 ## Files for making CMS CVMFS work.
 ##
    file { "chroot_cvmfs_dir":
-      path    => "${chroot::params::chroot_root}/etc/cvmfs",
+      path    => "${chroot_root}/etc/cvmfs",
       mode    => "0644", owner => "root", group => "root",
       recurse => true,
       ensure  => directory,
    }
 
    file { "chroot_SITECONF_dir":
-      path    => "${chroot::params::chroot_root}/etc/cvmfs/SITECONF",
+      path    => "${chroot_root}/etc/cvmfs/SITECONF",
       mode    => "0644", owner => "root", group => "root",
       recurse => true,
       ensure  => directory,
@@ -294,7 +296,7 @@ class chroot {
    }
 
    file { "chroot_JobConfig_dir":
-      path    => "${chroot::params::chroot_root}/etc/cvmfs/SITECONF/JobConfig",
+      path    => "${chroot_root}/etc/cvmfs/SITECONF/JobConfig",
       mode    => "0644", owner => "root", group => "root",
       recurse => true,
       ensure  => directory,
@@ -302,7 +304,7 @@ class chroot {
    }  
       
    file { "chroot_site-local-config.xml":
-      path    => "${chroot::params::chroot_root}/etc/cvmfs/SITECONF/JobConfig/site-local-config.xml",
+      path    => "${chroot_root}/etc/cvmfs/SITECONF/JobConfig/site-local-config.xml",
       source  => "puppet:///modules/cvmfs/site-local-config.xml",
       mode    => "0644", owner => "root", group => "root",
       ensure  => present,
@@ -312,21 +314,21 @@ class chroot {
 ## OSG_APP, OSG_DATA, oh my!
 ##
    file { "chroot_opt":
-      path    => "${chroot::params::chroot_root}/opt",
+      path    => "${chroot_root}/opt",
       mode    => "0644", owner => "root", group => "root",
       ensure  => directory,
       require => [Exec["chroot_initial_cmd"], File["chroot_dir"]],
    }
 
    file { "chroot_opt_osg":
-      path    => "${chroot::params::chroot_root}/opt/osg",
+      path    => "${chroot_root}/opt/osg",
       mode    => "0644", owner => "root", group => "root",
       ensure  => directory,
       require => [Exec["chroot_initial_cmd"], File["chroot_opt"]],
    }  
 
    file { "chroot_opt_osg_app":
-      path    => "${chroot::params::chroot_root}/opt/osg/app",
+      path    => "${chroot_root}/opt/osg/app",
 #      mode    => "0744", owner => "root", group => "root",
       ensure  => directory,
       require => [File["chroot_opt_osg"]],
@@ -335,7 +337,7 @@ class chroot {
    # Bind mounts do not work because puppet will just do the bind mount twice,
    # but ignore the actual NFS server
    mount { "chroot_mount_opt_osg_app":
-      name    => "${chroot::params::chroot_root}/opt/osg/app",
+      name    => "${chroot_root}/opt/osg/app",
       device  => "hcc-gridnfs:/osg/app",
       fstype  => "nfs4",
       ensure  => mounted,
@@ -345,7 +347,7 @@ class chroot {
    }
 
    file { "chroot_opt_osg_data":
-      path    => "${chroot::params::chroot_root}/opt/osg/data",
+      path    => "${chroot_root}/opt/osg/data",
 #      mode    => "0644", owner => "root", group => "root",
       ensure  => directory,
       require => [File["chroot_opt_osg"]],
@@ -353,7 +355,7 @@ class chroot {
 
    # See above comment for why this is not a bind mount      
    mount { "chroot_mount_opt_osg_data":
-      name    => "${chroot::params::chroot_root}/opt/osg/data",
+      name    => "${chroot_root}/opt/osg/data",
       device  => "hcc-gridnfs:/osg/data",
       fstype  => "nfs4",
       ensure  => mounted,
@@ -362,35 +364,43 @@ class chroot {
       require  => [File["chroot_opt_osg_data"]],
    }  
 
-## Home
-## Home is managed by autofs, so no bind mount.
-##
    file { "chroot_home":
-      path    => "${chroot::params::chroot_root}/home",
+      path    => "${chroot_root}/home",
       mode    => "0644", owner => "root", group => "root",
       ensure  => directory,
       require => Exec["chroot_initial_cmd"],
-      notify  => Service["autofs"],
    }  
+
+	# not a bind mount for same reason as above
+	mount { "chroot_mount_home":
+      name    => "${chroot_root}/home",
+      device  => "t3-nfs:/home",
+      fstype  => "nfs4",
+      ensure  => mounted,
+      options => "rw,noatime,hard,intr,rsize=32768,wsize=32768",
+      atboot  => true,
+      require  => [File["chroot_home"]],
+	}
+
 
 ## SSSD
 ##
    file { "chroot_var_lib":
-      path    => "${chroot::params::chroot_root}/var/lib",
+      path    => "${chroot_root}/var/lib",
       mode    => "0644", owner => "root", group => "root",
       require => File["chroot_var"],
       ensure  => directory,
    }  
       
    file { "chroot_sss":
-      path    => "${chroot::params::chroot_root}/var/lib/sss",
+      path    => "${chroot_root}/var/lib/sss",
       mode    => "0644", owner => "root", group => "root",
       ensure  => directory,
       require => File["chroot_var_lib"],
    }
 
    file { "chroot_sss_pipes":
-      path    => "${chroot::params::chroot_root}/var/lib/sss/pipes",
+      path    => "${chroot_root}/var/lib/sss/pipes",
       mode    => "0644", owner => "root", group => "root",
       seluser => "system_u",
       seltype => "sssd_var_lib_t",
@@ -399,7 +409,7 @@ class chroot {
    }
 
    mount { "chroot_mount_sss_nss":
-      name     => "${chroot::params::chroot_root}/var/lib/sss/pipes",
+      name     => "${chroot_root}/var/lib/sss/pipes",
       device   => "/var/lib/sss/pipes",
       ensure   => mounted,
       options  => "bind",
@@ -410,7 +420,7 @@ class chroot {
    }
 
    file { "chroot_nsswitch":
-      path    => "${chroot::params::chroot_root}/etc/nsswitch.conf",
+      path    => "${chroot_root}/etc/nsswitch.conf",
       mode    => "0644", owner => "root", group => "root",
       seltype => "etc_t",
       ensure  => file,
@@ -418,7 +428,7 @@ class chroot {
    }
 
    mount { "chroot_mount_nsswitch":
-      name     => "${chroot::params::chroot_root}/etc/nsswitch.conf",
+      name     => "${chroot_root}/etc/nsswitch.conf",
       device   => "/etc/nsswitch.conf",
       ensure   => mounted,
       options  => "bind",
@@ -431,7 +441,7 @@ class chroot {
 ## Customize lcmaps.db
 ##
    file { "chroot_lcmaps.db":
-      name    => "${chroot::params::chroot_root}/etc/lcmaps.db",
+      name    => "${chroot_root}/etc/lcmaps.db",
       require => Exec["chroot_initial_cmd"],
       ensure  => present,
       mode    => "0600", owner => "root", group => "root",
@@ -441,7 +451,7 @@ class chroot {
 ## Mirror the Condor job wrapper
 ##
    file { "chroot_condor_job_wrapper":
-      path    => "${chroot::params::chroot_root}/usr/local/bin/condor_nfslite_job_wrapper.sh",
+      path    => "${chroot_root}/usr/local/bin/condor_nfslite_job_wrapper.sh",
       mode    => "0755", owner => "root", group => "root",
       ensure  => file,
       require => Exec["chroot_initial_cmd"],
@@ -450,14 +460,14 @@ class chroot {
 
 # Make sure the execute directory exists
    file { "chroot_var_lib_condor":
-      path    => "${chroot::params::chroot_root}/var/lib/condor",
+      path    => "${chroot_root}/var/lib/condor",
       mode    => "0644", owner => "root", group => "root",
       ensure  => directory,
       require => File["chroot_var_lib"],
    }
 
    file { "chroot_var_lib_condor_execute":
-      path    => "${chroot::params::chroot_root}/var/lib/condor/execute",
+      path    => "${chroot_root}/var/lib/condor/execute",
       mode    => "0644", owner => "root", group => "root",
       ensure  => directory,
       require => File["chroot_var_lib_condor"],
@@ -491,7 +501,7 @@ class chroot {
 	# has been setup yet
 	exec { "chroot_initial_cmd":
 		command   => "chroot-tool create && chroot-tool install acl attr authconfig bc bind-utils bzip2 cyrus-sasl-plain lsof libcgroup quota rhel-instnum cpuspeed dos2unix m2crypto sssd nc prctl redhat-lsb setarch time tree unix2dos unzip wget which zip zlib && chroot-tool secure",
-		onlyif    => "test ! -d ${chroot::params::chroot_root}",
+		onlyif    => "test ! -d ${chroot_root}",
 		require   => [File["chroot_tool_cfg"], File["chroot_tool_yum_conf"]],
 		provider  => "shell",
 		cwd       => "/",
@@ -502,7 +512,7 @@ class chroot {
 	# osg software has been installed
    exec { "chroot_grid_cmd":
 		command   => "chroot-tool install osg-wn-client HEP_OSlibs_SL5 glexec lcmaps-plugins-condor-update lcmaps-plugins-process-tracking lcmaps-plugins-mount-under-scratch",
-		onlyif    => "test ! -f ${chroot::params::chroot_root}/usr/sbin/glexec",
+		onlyif    => "test ! -f ${chroot_root}/usr/sbin/glexec",
       require   => [Exec["chroot_initial_cmd"]],
       provider  => "shell",
       cwd       => "/",
