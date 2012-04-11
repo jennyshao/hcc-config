@@ -7,8 +7,8 @@
 ##############################################################################
 
 
-# for cmsprod/cmswrite
-Defaults umask = 0002
+# need to set default 0002 umask for bestman operations
+Defaults umask=0002, umask_override
 
 # bestman file commands
 Cmnd_Alias SRM_CMD = /bin/rm, /bin/mkdir, /bin/rmdir, /bin/mv, /bin/cp, /bin/ls
