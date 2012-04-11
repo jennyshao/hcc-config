@@ -16,7 +16,8 @@ class yum::repo::osg {
 
 		'osg':
 			descr => "OSG Software for Enterprise Linux $lsbmajdistrelease - \$basearch",
-			mirrorlist => "http://repo.grid.iu.edu/mirror/3.0/el$lsbmajdistrelease/osg-release/\$basearch",
+#			mirrorlist => "http://repo.grid.iu.edu/mirror/3.0/el$lsbmajdistrelease/osg-release/\$basearch",
+			baseurl => "http://t2.unl.edu/osg/3.0/el$lsbmajdistrelease/osg-release/\$basearch",
 			enabled => 1,
 		 	gpgcheck => 1,
 			gpgkey => 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OSG',
@@ -26,7 +27,8 @@ class yum::repo::osg {
 
       'osg-testing':
          descr => "OSG Software for Enterprise Linux $lsbmajdistrelease - Testing - \$basearch",
-         mirrorlist => "http://repo.grid.iu.edu/mirror/3.0/el$lsbmajdistrelease/osg-testing/\$basearch",
+ #        mirrorlist => "http://repo.grid.iu.edu/mirror/3.0/el$lsbmajdistrelease/osg-testing/\$basearch",
+			baseurl => "http://t2.unl.edu/osg/3.0/el$lsbmajdistrelease/osg-testing/\$basearch",
          enabled => 0,
          gpgcheck => 1,
          gpgkey => 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OSG',
@@ -36,7 +38,8 @@ class yum::repo::osg {
 
       'osg-development':
          descr => "OSG Software for Enterprise Linux $lsbmajdistrelease - Development - \$basearch",
-         mirrorlist => "http://repo.grid.iu.edu/mirror/3.0/el$lsbmajdistrelease/osg-development/\$basearch",
+  #       mirrorlist => "http://repo.grid.iu.edu/mirror/3.0/el$lsbmajdistrelease/osg-development/\$basearch",
+			baseurl => "http://t2.unl.edu/osg/3.0/el$lsbmajdistrelease/osg-development/\$basearch",
          enabled => 0,
          gpgcheck => 1,
          gpgkey => 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OSG',
@@ -46,7 +49,8 @@ class yum::repo::osg {
 
 		'osg-source':
 			descr => "OSG Software for Enterprise Linux $lsbmajdistrelease - \$basearch - Source",
-			baseurl => "http://repo.grid.iu.edu/3.0/el$lsbmajdistrelease/osg-release/source/SRPMS",
+	#		baseurl => "http://repo.grid.iu.edu/3.0/el$lsbmajdistrelease/osg-release/source/SRPMS",
+			baseurl => "http://t2.unl.edu/osg/3.0/el$lsbmajdistrelease/osg-release/source/SRPMS",
 			enabled => 0,
 	 		gpgcheck => 1,
 			gpgkey => 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OSG',
@@ -56,7 +60,8 @@ class yum::repo::osg {
 
 		'osg-debug':
 			descr => "OSG Software for Enterprise Linux $lsbmajdistrelease - \$basearch - Debug",
-			baseurl => "http://repo.grid.iu.edu/3.0/el6$lsbmajdistrelease/osg-release/\$basearch/debug",
+	#		baseurl => "http://repo.grid.iu.edu/3.0/el$lsbmajdistrelease/osg-release/\$basearch/debug",
+			baseurl => "http://t2.unl.edu/osg/3.0/el$lsbmajdistrelease/osg-release/\$basearch/debug",
 			enabled => 0,
 	 		gpgcheck => 1,
 			gpgkey => 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OSG',
