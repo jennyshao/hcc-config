@@ -9,30 +9,3 @@
 
 # the magical mythical land o' configs (should not normally be mounted anywhere)
 /opt/kickstart -rw,noatime,tcp,nolock,hard,intr,rsize=32768,wsize=32768 red-man.unl.edu:/opt/kickstart
-
-# OSGAPP and OSGDATA
-#/opt/osg/app -fstype=nfs4,rw,noatime,rsize=32768,wsize=32768 hcc-gridnfs:/osg/app
-#/opt/osg/data -fstype=nfs4,rw,noatime,rsize=32768,wsize=32768 hcc-gridnfs:/osg/data
-
-# t3 homedirs
-/home/bloom -fstype=nfs4,rw,noatime,rsize=32768,wsize=32768 t3-nfs:/home/bloom
-/home/bockelman -fstype=nfs4,rw,noatime,rsize=32768,wsize=32768 t3-nfs:/home/bockelman
-/home/cse496 -fstype=nfs4,rw,noatime,rsize=32768,wsize=32768 t3-nfs:/home/cse496
-/home/dominguez -fstype=nfs4,rw,noatime,rsize=32768,wsize=32768 t3-nfs:/home/dominguez
-/home/hep -fstype=nfs4,rw,noatime,rsize=32768,wsize=32768 t3-nfs:/home/hep
-/home/snow -fstype=nfs4,rw,noatime,rsize=32768,wsize=32768 t3-nfs:/home/snow
-/home/swanson -fstype=nfs4,rw,noatime,rsize=32768,wsize=32768 t3-nfs:/home/swanson
-/home/t3-ksu -fstype=nfs4,rw,noatime,rsize=32768,wsize=32768 t3-nfs:/home/t3-ksu
-/home/t3-ku -fstype=nfs4,rw,noatime,rsize=32768,wsize=32768 t3-nfs:/home/t3-ku
-
-#<%= scope.lookupvar('chroot::params::chroot_root') %>/home/bloom -fstype=nfs4,rw,noatime,rsize=32768,wsize=32768 t3-nfs:/home/bloom
-#<%= scope.lookupvar('chroot::params::chroot_root') %>/home/bockelman -fstype=nfs4,rw,noatime,rsize=32768,wsize=32768 t3-nfs:/home/bockelman
-#<%= scope.lookupvar('chroot::params::chroot_root') %>/home/cse496 -fstype=nfs4,rw,noatime,rsize=32768,wsize=32768 t3-nfs:/home/cse496
-#<%= scope.lookupvar('chroot::params::chroot_root') %>/home/dominguez -fstype=nfs4,rw,noatime,rsize=32768,wsize=32768 t3-nfs:/home/dominguez
-#<%= scope.lookupvar('chroot::params::chroot_root') %>/home/hep -fstype=nfs4,rw,noatime,rsize=32768,wsize=32768 t3-nfs:/home/hep
-#<%= scope.lookupvar('chroot::params::chroot_root') %>/home/snow -fstype=nfs4,rw,noatime,rsize=32768,wsize=32768 t3-nfs:/home/snow
-#<%= scope.lookupvar('chroot::params::chroot_root') %>/home/swanson -fstype=nfs4,rw,noatime,rsize=32768,wsize=32768 t3-nfs:/home/swanson
-#<%= scope.lookupvar('chroot::params::chroot_root') %>/home/t3-ksu -fstype=nfs4,rw,noatime,rsize=32768,wsize=32768 t3-nfs:/home/t3-ksu
-#<%= scope.lookupvar('chroot::params::chroot_root') %>/home/t3-ku -fstype=nfs4,rw,noatime,rsize=32768,wsize=32768 t3-nfs:/home/t3-ku
-
-
