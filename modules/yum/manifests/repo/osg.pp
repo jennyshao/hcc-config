@@ -47,6 +47,17 @@ class yum::repo::osg {
          priority => 98,
          require => File['RPM-GPG-KEY-OSG'] ;
 
+      'osg-contrib':
+         descr => "OSG Software for Enterprise Linux $lsbmajdistrelease - Contrib - \$basearch",
+  #       mirrorlist => "http://repo.grid.iu.edu/mirror/3.0/el$lsbmajdistrelease/osg-contrib/\$basearch",
+			baseurl => "http://t2.unl.edu/osg/3.0/el$lsbmajdistrelease/osg-contrib/\$basearch",
+         enabled => 1,
+         gpgcheck => 1,
+         gpgkey => 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OSG',
+         failovermethod => 'priority',
+         priority => 98,
+         require => File['RPM-GPG-KEY-OSG'] ;
+
 		'osg-source':
 			descr => "OSG Software for Enterprise Linux $lsbmajdistrelease - \$basearch - Source",
 	#		baseurl => "http://repo.grid.iu.edu/3.0/el$lsbmajdistrelease/osg-release/source/SRPMS",
