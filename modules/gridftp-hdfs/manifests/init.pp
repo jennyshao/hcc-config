@@ -57,6 +57,13 @@ class gridftp-hdfs {
 		require => Package["osg-gridftp-hdfs.x86_64"],
 	}
 
+   file { "globus-gridftp-server":
+      path    => "/etc/sysconfig/globus-gridftp-server",
+      owner   => "root", group => "root", mode => 644,
+      source  => "puppet:///modules/gridftp-hdfs/globus-gridftp-server",
+      require => Package["osg-gridftp-hdfs.x86_64"],
+   }
+
    # Configuration customizations for the HDFS server.
    # Sets the checksum algorithms and syslog support for HadoopViz
    file { "gridftp-hdfs":
