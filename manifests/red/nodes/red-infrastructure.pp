@@ -1,9 +1,7 @@
 ### red infrastructure nodes (single nodes, groups go in their own .pp file)
 
 node 'red-test.unl.edu' inherits red-public {
-	include general
-	$role = "red-gridftp"
-	$yum_extrarepo = [ 'epel', 'nebraska', 'osg' ]
+	$role = "red-srm"
 #	include tester
 	include general
 
@@ -24,6 +22,20 @@ node 'hcc-uniquant.unl.edu' inherits red-public {
 	$sshExtraAdmins = [ 'acaprez', 'aguru' ]
 	$sudoExtraAdmins = [ 'acaprez', 'aguru' ]
 
+	include general
+
+	mount { "/home":
+		device  => "t3-nfs:/home",
+		fstype  => "nfs4",
+		ensure  => mounted,
+		options => "rw,noatime,hard,intr,rsize=32768,wsize=32768",
+		atboot  => true,
+	}
+}
+
+node 'red-web.unl.edu' inherits red-public {
+	$sshExtraAdmins = [ 'acaprez', 'aguru', 'jwang', 'dweitzel', 'bbockelm' ]
+	$sudoExtraAdmins = [ 'acaprez', 'aguru', 'tharvill', 'jthiltge', 'jsamuels', 'jwang', 'dweitzel', 'bbockelm' ]
 	include general
 }
 
@@ -82,6 +94,10 @@ node 'osg-test4.unl.edu' inherits red-public {
 	include ganglia
 }
 
+node 'hcc-gridnfs.red.hcc.unl.edu' inherits red-private {
+	include general
+}
+
 node 't3-nfs.red.hcc.unl.edu' inherits red-private {
 
 	include general
@@ -137,11 +153,24 @@ node 't3.unl.edu' inherits red-public {
 		atboot  => true,
 		require => File["/opt/osg/data"],
 	}
+
+	mount { "/home":
+		device  => "t3-nfs:/home",
+		fstype  => "nfs4",
+		ensure  => mounted,
+		options => "rw,noatime,hard,intr,rsize=32768,wsize=32768",
+		atboot  => true,
+	}
 }
 
 node 'red-ldap1.unl.edu' inherits red-public {
 	include minimal
 	include general
+}
+
+node 'hadoop-name.red.hcc.unl.edu' inherits red-private {
+	include general
+	include hadoop
 }
 
 node 'hadoop-tracker.red.hcc.unl.edu' inherits red-private {
