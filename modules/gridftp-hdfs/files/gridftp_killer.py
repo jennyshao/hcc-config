@@ -5,6 +5,7 @@ import re
 import sys
 import time
 import signal
+import syslog
 
 status_re = re.compile('([\w]+):\s+(.*)')
 
@@ -31,7 +32,7 @@ def list_processes():
     return all_procs
 
 def find_gridftp(age=12*3600):
-    xinetd_proc = None
+    gridftp_root_procs = []
     gridftp_procs = []
     parent_proc = {}
     all_procs = list_processes()
@@ -39,6 +40,7 @@ def find_gridftp(age=12*3600):
     for proc in all_procs:
         try:
             fd = open(os.path.join('/proc', str(proc), 'status'))
+            owner_uid = os.fstat(fd.fileno()).st_uid
             for line in fd:
                 m = status_re.match(line.strip())
                 if not m:
@@ -47,8 +49,8 @@ def find_gridftp(age=12*3600):
                 if key == 'Name':
                     if val.find('globus-gridftp-') >= 0:
                         gridftp_procs.append(proc)
-                    elif val == 'xinetd':
-                        xinetd_proc = proc
+                        if owner_uid == 0:
+                            gridftp_root_procs.append(proc)
                     else:
                         break
                 elif key == 'PPid':
@@ -58,16 +60,18 @@ def find_gridftp(age=12*3600):
                         continue
         except OSError:
             continue
-    if xinetd_proc == None:
-        return []
     interesting_procs = []
+    real_parent_procs = []
     for proc in gridftp_procs:
-#        if parent_proc.get(proc, -1) == xinetd_proc:
-#            print "continuing, xinetd=",xinetd_proc
-#            continue
+        ppid = parent_proc.get(proc, -1)
+        if (ppid in gridftp_root_procs) and (ppid not in real_parent_procs):
+            print "continuing, daemon proc=%d" % ppid
+            real_parent_procs.append(ppid)
+            continue
         if process_age(proc) >= age:
             print "interesting=",proc
             interesting_procs.append(proc)
+    interesting_procs = [i for i in interesting_procs if i not in real_parent_procs]
     return interesting_procs
 
 def kill_procs(interesting_procs):
@@ -91,7 +95,12 @@ def main():
     else:
         procs = find_gridftp()
     print "GridFTP servers to kill:\n" + "\n".join([str(i) for i in procs])
-    kill_procs(procs)
+    syslog.openlog("gridftp_killer", syslog.LOG_PID, syslog.LOG_DAEMON)
+    if procs:
+        syslog.syslog(syslog.LOG_ERR, "Killing gridftp processes %s" % ", ".join([str(i) for i in procs]))
+    else:
+        syslog.syslog(syslog.LOG_NOTICE, "GridFTP killer found no processes to kill.")
+    #kill_procs(procs)
 
 if __name__ == '__main__':
     main()
