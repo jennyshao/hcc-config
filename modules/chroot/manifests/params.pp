@@ -2,7 +2,7 @@ class chroot::params {
 
    $chroot_top  = "/chroot"
 
-   $chroot_version = "sl5-v3"
+   $chroot_version = "sl5-v5"
 
    $chroot_base = "${chroot_top}/${chroot_version}"
 
