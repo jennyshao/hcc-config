@@ -27,11 +27,11 @@ class hadoop {
 
 	# log location owned by hadoop group and group writable
 	# this should happen automatically with the newer hadoop RPMs
-	file { "/var/log/hadoop-0.20":
-		ensure => directory,
-		owner => "root", group => "hadoop", mode => 0775,
-		require => Package["hadoop"],
-	}
+#	file { "/var/log/hadoop-0.20":
+#		ensure => directory,
+#		owner => "root", group => "hadoop", mode => 0775,
+#		require => Package["hadoop"],
+#	}
 
 
 	# we keep our configs on a dedicated conf.red directory
@@ -39,9 +39,9 @@ class hadoop {
 	file { "/etc/hadoop-0.20/conf.red":
 		ensure  => directory,
 		owner   => "root", group => "root", mode => 0644,
-		recurse => true,
-		purge   => true,
-		force   => true,
+#		recurse => true,
+#		purge   => true,
+#		force   => true,
 		source  => "puppet:///modules/hadoop/defaults",
 		require => Package["hadoop"],
 	}
@@ -83,7 +83,17 @@ class hadoop {
 		require => Package["hadoop"],
 	}
 
-
+	file {"/etc/hadoop-0.20/conf.red/rack_mapfile.txt":
+		owner 	=> "root", group => "root", mode => 0644,
+		source	=> "puppet:///modules/hadoop/rack_mapfile.txt",
+		require => Package["hadoop"],
+	}
+	
+	file {"/etc/hadoop-0.20/conf.red/rackmap.pl":
+      owner    => "hdfs", group => "root", mode => 0744,
+      source   => "puppet:///modules/hadoop/rackmap.pl",
+      require => Package["hadoop"],
+   }
 	# ALTERNATIVES maintenance
 	# we use the alternatives system to keep our hadoop configs in a dedicated
 	# location called conf.red (as opposed to conf.osg from the -osg RPMs)
