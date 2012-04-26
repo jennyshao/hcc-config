@@ -1,7 +1,7 @@
 
 NAMED_CHROOT = SL5=<%= scope.lookupvar('chroot::params::chroot_root') %> SL6=/
 
-START = ($(START)) && (IsT3User =!= True) && (RequestedChroot isnt null)
+START = ($(START)) && (RequestedChroot isnt null)
 
 BASE_CGROUP = /condor
 
@@ -9,6 +9,11 @@ SLOT_TYPE_1=100%
 SLOT_TYPE_1_PARTITIONABLE=TRUE
 NUM_SLOTS_TYPE_1=1
 
+#MEMORY_LIMIT = hard
+
+CREATE_CORE_FILES=True
+ABORT_ON_EXCEPTION=True
+CLAIM_PARTITIONABLE_LEFTOVERS=False
 
 <% if has_variable?("jobslots") then -%>
 # define number of job slots based on cobbler 'jobslots' variable
@@ -18,3 +23,12 @@ NUM_SLOTS = <%= jobslots %>
 # WARNING: jobslots not defined in cobbler for this node
 #
 <% end %>
+
+<% if has_variable?("workertype") then -%>
+# define a worker type
+# here mostly as a leftover from the autofs+nfs4 t3 issues,
+# but perhaps still useful
+WorkerType = "<%= workertype %>"
+STARTD_ATTRS = $(STARTD_ATTRS) WorkerType
+<% end %>
+
