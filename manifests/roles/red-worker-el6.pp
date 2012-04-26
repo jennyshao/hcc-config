@@ -22,7 +22,7 @@ class role_red-worker-el6 {
    include cgroups
    include nrpe
    include sudo
-
+   include updatedb
 
    ## TODO: This is copy/paste from red-worker57; unify.
 
@@ -50,5 +50,13 @@ class role_red-worker-el6 {
       atboot  => true,
       require => [ File["/opt/osg"], File["/opt/osg/data"], ],
    }
+
+	mount { "/home":
+		device  => "t3-nfs:/home",
+		fstype  => "nfs4",
+		ensure  => mounted,
+		options => "rw,noatime,hard,intr,rsize=32768,wsize=32768",
+		atboot  => true,
+	}
 
 }
