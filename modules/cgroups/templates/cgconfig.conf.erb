@@ -24,23 +24,22 @@
 # By default, mount all controllers to /cgroup/<controller>
 
 mount {
-	cpuset	= /cgroup/cpuset;
-	cpu	= /cgroup/cpu;
-	cpuacct	= /cgroup/cpuacct;
-	memory	= /cgroup/memory;
-	devices	= /cgroup/devices;
-	freezer	= /cgroup/freezer;
-	net_cls	= /cgroup/net_cls;
-	blkio	= /cgroup/blkio;
+	cpuset = /cgroup/cpuset;
+	cpu = /cgroup/cpu;
+	cpuacct = /cgroup/cpuacct;
+	memory = /cgroup/memory;
+	devices = /cgroup/devices;
+	freezer = /cgroup/freezer;
+	net_cls = /cgroup/net_cls;
+	blkio = /cgroup/blkio;
 }
 
 group condor {
-  memory {
-    memory.use_hierarchy = "1";
-    memory.limit_in_bytes = "<%= memorysizeinbytes.to_i - (512*1024*1024) %>";
-    memory.memsw.limit_in_bytes = "<%= memorysizeinbytes.to_i - (512*1024*1024) + swapsizeinbytes.to_i %>";
-  }
-  cpuacct {}
-  freezer {}
+	memory {
+		memory.use_hierarchy="1";
+		memory.limit_in_bytes="<%= memorysizeinbytes.to_i - (512*1024*1024) %>";
+	}
+	cpuacct {}
+	freezer {}
 }
 
