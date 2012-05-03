@@ -11,7 +11,8 @@ class cgroups {
 		ensure     => running,
 		before     => Service["cgred"],
 		enable     => true,
-		hasrestart => true,
+#		hasrestart => true,
+		hasrestart => false,
 		hasstatus  => true,
 		require    => File["cgroup"],
 	}
@@ -20,7 +21,8 @@ class cgroups {
 		name       => "cgred",
 		ensure     => running,
 		enable     => true,
-		hasrestart => true,
+#		hasrestart => true,
+		hasrestart => false,
 		hasstatus  => true,
 		require    => File["cgroup"],
 	}
@@ -45,7 +47,7 @@ class cgroups {
 		path    => "/etc/cgconfig.conf",
 		ensure  => present,
 		owner   => "root", group => "root", mode => 644,
-		notify  => [ Service["cgconfig"], Service["cgred"] ],
+#		notify  => [ Service["cgconfig"], Service["cgred"] ],
 		content => template("cgroups/cgconfig.conf.erb"),
 	}
 
@@ -53,7 +55,7 @@ class cgroups {
 		path    => "/etc/cgrules.conf",
 		ensure  => present,
 		owner   => "root", group => "root", mode => 644,
-		notify  => [ Service["cgconfig"], Service["cgred"] ],
+#		notify  => [ Service["cgconfig"], Service["cgred"] ],
 		content => template("cgroups/cgrules.conf.erb"),
 	}
 
