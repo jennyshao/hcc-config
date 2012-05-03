@@ -192,13 +192,18 @@ class condor {
 	}
 
 
+	# ensure /usr/local/bin exists
+	file { "/usr/local/bin":
+		ensure => directory,
+		owner  => "root", group => "root", mode => "0755",
+	}
 
 	# nfslite wrapper
 	file { "/usr/local/bin/condor_nfslite_job_wrapper.sh":
 		ensure => present,
 		owner  => "root", group => "root", mode => 755,
 		source => "puppet:///modules/condor/condor_nfslite_job_wrapper.sh",
-		require => Package["condor"],
+		require => [ Package["condor"], File["/usr/local/bin"], ],
 	}
 
 	# srm-plugin
@@ -206,7 +211,7 @@ class condor {
 		ensure => present,
 		owner  => "root", group => "root", mode => 755,
 		source => "puppet:///modules/condor/srm-plugin",
-		require => Package["condor"],
+		require => [ Package["condor"], File["/usr/local/bin"], ],
 	}
 
 	# vm-nfs-plugin
@@ -214,7 +219,7 @@ class condor {
 		ensure => present,
 		owner  => "root", group => "root", mode => 755,
 		source => "puppet:///modules/condor/vm-nfs-plugin",
-		require => Package["condor"],
+		require => [ Package["condor"], File["/usr/local/bin"], ],
 	}
 
 
