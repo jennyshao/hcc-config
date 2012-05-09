@@ -1,0 +1,19 @@
+
+# do not flock (is on by default for red ces)
+FLOCK_TO =
+
+GRIDMANAGER_MAX_SUBMITTED_JOBS_PER_RESOURCE = 1000
+GRIDMANAGER_MAX_PENDING_SUBMITS_PER_RESOURCE = 1000
+
+# mark all jobs submitted from t3 for 'dedicated' slots
+IsT3User = True
+#AccountingGroup = "cms.other.user.t3"
+
+request_memory = 1900
+request_disk = 10240
+
+RequestedChroot = "SL5"
+
+SUBMIT_EXPRS = $(SUBMIT_EXPRS) IsT3User AccountingGroup request_memory request_disk RequestedChroot
+
+

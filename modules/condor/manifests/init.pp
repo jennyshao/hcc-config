@@ -27,7 +27,7 @@ class condor {
 	include hadoop
    include chroot::params # To fill in the 09-el6 template.
 
-	package { condor: name => "condor.x86_64", ensure => latest }
+	package { condor: name => "condor.x86_64", ensure => installed }
 	package { condor-vm-gahp: name => "condor-vm-gahp.x86_64", ensure => installed }
 	package { condor-qmf: name => "condor-qmf.x86_64", ensure => installed }
 

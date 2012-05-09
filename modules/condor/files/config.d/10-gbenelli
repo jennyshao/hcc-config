@@ -6,4 +6,6 @@
 ##############################################################################
 ##############################################################################
 
-START = regexp("gbenelli.*", TARGET.Owner) == TRUE
+#START = regexp("gbenelli.*", TARGET.Owner) == TRUE
+
+START = (regexp("gbenelli.*", TARGET.Owner) || regexp("malbouis.*", TARGET.Owner)) == TRUE

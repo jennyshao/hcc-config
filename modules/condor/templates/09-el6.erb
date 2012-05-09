@@ -1,7 +1,7 @@
 
 NAMED_CHROOT = SL5=<%= scope.lookupvar('chroot::params::chroot_root') %> SL6=/
 
-START = ($(START)) && (RequestedChroot isnt null)
+#START = ($(START)) && (TARGET.RequestedChroot =!= UNDEFINED)
 
 BASE_CGROUP = /condor
 
@@ -13,7 +13,7 @@ NUM_SLOTS_TYPE_1=1
 
 CREATE_CORE_FILES=True
 ABORT_ON_EXCEPTION=True
-CLAIM_PARTITIONABLE_LEFTOVERS=False
+#CLAIM_PARTITIONABLE_LEFTOVERS=False
 
 <% if has_variable?("jobslots") then -%>
 # define number of job slots based on cobbler 'jobslots' variable
