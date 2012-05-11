@@ -14,7 +14,7 @@
 # will advertise. The values are "no" or "yes"
 # with yes being the default
 MOUNTD_NFS_V2="no"
-MOUNTD_NFS_V3="no"
+#MOUNTD_NFS_V3="no"
 #
 #
 # Path to remote quota server. See rquotad(8)
@@ -35,7 +35,8 @@ MOUNTD_NFS_V3="no"
 #
 # Optional arguments passed to rpc.nfsd. See rpc.nfsd(8)
 # Turn off v2 and v3 protocol support
-RPCNFSDARGS="-N 2 -N 3"
+#RPCNFSDARGS="-N 2 -N 3"
+RPCNFSDARGS="-N 2"
 # Turn off v4 protocol support
 #RPCNFSDARGS="-N 4"
 # Number of nfs server processes to be started.
