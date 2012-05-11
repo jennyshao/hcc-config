@@ -24,18 +24,16 @@ class role_red-worker-el6 {
    include sudo
    include updatedb
 
-   ## TODO: This is copy/paste from red-worker57; unify.
-
    # must hard mount OSGAPP and OSGDATA to make RSV probes happy
    # automounting will not show correct permissions
    file { "/opt/osg": ensure => directory }
    file { "/opt/osg/app": ensure => directory }
    mount { "mount_osg_app":
       name    => "/opt/osg/app",
-      device  => "hcc-gridnfs:/osg/app",
-      fstype  => "nfs4",
+      device  => "hcc-gridnfs:/export/osg/app",
+      fstype  => "nfs",
       ensure  => mounted,
-      options => "rw,noatime,hard,intr,rsize=32768,wsize=32768",
+      options => "nfsvers=3,rw,noatime,hard,intr,rsize=32768,wsize=32768",
       atboot  => true,
       require => [ File["/opt/osg"], File["/opt/osg/app"], ],
    }
@@ -43,19 +41,19 @@ class role_red-worker-el6 {
    file { "/opt/osg/data": ensure => directory }
    mount { "mount_osg_data":
       name    => "/opt/osg/data",
-      device  => "hcc-gridnfs:/osg/data",
-      fstype  => "nfs4",
+      device  => "hcc-gridnfs:/export/osg/data",
+      fstype  => "nfs",
       ensure  => mounted,
-      options => "rw,noatime,hard,intr,rsize=32768,wsize=32768",
+      options => "nfsvers=3,rw,noatime,hard,intr,rsize=32768,wsize=32768",
       atboot  => true,
       require => [ File["/opt/osg"], File["/opt/osg/data"], ],
    }
 
 	mount { "/home":
-		device  => "t3-nfs:/home",
-		fstype  => "nfs4",
+		device  => "t3-nfs:/export/home",
+		fstype  => "nfs",
 		ensure  => mounted,
-		options => "rw,noatime,hard,intr,rsize=32768,wsize=32768",
+		options => "nfsvers=3,rw,noatime,hard,intr,rsize=32768,wsize=32768",
 		atboot  => true,
 	}
 
