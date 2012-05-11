@@ -338,10 +338,10 @@ class chroot (
    # but ignore the actual NFS server
    mount { "chroot_mount_opt_osg_app":
       name    => "${chroot_root}/opt/osg/app",
-      device  => "hcc-gridnfs:/osg/app",
-      fstype  => "nfs4",
+      device  => "hcc-gridnfs:/export/osg/app",
+      fstype  => "nfs",
       ensure  => mounted,
-      options => "rw,noatime,hard,intr,rsize=32768,wsize=32768",
+      options => "nfsvers=3,rw,noatime,hard,intr,rsize=32768,wsize=32768",
       atboot  => true,
       require => [ File["chroot_opt_osg_app"] ],
    }
@@ -356,10 +356,10 @@ class chroot (
    # See above comment for why this is not a bind mount      
    mount { "chroot_mount_opt_osg_data":
       name    => "${chroot_root}/opt/osg/data",
-      device  => "hcc-gridnfs:/osg/data",
-      fstype  => "nfs4",
+      device  => "hcc-gridnfs:/export/osg/data",
+      fstype  => "nfs",
       ensure  => mounted,
-      options => "rw,noatime,hard,intr,rsize=32768,wsize=32768",
+      options => "nfsvers=3,rw,noatime,hard,intr,rsize=32768,wsize=32768",
       atboot  => true,
       require  => [File["chroot_opt_osg_data"]],
    }  
@@ -374,10 +374,10 @@ class chroot (
 	# not a bind mount for same reason as above
 	mount { "chroot_mount_home":
       name    => "${chroot_root}/home",
-      device  => "t3-nfs:/home",
-      fstype  => "nfs4",
+      device  => "t3-nfs:/export/home",
+      fstype  => "nfs",
       ensure  => mounted,
-      options => "rw,noatime,hard,intr,rsize=32768,wsize=32768",
+      options => "nfsvers=3,rw,noatime,hard,intr,rsize=32768,wsize=32768",
       atboot  => true,
       require  => [File["chroot_home"]],
 	}
