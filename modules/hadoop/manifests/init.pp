@@ -172,6 +172,22 @@ class hadoop {
 			ensure => present,
 			require => Package["hadoop"],
 		}
+
+		file { "hdfs-log-rotate":
+			path => '/usr/local/sbin/hdfs-log-rotate',
+			owner => "root", group => "root", mode => 0744,
+			source   => "puppet:///modules/hadoop/hdfs-log-rotate",
+			require => Package["hadoop"],
+		}
+
+		cron { "hdfs-log-rotate":
+			ensure => present,
+			command => '/usr/local/sbin/hdfs-log-rotate',
+			user => 'root',
+			minute => '45',
+			hour => '4',
+			require => File["hdfs-log-rotate"],
+		}
 	} # isHDFSDatanode
 
 }
