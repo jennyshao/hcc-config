@@ -57,4 +57,11 @@ class role_red-worker-el6 {
 		atboot  => true,
 	}
 
+
+	# disable transparent huge pages for now, kernel bug of some kind
+	exec { "disable_thp":
+		command => 'echo never > /sys/kernel/mm/redhat_transparent_hugepage/enabled',
+		unless => 'grep "\[never\]" /sys/kernel/mm/redhat_transparent_hugepage/enabled',
+	}
+
 }
