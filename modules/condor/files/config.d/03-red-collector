@@ -44,19 +44,19 @@ GROUP_NAMES = \
 #          uscms = Remaining
 # other = 10%
 #     HCC = 100
-GROUP_QUOTA_DYNAMIC_cms = .97
-GROUP_QUOTA_DYNAMIC_other = .03
+GROUP_QUOTA_DYNAMIC_cms = .95
+GROUP_QUOTA_DYNAMIC_other = .05
 
 # CMS children
-GROUP_QUOTA_DYNAMIC_cms.prod = .5
-GROUP_QUOTA_DYNAMIC_cms.other = .4
-GROUP_QUOTA_DYNAMIC_cms.lcgadmin = .1
+GROUP_QUOTA_DYNAMIC_cms.prod = .75
+GROUP_QUOTA_DYNAMIC_cms.other = .20
+GROUP_QUOTA_DYNAMIC_cms.lcgadmin = .05
 
 GROUP_QUOTA_DYNAMIC_cms.other.prio = .5
 GROUP_QUOTA_DYNAMIC_cms.other.user = .5
-GROUP_QUOTA_DYNAMIC_cms.other.user.us = .4
-GROUP_QUOTA_DYNAMIC_cms.other.user.nonus = .4
-GROUP_QUOTA_DYNAMIC_cms.other.user.t3 = .2
+GROUP_QUOTA_DYNAMIC_cms.other.user.us = .2
+GROUP_QUOTA_DYNAMIC_cms.other.user.nonus = .2
+GROUP_QUOTA_DYNAMIC_cms.other.user.t3 = .6
 
 # Other children
 GROUP_QUOTA_DYNAMIC_other.hcc = 1
