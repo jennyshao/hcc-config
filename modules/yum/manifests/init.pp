@@ -14,6 +14,7 @@ class yum {
 			if $yum::params::extrarepo =~ /epel/ { include yum::repo::epel }
 			if $yum::params::extrarepo =~ /nebraska/ { include yum::repo::nebraska }
 			if $yum::params::extrarepo =~ /osg/ { include yum::repo::osg }
+			if $yum::params::extrarepo =~ /nginx/ { include yum::repo::nginx }
 		}
 
 		scientific: {
@@ -22,6 +23,7 @@ class yum {
 			if $yum::params::extrarepo =~ /epel/ { include yum::repo::epel }
 			if $yum::params::extrarepo =~ /nebraska/ { include yum::repo::nebraska }
 			if $yum::params::extrarepo =~ /osg/ { include yum::repo::osg }
+			if $yum::params::extrarepo =~ /nginx/ { include yum::repo::nginx }
 		}
 
 		redhat: {
