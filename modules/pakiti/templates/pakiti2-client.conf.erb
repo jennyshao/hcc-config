@@ -35,7 +35,7 @@ ca_certificate = /etc/grid-security/certificates
 #curl_path = /usr/bin/curl
 
 # Put something small that can identify your site/host/team, without spaces.
-tag = <%= pakitiTag %>
+tag = <%= scope.lookupvar('::pakitiTag') %>
 
 # Does the client should report back the list of packages needs upgrade?
 # (default 0 - off)

@@ -1,0 +1,28 @@
+#############################################################################
+##############################################################################
+#
+#  DO NOT EDIT - file is being maintained by puppet
+#
+##############################################################################
+##############################################################################
+
+# This file defines the settings for the condor_defrag daemon.
+# This daemon will drain off a controlled number of nodes at a time.
+
+# Documentation for condor_defrag are here:
+# http://research.cs.wisc.edu/condor/manual/v7.7/3_12Setting_Up.html#SECTION0041281000000000000000
+
+DAEMON_LIST = $(DAEMON_LIST) DEFRAG
+DEFRAG_INTERVAL = 3600
+
+# At most, start one machine draining per two hours; have no more than three
+# concurrent draining jobs.
+DEFRAG_DRAINING_MACHINES_PER_HOUR = 0.5
+DEFRAG_MAX_CONCURRENT_DRAINING = 3
+
+# After draining, the nodes will likely become re-partitioned by large memory
+# jobs.
+# However, in case OSG users start running HTPC jobs, we want to limit how many
+# slots they can grab.
+DEFRAG_MAX_WHOLE_MACHINES = 20
+

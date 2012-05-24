@@ -148,6 +148,13 @@ class condor {
          source => "puppet:///modules/condor/qpid_passfile_collector",
          require => Package["condor"],
       }
+
+		file { "/etc/condor/config.d/07-red-defrag":
+			ensure => present,
+			owner  => "root", group => "root", mode => 644,
+			source => "puppet:///modules/condor/config.d/07-red-defrag",
+			require => Package["condor"],
+		}
 	}
 
 

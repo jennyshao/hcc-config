@@ -184,4 +184,18 @@ class osg-ce::config {
 		content => template("osg-ce/config.d/40-siteinfo.ini.erb"),
 	}
 
+   file { "sysctl.conf":
+      ensure  => present,
+      path    => "/etc/sysctl.conf",
+      owner   => "root", group => "root", mode => '0644',
+      source  => "puppet:///modules/osg-ce/sysctl.conf",
+   }
+
+   file { "globus-gatekeeper":
+      ensure  => present,
+      path    => "/etc/sysconfig/globus-gatekeeper",
+      owner   => "root", group => "root", mode => '0644',
+      source  => "puppet:///modules/osg-ce/globus-gatekeeper",
+   }
+
 }
