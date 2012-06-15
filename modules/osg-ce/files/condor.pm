@@ -618,7 +618,8 @@ sub submit
             Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
     }
 
-    my $memory_request = "2500";
+    my $memory_request = "1900";
+	 if($group =~ m/cms/x) {$memory_request="2500"};
     if($description->min_memory() ne '')
     {
         $memory_request = $description->min_memory();
