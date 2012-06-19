@@ -22,6 +22,10 @@ fi
 
 export GLOBUS_LOCATION=/usr
 
+# Glite will sleep for many hours trying to stage in/out without this setting.
+export GLITE_LOCAL_COPY_RETRY_COUNT=2
+export GLITE_LOCAL_COPY_RETRY_FIRST_WAIT=120
+
 export OSG_WN_TMP=$_CONDOR_SCRATCH_DIR
 export PATH=/bin:/usr/bin:$PATH
 exec "$@"
