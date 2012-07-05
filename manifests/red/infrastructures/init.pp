@@ -17,8 +17,11 @@ node basenode {
 	$debug = "yes"
 
 	# site wide variables
-	$domain = "unl.edu"
-	$dns_servers = [ '129.93.1.32', '129.93.6.189', '129.93.5.53' ]
+#	$domain = "unl.edu"
+#	$dns_servers = [ '129.93.1.32', '129.93.6.189', '129.93.5.53' ]
+
+	$domain = "red.hcc.unl.edu unl.edu"
+	$dns_servers = [ '129.93.239.161', '129.93.239.156' ]
 
 	$puppet_server = "red-man.unl.edu"
 	$puppet_allow = [ "172.16.0.0/16", "129.93.239.128/26" ]
@@ -49,7 +52,7 @@ node basenode {
 
 	# ldap authentication
 	$users_auth = "ldap"
-	$users_ldap_servers = [ "red-ldap2.unl.edu" ]
+	$users_ldap_servers = [ "red-ldap1.unl.edu", "red-ldap2.unl.edu" ]
 	$users_ldap_basedn = "dc=rcf,dc=unl,dc=edu"
 	$users_ldap_ssl = "yes"
 
