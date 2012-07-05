@@ -23,12 +23,11 @@ class sssd {
 		content => template("sssd/sssd.conf.erb"),
 	}
 
-	# certs for HCC ldap servers
-	# without this sss can id, but not auth
-	file { "hcc-ldap.crt":
-		path    => "/etc/pki/tls/certs/hcc-ldap.crt",
+	# HCC-CA cert
+	file { "hcc-ca.crt":
+		path    => "/etc/pki/tls/certs/hcc-ca.crt",
 		owner   => "root", group => "root", mode => 644,
-		source  => "puppet:///modules/sssd/hcc-ldap.crt",
+		source  => "puppet:///modules/sssd/hcc-ca.crt",
 	}
 
 }

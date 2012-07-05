@@ -74,10 +74,10 @@ id_provider = ldap
 auth_provider = ldap
 
 ldap_schema = rfc2307
-ldap_uri = ldap://red-ldap2.unl.edu/
+ldap_uri = <% users_ldap_servers.each do |ldap| %><% if ldap == users_ldap_servers.last %>ldap://<%= ldap%><% else %>ldap://<%= ldap %>, <% end %><% end %>
 ldap_search_base = <%= users_ldap_basedn %>
 ldap_tls_reqcert = demand
-ldap_tls_cacert = /etc/pki/tls/certs/hcc-ldap.crt
+ldap_tls_cacert = /etc/pki/tls/certs/hcc-ca.crt
 
 min_id = 1000
 enumerate = false
