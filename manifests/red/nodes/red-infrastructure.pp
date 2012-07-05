@@ -7,6 +7,10 @@ node 'red-test.unl.edu' inherits red-public {
 
 }
 
+node 'hcc-mon.unl.edu' inherits red-public {
+	include general
+}
+
 node 'hcc-ganglia.unl.edu' inherits red-public {
 	include general
 	$yum_extrarepo = [ 'epel', 'nebraska' ]
@@ -18,9 +22,15 @@ node 'red-net1.unl.edu', 'red-net2.unl.edu' inherits red-private {
 	include ganglia
 }
 
+node 'hcc-crabserver.unl.edu' inherits red-public {
+	$sshExtraAdmins = [ 'belforte' ]
+	$sudoExtraAdmins = [ 'belforte' ]
+	include general
+}
+
 node 'hcc-uniquant.unl.edu' inherits red-public {
-	$sshExtraAdmins = [ 'acaprez', 'aguru' ]
-	$sudoExtraAdmins = [ 'acaprez', 'aguru' ]
+	$sshExtraAdmins = [ 'acaprez', 'aguru', 'dweitzel' ]
+	$sudoExtraAdmins = [ 'acaprez', 'aguru', 'dweitzel' ]
 
 	include general
 
@@ -117,6 +127,7 @@ node 't3-nfs.red.hcc.unl.edu' inherits red-private {
 }
 
 node 't3.unl.edu' inherits red-public {
+	$sudoExtraAdmins = [ 'acaprez', ]
 	$mountsHDFS = true
 	$isCondorSubmitter = true
    $ntp_server_local = true
@@ -163,8 +174,11 @@ node 't3.unl.edu' inherits red-public {
 	}
 }
 
-node 'red-ldap1.unl.edu' inherits red-public {
-	include minimal
+node 'red-ldap1.unl.edu', 'red-ldap2.unl.edu' inherits red-public {
+	include general
+}
+
+node 'red-fdt.unl.edu' inherits red-public {
 	include general
 }
 

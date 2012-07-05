@@ -65,13 +65,15 @@ node 'red-d8n1', 'red-d8n2', 'red-d8n3', 'red-d8n4', 'red-d8n5', 'red-d8n6', 're
 }
 
 node 'red-d9n1', 'red-d9n2', 'red-d9n3', 'red-d9n4', 'red-d9n5', 'red-d9n6', 'red-d9n7', 'red-d9n8', 'red-d9n9', 'red-d9n10', 'red-d9n11', 'red-d9n12', 'red-d9n13', 'red-d9n14', 'red-d9n15', 'red-d9n16', 'red-d9n17', 'red-d9n18', 'red-d9n19', 'red-d9n20' inherits red-private {
-	$role = "red-worker57"
+	$role = "red-worker-el6"
+	$condorCustom09="el6"
 	$isHDFSDatanode = true
 	include general
 }
 
 node 'red-d11n1', 'red-d11n2', 'red-d11n3', 'red-d11n4', 'red-d11n5', 'red-d11n6', 'red-d11n7', 'red-d11n8', 'red-d11n9', 'red-d11n10', 'red-d11n11', 'red-d11n12', 'red-d11n13', 'red-d11n14', 'red-d11n15', 'red-d11n16', 'red-d11n17', 'red-d11n18', 'red-d11n19', 'red-d11n20' inherits red-private {
-	$role = "red-worker57"
+	$role = "red-worker-el6"
+	$condorCustom09 = "el6"
 	$isHDFSDatanode = true
 	include general
 }
