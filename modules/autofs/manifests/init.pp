@@ -37,7 +37,7 @@ class autofs {
 		mode    => 644,
 		owner   => "root",
 		group   => "root",
-		content => template("autofs/auto.red.erb"),
+		content => inline_template(file("/etc/puppet/modules/autofs/templates/auto.red-$hostname.erb", "/etc/puppet/modules/autofs/templates/auto.red.erb")),
 		require => Package[autofs],
 		notify  => Service[autofs],
 		ensure  => present,
