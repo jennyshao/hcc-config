@@ -1,0 +1,17 @@
+##############################################################################
+##############################################################################
+#
+#	DO NOT EDIT - file is being maintained by puppet
+#
+##############################################################################
+##############################################################################
+
+
+# the magical mythical land o' configs (should not normally be mounted anywhere)
+/opt/kickstart -rw,noatime,tcp,nolock,hard,intr,rsize=32768,wsize=32768 red-man.unl.edu:/opt/kickstart
+
+# homedirs for admins
+/home/cse496 --rw,noatime,tcp,nolock,hard,intr,rsize=32768,wsize=32768 t3-nfs:/home/cse496/
+/home/hep -rw,noatime,tcp,nolock,hard,intr,rsize=32768,wsize=32768 t3-nfs:/home/hep/
+/home/swanson -rw,noatime,tcp,nolock,hard,intr,rsize=32768,wsize=32768 t3-nfs:/home/swanson/
+
