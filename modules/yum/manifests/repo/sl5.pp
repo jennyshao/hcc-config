@@ -7,7 +7,7 @@ class yum::repo::sl5 {
 
 		'sl-base':
 			descr => 'SL 5 base',
-			baseurl => 'http://rcfzilla.unl.edu/scientific-linux/57/$basearch/SL http://ftp.scientificlinux.org/linux/scientific/57/$basearch/SL',
+			baseurl => 'http://rcfzilla.unl.edu/scientific-linux/5x/$basearch/SL http://ftp.scientificlinux.org/linux/scientific/5x/$basearch/SL',
 			enabled => 1,
 			gpgcheck => 0,
 			gpgkey => 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-sl file:///etc/pki/rpm-gpg/RPM-GPG-KEY-sl5 file:///etc/pki/rpm-gpg/RPM-GPG-KEY-csieh file:///etc/pki/rpm-gpg/RPM-GPG-KEY-dawson file:///etc/pki/rpm-gpg/RPM-GPG-KEY-jpolok file:///etc/pki/rpm-gpg/RPM-GPG-KEY-cern file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-5',
@@ -15,7 +15,7 @@ class yum::repo::sl5 {
 
 		'sl-fastbugs':
 			descr => 'SL 5 fastbugs area',
-			baseurl => 'http://rcfzilla.unl.edu/scientific-linux/57/$basearch/updates/fastbugs http://ftp.scientificlinux.org/linux/scientific/57/$basearch/updates/fastbugs',
+			baseurl => 'http://rcfzilla.unl.edu/scientific-linux/5x/$basearch/updates/fastbugs http://ftp.scientificlinux.org/linux/scientific/5x/$basearch/updates/fastbugs',
 			enabled => 0,
 			gpgcheck => 0,
 			gpgkey => 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-sl file:///etc/pki/rpm-gpg/RPM-GPG-KEY-sl5 file:///etc/pki/rpm-gpg/RPM-GPG-KEY-csieh file:///etc/pki/rpm-gpg/RPM-GPG-KEY-dawson file:///etc/pki/rpm-gpg/RPM-GPG-KEY-jpolok file:///etc/pki/rpm-gpg/RPM-GPG-KEY-cern file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-5',
@@ -23,7 +23,7 @@ class yum::repo::sl5 {
 
 		'sl-security':
 			descr => 'SL 5 security updates',
-			baseurl => 'http://rcfzilla.unl.edu/scientific-linux/57/$basearch/updates/security http://ftp.scientificlinux.org/linux/scientific/57/$basearch/updates/security',
+			baseurl => 'http://rcfzilla.unl.edu/scientific-linux/5x/$basearch/updates/security http://ftp.scientificlinux.org/linux/scientific/5x/$basearch/updates/security',
 			enabled => 1,
 			gpgcheck => 0,
 			gpgkey => 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-sl file:///etc/pki/rpm-gpg/RPM-GPG-KEY-sl5 file:///etc/pki/rpm-gpg/RPM-GPG-KEY-csieh file:///etc/pki/rpm-gpg/RPM-GPG-KEY-dawson file:///etc/pki/rpm-gpg/RPM-GPG-KEY-jpolok file:///etc/pki/rpm-gpg/RPM-GPG-KEY-cern file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-5',
@@ -31,7 +31,7 @@ class yum::repo::sl5 {
 
 		'sl-contrib':
 			descr => 'Scientific Linux 5 contrib area',
-			baseurl => 'http://rcfzilla.unl.edu/scientific-linux/57/$basearch/contrib http://ftp.scientificlinux.org/linux/scientific/57/$basearch/contrib',
+			baseurl => 'http://rcfzilla.unl.edu/scientific-linux/5x/$basearch/contrib http://ftp.scientificlinux.org/linux/scientific/5x/$basearch/contrib',
 			enabled => 0,
 			gpgcheck => 0,
 			gpgkey => 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-sl file:///etc/pki/rpm-gpg/RPM-GPG-KEY-sl5 file:///etc/pki/rpm-gpg/RPM-GPG-KEY-csieh file:///etc/pki/rpm-gpg/RPM-GPG-KEY-dawson file:///etc/pki/rpm-gpg/RPM-GPG-KEY-jpolok file:///etc/pki/rpm-gpg/RPM-GPG-KEY-cern file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-5',
