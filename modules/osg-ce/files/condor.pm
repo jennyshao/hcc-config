@@ -585,7 +585,7 @@ sub submit
         }
     }
     if ( $overflowEnabled ) {
-    $rc = print SCRIPT_FILE "+IsT2Overflow=( (CurrentTime - QDate) > 60 * 60 * 24)\n";
+    $rc = print SCRIPT_FILE "+IsT2Overflow=( ((CurrentTime - QDate) > 60 * 60 * 24)) && (regexp(\"cms\\.other\\.user\\.t3.*\", AccountingGroup) == FALSE)\n";
     if (!$rc)
         {
             return $self->respond_with_failure_extension(

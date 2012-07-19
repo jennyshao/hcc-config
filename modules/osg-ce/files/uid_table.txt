@@ -22,6 +22,8 @@ bloom cms.other.user.t3
 jbutt cms.other.user.t3
 jorcutt cms.other.user.t3
 kellerjd cms.other.user.t3
+cfangmeier cms.other.user.t3
+wilken	cms.other.user.t3
 cmsphedex cms.lcgadmin
 lcgadmin cms.lcgadmin
 uscmsPool1396 cms.lcgadmin
