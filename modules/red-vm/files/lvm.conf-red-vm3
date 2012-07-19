@@ -1,3 +1,14 @@
+##############################################################################
+##############################################################################
+#
+#  DO NOT EDIT - file is being maintained by puppet
+#  
+#  /etc/lvm/lvm.conf for red-vm3.red.hcc.unl.edu
+#
+##############################################################################
+##############################################################################
+
+
 # This is an example configuration file for the LVM2 system.
 # It contains the default settings that would be used if there was no
 # /etc/lvm/lvm.conf file.
@@ -6,6 +17,9 @@
 #
 # To put this file in a different directory and override /etc/lvm set
 # the environment variable LVM_SYSTEM_DIR before running the tools.
+#
+# N.B. Take care that each setting only appears once if uncommenting
+# example settings in this file.
 
 
 # This section allows you to configure which block devices should
@@ -18,6 +32,16 @@ devices {
     # An array of directories that contain the device nodes you wish
     # to use with LVM2.
     scan = [ "/dev" ]
+
+    # If set, the cache of block device nodes with all associated symlinks
+    # will be constructed out of the existing udev database content.
+    # This avoids using and opening any inapplicable non-block devices or
+    # subdirectories found in the device directory. This setting is applied
+    # to udev-managed device directory only, other directories will be scanned
+    # fully. LVM2 needs to be compiled with udev support for this setting to
+    # take effect. N.B. Any device node or symlink not managed by udev in
+    # udev directory will be ignored with this setting on.
+    obtain_device_list_from_udev = 1
 
     # If several entries in the scanned directories correspond to the
     # same block device and the tools need to display a name for device,
@@ -48,10 +72,8 @@ devices {
     # the cache file gets regenerated (see below).
     # If it doesn't do what you expect, check the output of 'vgscan -vvvv'.
 
-
-    # By default we accept every block device:
-    #filter = [ "a/.*/" ]
-    filter = [ "a|/dev/md|", "a|/dev/mapper/mpath|", "r/.*/" ]
+    # only accept local hw raid (/dev/sda) and mpath devices
+    filter = [ "a|/dev/sda[0-9]|", "a|/dev/mapper/hcc-vm-mainp1$|", "r/.*/" ]
 
     # Exclude the cdrom drive
     # filter = [ "r|/dev/cdrom|" ]
@@ -145,6 +167,28 @@ devices {
 
     # Allow use of pvcreate --uuid without requiring --restorefile.
     require_restorefile_with_uuid = 1
+
+    # Minimum size (in KB) of block devices which can be used as PVs.
+    # In a clustered environment all nodes must use the same value.
+    # Any value smaller than 512KB is ignored.
+
+    # Ignore devices smaller than 2MB such as floppy drives.
+    pv_min_size = 2048
+
+    # The original built-in setting was 512 up to and including version 2.02.84.
+    # pv_min_size = 512
+
+    # Issue discards to a logical volumes's underlying physical volume(s) when
+    # the logical volume is no longer using the physical volumes' space (e.g.
+    # lvremove, lvreduce, etc).  Discards inform the storage that a region is
+    # no longer in use.  Storage that supports discards advertise the protocol
+    # specific way discards should be issued by the kernel (TRIM, UNMAP, or
+    # WRITE SAME with UNMAP bit set).  Not all storage will support or benefit
+    # from discards but SSDs and thinly provisioned LUNs generally do.  If set
+    # to 1, discards will only be issued if both the storage and kernel provide
+    # support.
+    # 1 enables; 0 disables.
+    issue_discards = 0
 }
 
 # This section allows you to configure the way in which LVM selects
@@ -164,6 +208,19 @@ devices {
 #
 #    cling_tag_list = [ "@site1", "@site2" ]
 #    cling_tag_list = [ "@*" ]
+#
+#    Changes made in version 2.02.85 extended the reach of the 'cling'
+#    policies to detect more situations where data can be grouped
+#    onto the same disks.  Set this to 0 to revert to the previous
+#    algorithm.
+#
+#    maximise_cling = 1
+#
+#    Set to 1 to guarantee that mirror logs will always be placed on 
+#    different PVs from the mirror images.  This was the default
+#    until version 2.02.85.
+#
+#    mirror_logs_require_separate_pvs = 0
 #}
 
 # This section that allows you to configure the nature of the
@@ -355,15 +412,46 @@ global {
     # encountered the internal error. Please only enable for debugging.
     abort_on_internal_errors = 0
 
+    # Check whether CRC is matching when parsed VG is used multiple times.
+    # This is useful to catch unexpected internal cached volume group
+    # structure modification. Please only enable for debugging.
+    detect_internal_vg_cache_corruption = 0
+
     # If set to 1, no operations that change on-disk metadata will be permitted.
     # Additionally, read-only commands that encounter metadata in need of repair
     # will still be allowed to proceed exactly as if the repair had been 
     # performed (except for the unchanged vg_seqno).
     # Inappropriate use could mess up your system, so seek advice first!
     metadata_read_only = 0
+
+    # 'mirror_segtype_default' defines which segtype will be used when the
+    # shorthand '-m' option is used for mirroring.  The possible options are:
+    #
+    # "mirror" - The original RAID1 implementation provided by LVM2/DM.  It is
+    # 	         characterized by a flexible log solution (core, disk, mirrored)
+    #		 and by the necessity to block I/O while reconfiguring in the
+    #		 event of a failure.  Snapshots of this type of RAID1 can be
+    #		 problematic.
+    #
+    # "raid1"  - This implementation leverages MD's RAID1 personality through
+    # 	       	 device-mapper.  It is characterized by a lack of log options.
+    #		 (A log is always allocated for every device and they are placed
+    #		 on the same device as the image - no separate devices are
+    #		 required.)  This mirror implementation does not require I/O
+    #		 to be blocked in the kernel in the event of a failure.
+    #
+    # Specify the '--type <mirror|raid1>' option to override this default
+    # setting.
+    mirror_segtype_default = "mirror"
 }
 
 activation {
+    # Set to 1 to perform internal checks on the operations issued to
+    # libdevmapper.  Useful for debugging problems with activation.
+    # Some of the checks may be expensive, so it's best to use this
+    # only when there seems to be a problem.
+    checks = 0
+
     # Set to 0 to disable udev synchronisation (if compiled into the binaries).
     # Processes will not wait for notification from udev.
     # They will continue irrespective of any possible udev processing
@@ -380,6 +468,12 @@ activation {
     # N.B. Manual intervention may be required if this setting is changed
     # while any logical volumes are active.
     udev_rules = 1
+
+    # Set to 1 for LVM2 to verify operations performed by udev. This turns on
+    # additional checks (and if necessary, repairs) on entries in the device
+    # directory after udev has completed processing its events. 
+    # Useful for diagnosing problems with LVM2/udev interactions.
+    verify_udev_operations = 0
 
     # How to fill in missing stripes if activating an incomplete volume.
     # Using "error" will make inaccessible parts of the device return

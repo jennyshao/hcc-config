@@ -72,9 +72,10 @@ devices {
     # the cache file gets regenerated (see below).
     # If it doesn't do what you expect, check the output of 'vgscan -vvvv'.
 
-
-    # By default we accept every block device:
-    filter = [ "a/.*/" ]
+    # only accept local hw raid (/dev/sda) and mpath devices
+    # note we have to use sda<number> to grab partition as we'll
+    # likely loop through /dev/sdaa, /dev/sdab, etc with iscsi stuff
+    filter = [ "a|/dev/sda[0-9]|", "a|/dev/mapper/hcc-vm-mainp1$|", "r/.*/" ]
 
     # Exclude the cdrom drive
     # filter = [ "r|/dev/cdrom|" ]
