@@ -1,0 +1,31 @@
+[1;31m
+
+                ______ _______ ______      _  _  _ _______ ______ 
+               |_____/ |______ |     \ ___ |  |  | |______ |_____]
+               |    \_ |______ |_____/     |__|__| |______ |_____]
+[1;30m   \_________________________________________________________________________/
+   /                                                                         \
+
+                        firewall script = /root/firewall-red-web
+                        selinux is enabled
+
+
+         Plone, nginx, and varnish startup script located at
+             /root/bin/start_web_services.sh
+         (sometimes varnish forgets to remove its PID file and needs a kick)
+
+
+         Plone          /usr/local/Plone/t2/bin/[start,shutdown]cluster.sh
+                        backups in /usr/local/Plone/backups/t2/
+
+         nginx          /usr/local/nginx/
+                        restart with "pkill nginx" and then "nginx"
+
+         varnish        /usr/local/varnish/
+
+         SVN            /var/svnroot-t2/
+
+         Jobview        /opt/jobview (and /var/www/t2.unl.edu/jobview)
+
+
+[0m

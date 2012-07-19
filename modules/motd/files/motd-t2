@@ -1,0 +1,22 @@
+
+	t2.unl.edu
+
+	-------------------------------------------------
+
+	* t2.unl.edu Plone instance lives in /usr/local/Plone, start with
+		# /usr/local/Plone/t2/bin/startcluster.sh
+
+	* nginx is main webserver, installed from RPMs with init script and all
+
+	* GIP trac instance lives in /home/trac, start with
+		# su - trac /home/trac/start-trac
+
+	* Gratia static graphs are a combination of the GratiaWeb service
+	  and a gratia_data.cron in /etc/cron.d/ - there's also a cron to
+	  restart GratiaWeb when it stalls ( grumble )
+
+	* SVN repos live in /svnroot and is run under xinetd
+
+	* bind-chroot is a mirror of red-man and is in the usual place
+
+
