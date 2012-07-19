@@ -12,7 +12,7 @@
 
 CONDOR_HOST    = red-condor.unl.edu
 COLLECTOR_NAME = Nebraska T2
-CONDOR_ADMIN   = attebury@cse.unl.edu
+# CONDOR_ADMIN   = attebury@cse.unl.edu
 
 FLOCK_FROM          = red.unl.edu, red-gw1.unl.edu, red-gw2.unl.edu, red-gw3.unl.edu, t3.unl.edu
 FLOCK_TO            = glidein.unl.edu

@@ -47,6 +47,18 @@ class condor {
 		owner => "condor", group => "condor", mode => "0755",
 	}
 
+	# Needed for the sleeper pools
+	file { "sleeperlog":
+		path => "/var/log/condor/sleeper",
+		ensure => directory,
+		owner => "condor", group => "condor", mode => "0755",
+	}
+	file { "sleeperexecute":
+		path => "/var/lib/condor/execute/sleeper",
+		ensure => directory,
+		owner => "condor", group => "condor", mode => "0755",
+	}
+
 	file { "/etc/sysconfig/condor":
 		owner   => "root", group => "root", mode => "0644",
 		ensure  => present,
