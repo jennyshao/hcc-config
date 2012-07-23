@@ -640,6 +640,20 @@ sub submit
             Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
     }
 
+    # default max_time specified in globus-gram-job-manager.rvf
+    if($description->max_time() ne '')
+    {
+        my $max_time = $description->max_time() ;
+        $rc = print SCRIPT_FILE "PeriodicRemove= (JobStatus == 2) && ( (time() - EnteredCurrentStatus) < (" . $max_time . " * 60))\n";
+        if (!$rc)
+        {
+            return $self->respond_with_failure_extension(
+                "print: $script_filename: $!",
+                Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
+        }
+    }
+    
+
     # NFS Lite mode
     if ($isNFSLite && !$isManagedFork) {
         print SCRIPT_FILE "should_transfer_files = YES\n";

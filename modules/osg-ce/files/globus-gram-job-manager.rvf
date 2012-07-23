@@ -83,6 +83,7 @@ Description: "The maximum walltime or cputime for a single execution of the
 	      will go through an atoi() conversion in order to get an
 	      integer."
 ValidWhen: GLOBUS_GRAM_JOB_SUBMIT
+Default: 2880
 
 Attribute: max_wall_time
 Description: "Explicitly set the maximum walltime for a single execution of
