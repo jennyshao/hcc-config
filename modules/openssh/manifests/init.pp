@@ -58,6 +58,20 @@ class openssh {
 		user => "root",
     }
 
+    ssh_authorized_key { "red-man-new":
+		ensure => "present",
+		type => "ssh-rsa",
+      key => "AAAAB3NzaC1yc2EAAAABIwAAAQEAxgS/e4Fng+nVXFfI7LPfQ+sR9oyDXG4xvOC8a6YGJW9XdDVrCCGiDO/XZFs9+6nW8N1w7rPQpGmtj1L0NM6m07cJXvnXclC4eu99JliLlR6C6NH/efbWrfRYekKHwf6D8txBhcOWlZk8aQFgQipF9sYVqD64WUkdrcnK+iuvACopjiT+jgNETiXeJoIt92VtKHIcANfO8J9sXwK2XaU87PhjQxWi7z+P1AMMieNwA7MkohOSGW6L0NmVWeaazXTLvkY9kTcfQv3bvBnvjBI4iksJC1vFfg3mupehSoqEkduZQqyE1WfvhoI8SODydsFzrJpb4oNJWrE9Q+dw9EePFw==",
+		user => "root",
+    }
+
+    ssh_authorized_key { "red-tape":
+		ensure => "present",
+		type => "ssh-rsa",
+      key => "AAAAB3NzaC1yc2EAAAADAQABAAABAQDH3Leng9UsuhuIUs0rAPD7jPYlWmEsLGu9ZGKPM9a+3LLOqwKGxbF6nCl7FgaTJbkS03iGn7iLfB44nhrzHMCRlLPDW9cAJJheMfQJ5b/7xJgGcBci6AuOXu1euhPXesxOtEcN7dYC9k/obhh4suBtxnkRf8s5K8uJpecbuLdlOaTQTdtTIte65qm4lnQDwKSZiDQKQ9XVUUOpIois/FFW96w14AtgQHq5Mqy1RImRMfLopWh2Vrw9/lyby/SAQJ5jttxV1vZq12rOacOVrRmTka70cgj3D89wmMEgeLA9BJYqRWDj82AckD+YgEymTBzwZ/wNpus1dJ49qxypMHmd",
+		user => "root",
+    }
+
     if $puppi == "yes" { include openssh::puppi }
     if $backup == "yes" { include openssh::backup }
     if $monitor == "yes" { include openssh::monitor }
