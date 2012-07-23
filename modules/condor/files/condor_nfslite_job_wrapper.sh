@@ -26,6 +26,9 @@ export GLOBUS_LOCATION=/usr
 export GLITE_LOCAL_COPY_RETRY_COUNT=2
 export GLITE_LOCAL_COPY_RETRY_FIRST_WAIT=120
 
+export OSG_APP=/opt/osg/app
+export OSG_DATA=/opt/osg/data
+
 export OSG_WN_TMP=$_CONDOR_SCRATCH_DIR
 export PATH=/bin:/usr/bin:$PATH
 exec "$@"

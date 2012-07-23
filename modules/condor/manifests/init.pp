@@ -58,6 +58,13 @@ class condor {
 		ensure => directory,
 		owner => "condor", group => "condor", mode => "0755",
 	}
+	# Only needed on t3 for the flocking configuration.
+	# Don't know how to limit this to T3 though.
+   file { "flockinglog":
+      path => "/var/log/condor/flocking",
+      ensure => directory,
+      owner => "condor", group => "condor", mode => "0755",
+   }
 
 	file { "/etc/sysconfig/condor":
 		owner   => "root", group => "root", mode => "0644",
