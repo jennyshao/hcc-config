@@ -14,7 +14,7 @@ class gridftp-hdfs {
 	require hostcert
 
 	package { "osg-gridftp-hdfs.x86_64": ensure => present, }
-	package { "gratia-probe-gridftp-transfer": ensure => present, }
+	package { "gratia-probe-gridftp-transfer": ensure => latest, }
 	package { "sysklogd": ensure => present, }
 	package { "arptables_jf": ensure => present, }
 
@@ -35,6 +35,14 @@ class gridftp-hdfs {
 		subscribe  => File["gridftp-syslog.conf"],
 	}
 
+	service { "gratia-probes-cron":
+		name       => "gratia-probes-cron",
+		ensure     => running,
+		enable     => true,
+		hasrestart => true,
+		require    => Package["gratia-probe-gridftp-transfer"],
+		subscribe  => File["gridftp-transfer-ProbeConfig"],
+	}
 
 	file { "gridftp-syslog.conf":
 		path    => "/etc/syslog.conf",
