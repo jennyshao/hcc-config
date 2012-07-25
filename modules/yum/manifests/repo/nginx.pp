@@ -10,4 +10,6 @@ class yum::repo::nginx {
 	 	gpgcheck => 0,
 		priority => 8 ;
 
+	}
+
 }
