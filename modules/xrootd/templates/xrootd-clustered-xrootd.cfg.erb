@@ -1,10 +1,13 @@
 ##############################################################################
 ##############################################################################
 #
-#  DO NOT EDIT - file is being maintained by puppet
+#	DO NOT EDIT - file is being maintained by puppet
+#
+#	this file specific to xrootd.unl.edu
 #
 ##############################################################################
 ##############################################################################
+
 
 # Port specifications; only the redirector needs to use a well-known port
 # "any" will cause rooted to bind to any available port.  Change as needed for firewalls.
@@ -63,17 +66,16 @@ cms.sched cpu 0 io 0 runq 0 pag 0 fuzz 100 refreset 3600
 xrd.sched mint 8 maxt 2048 avlt 512 idle 780
 
 xrd.report xrootd.t2.ucsd.edu:9931 every 30s all sync
-xrootd.monitor all auth flush 30s mbuff 1472 window 5s dest files io info user xrootd.t2.ucsd.edu:9930
-xrootd.monitor all auth flush 30s mbuff 1472 window 5s dest files io info user hcc-group4.unl.edu:9930
+xrootd.monitor all auth flush 30s mbuff 1472 window 5s dest files io info redir user xrootd.t2.ucsd.edu:9930
+#xrootd.monitor all auth flush 30s mbuff 1472 window 5s dest files io info user hcc-group4.unl.edu:9930
 
 cms.allow host *.ultralight.org
 cms.allow host *.mit.edu
-cms.allow host *.ufl.edu
+#cms.allow host *.ufl.edu
 cms.allow host *.unl.edu
 cms.allow host *.fnal.gov
 cms.allow host *.purdue.edu
 cms.allow host *.ucsd.edu
 cms.allow host *.wisc.edu
 cms.allow host *.vanderbilt.edu
-
 
