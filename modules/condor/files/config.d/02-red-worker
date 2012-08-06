@@ -99,6 +99,8 @@ STARTD.SLEEPER.COLLECTOR_HOST = $(CONDOR_HOST):9619
 STARTD.SLEEPER.QMF_STOREFILE = $(LOG)/sleeper/.startd_storefile
 STARTD.SLEEPER.EXECUTE = $(SLEEPERSTARTD_EXECUTE)
 STARTD.SLEEPER.NUM_CPUS = 5*$(DETECTED_CORES)
+STARTD.SLEEPER.STARTD_ADDRESS_FILE = $(LOG)/sleeper/.startd_address
+STARTD.SLEEPER.STARTD_DAEMON_AD_FILE = $(LOG)/sleeper/.startd_classad
 DAEMON_LIST = $(DAEMON_LIST), SLEEPERSTARTD
 
 # Over-commit memory, just a bit.  Done in response to CMS moving the "kill" limit to 2.5GBs.
