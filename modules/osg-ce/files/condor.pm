@@ -426,7 +426,6 @@ sub submit
             "print: $script_filename: $!",
             Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
     }
-
     @tmpr = $description->condor_os;
     if (scalar(@tmpr) > 0)
     {
@@ -474,6 +473,7 @@ sub submit
         $requirements = ("True");
     }
  
+
     if (scalar(@requirements) > 0)
     {
         $rc = print SCRIPT_FILE "Requirements = ", join(" && ", @requirements) ."\n";
@@ -584,6 +584,55 @@ sub submit
                 Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
         }
     }
+    my @xcount = $description->xcount();
+    if(@xcount)
+    {   
+        $self->log("xcount = " . scalar(@xcount));
+        foreach my $this_xcount (@xcount)
+        {   
+            $self->log("xcount = " . $this_xcount);
+            $rc = print SCRIPT_FILE "request_cpus=$this_xcount \n";
+            if (!$rc)
+                {
+                    return $self->respond_with_failure_extension(
+                    "print: $script_filename: $!",
+                    Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
+                }
+        }   
+    } else
+    {
+        $rc = print SCRIPT_FILE "request_cpus=1\n";
+        if (!$rc)
+        {
+            return $self->respond_with_failure_extension(
+                "print: $script_filename: $!",
+                Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
+        }
+    }
+
+    if($description->min_memory() ne '')
+    {
+        my $memory_request = $description->min_memory();
+        if($group =~ m/cms/x) {$memory_request="2500"};
+        $rc = print SCRIPT_FILE "request_memory=" . $memory_request . "\n";
+        if (!$rc)
+        {
+            return $self->respond_with_failure_extension(
+                "print: $script_filename: $!",
+                Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
+        }
+    } else
+    {
+        my $memory_request = "1900";
+        if($group =~ m/cms/x) {$memory_request="2500"};
+        $rc = print SCRIPT_FILE "request_memory=" . $memory_request . "\n";
+        if (!$rc)
+        {
+            return $self->respond_with_failure_extension(
+                "print: $script_filename: $!",
+                Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
+        }
+    }
     if ( $overflowEnabled ) {
     $rc = print SCRIPT_FILE "+IsT2Overflow=( ((CurrentTime - QDate) > 60 * 60 * 24)) && (regexp(\"cms\\.other\\.user\\.t3.*\", AccountingGroup) == FALSE)\n";
     if (!$rc)
@@ -610,28 +659,6 @@ sub submit
             Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
     }
 
-    $rc = print SCRIPT_FILE "request_cpus=1\n";
-    if (!$rc)
-    {
-        return $self->respond_with_failure_extension(
-            "print: $script_filename: $!",
-            Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
-    }
-
-    my $memory_request = "1900";
-	 if($group =~ m/cms/x) {$memory_request="2500"};
-    if($description->min_memory() ne '')
-    {
-        $memory_request = $description->min_memory();
-    }
-    $rc = print SCRIPT_FILE "request_memory=" . $memory_request . "\n";
-    if (!$rc)
-    {
-        return $self->respond_with_failure_extension(
-            "print: $script_filename: $!",
-            Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
-    }
-
     $rc = print SCRIPT_FILE "request_disk=10240\n";
     if (!$rc)
     {
@@ -640,11 +667,11 @@ sub submit
             Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
     }
 
-    # default max_time specified in globus-gram-job-manager.rvf
-    if($description->max_time() ne '')
+    # default max_wall_time can be specified in globus-gram-job-manager.rvf
+    if($description->max_wall_time() ne '')
     {
-        my $max_time = $description->max_time() ;
-        $rc = print SCRIPT_FILE "PeriodicRemove= (JobStatus == 2) && ( (time() - EnteredCurrentStatus) < (" . $max_time . " * 60))\n";
+        my $max_wall_time = $description->max_wall_time() ;
+        $rc = print SCRIPT_FILE "PeriodicRemove= (JobStatus == 2) && ( (time() - EnteredCurrentStatus) < (" . $max_wall_time . " * 60))\n";
         if (!$rc)
         {
             return $self->respond_with_failure_extension(
@@ -652,7 +679,6 @@ sub submit
                 Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
         }
     }
-    
 
     # NFS Lite mode
     if ($isNFSLite && !$isManagedFork) {

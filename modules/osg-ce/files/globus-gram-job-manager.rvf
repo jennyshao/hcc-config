@@ -16,6 +16,7 @@ Default: /var/lib/globus/job_home/$(LOGNAME)
 ValidWhen: GLOBUS_GRAM_JOB_SUBMIT
 DefaultWhen: GLOBUS_GRAM_JOB_SUBMIT
 
+
 Attribute: executable
 Description: "The name of the executable file to run on the remote machine.
 	      If the value is a GASS URL, the file is transferred to the
@@ -83,7 +84,6 @@ Description: "The maximum walltime or cputime for a single execution of the
 	      will go through an atoi() conversion in order to get an
 	      integer."
 ValidWhen: GLOBUS_GRAM_JOB_SUBMIT
-Default: 2880
 
 Attribute: max_wall_time
 Description: "Explicitly set the maximum walltime for a single execution of
@@ -92,6 +92,7 @@ Description: "Explicitly set the maximum walltime for a single execution of
 	      GRAM scheduler cannot set walltime, then an error will be
 	      returned. "
 ValidWhen: GLOBUS_GRAM_JOB_SUBMIT
+Default: 2880
 
 Attribute: max_cpu_time
 Description: "Explicitly set the maximum cputime for a single execution of
@@ -152,6 +153,7 @@ Description: "Explicitly set the minimum amount of memory for a single execution
 	      GRAM scheduler cannot set minMemory, then an error will be
 	      returned."
 ValidWhen: GLOBUS_GRAM_JOB_SUBMIT
+Default: 1900
 
 Attribute: max_memory
 Description: "Explicitly set the maximum amount of memory for a single execution
