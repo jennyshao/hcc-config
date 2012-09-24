@@ -526,7 +526,7 @@ sub submit
                 Globus::GRAM::Error::TEMP_SCRIPT_FILE_FAILED());
         }
     }
-    $rc = print SCRIPT_FILE "+Environment = \"\$\$([ ifThenElse(IsT2Overflow =?= TRUE, \\\"IsT2Overflow=1 GLOBUS_GRAM_JOB_CONTACT=$gram_contact\\\", \\\"$environment_string\\\") ])\"\n";
+    $rc = print SCRIPT_FILE "+Environment = \"\$\$([ ifThenElse(GLIDECLIENT_Group =?= \\\"T2Overflow\\\", \\\"IsT2Overflow=1 GLOBUS_GRAM_JOB_CONTACT=$gram_contact\\\", \\\"$environment_string\\\") ])\"\n";
     if (!$rc)
     {
         return $self->respond_with_failure_extension(
@@ -635,6 +635,7 @@ sub submit
     }
     if ( $overflowEnabled ) {
     $rc = print SCRIPT_FILE "+IsT2Overflow=( ((CurrentTime - QDate) > 60 * 60 * 24)) && (regexp(\"cms\\.other\\.user\\.t3.*\", AccountingGroup) == FALSE)\n";
+    #$rc = print SCRIPT_FILE "+IsT2Overflow=FALSE\n";
     if (!$rc)
         {
             return $self->respond_with_failure_extension(

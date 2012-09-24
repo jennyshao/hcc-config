@@ -16,9 +16,23 @@ class osg-ce::config {
 		source  => "puppet:///modules/osg-ce/uid_table.txt",
 	}
 
+#	file { "condor.pm":
+#		ensure  => present,
+#		path    => "/usr/lib/perl5/vendor_perl/5.8.8/Globus/GRAM/JobManager/condor.pm",
+#		owner   => "root", group => "root", mode => '0644',
+#		source  => "puppet:///modules/osg-ce/condor.pm",
+#	}
+
+   file { "globus-gatekeeper.logrotate":
+      ensure => present,
+      path   => "/etc/logrotate.d/globus-gatekeeper",
+      owner  => "root", group => "root", mode => '0644',
+      source => "puppet:///modules/osg-ce/globus-gatekeeper.logrotate",
+   }
+
 	file { "condor.pm":
 		ensure  => present,
-		path    => "/usr/lib/perl5/vendor_perl/5.8.8/Globus/GRAM/JobManager/condor.pm",
+		path    => "/usr/share/perl5/vendor_perl/Globus/GRAM/JobManager/condor.pm",
 		owner   => "root", group => "root", mode => '0644',
 		source  => "puppet:///modules/osg-ce/condor.pm",
 	}
@@ -197,5 +211,18 @@ class osg-ce::config {
       owner   => "root", group => "root", mode => '0644',
       source  => "puppet:///modules/osg-ce/globus-gatekeeper",
    }
+
+
+	file { "osg-ce-httpcert.pem":
+		path    => "/etc/grid-security/http/httpcert.pem",
+		owner   => "tomcat", group => "tomcat", mode => 644,
+		source  => "puppet:///hostcert/${hostname}-hostcert.pem",
+	}
+
+	file { "osg-ce-httpkey.pem":
+		path    => "/etc/grid-security/http/httpkey.pem",
+		owner   => "tomcat", group => "tomcat", mode => 600,
+		source  => "puppet:///hostcert/${hostname}-hostkey.pem",
+	}
 
 }
