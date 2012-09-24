@@ -13,15 +13,9 @@
 # "any" will cause rooted to bind to any available port.  Change as needed for firewalls.
 xrd.port 1094
 
-# The roles this server will play.
-all.role server
-#all.role manager if xrootd.unl.edu
-all.role meta manager if xrootd.unl.edu
-# The known managers
-#all.manager xrootd.unl.edu 1213
-all.manager meta xrootd.unl.edu:1213
-#all.manager cmswn045.fnal.gov:1213
-#all.manager xrootd.ultralight.org:1213
+all.role manager
+all.manager meta any cms-xrd-global.cern.ch+ 1098
+all.manager xrootd.unl.edu:1213
 
 # Allow any path to be exported; this is further refined in the authfile.
 all.export /
@@ -56,7 +50,8 @@ xrootd.fslib /usr/lib64/libXrdOfs.so
 all.adminpath /var/run/xrootd
 all.pidpath /var/run/xrootd
 
-cms.delay startup 10 lookup 5 qdl 30 servers 1
+#cms.delay startup 10 lookup 5 qdl 30 servers 1
+cms.delay startup 10 lookup 1 qdl 30 qdn 2 servers 1
 cms.fxhold 60s
 #cms.ping 30 log 10 usage 0
 cms.ping 30
@@ -78,4 +73,7 @@ cms.allow host *.purdue.edu
 cms.allow host *.ucsd.edu
 cms.allow host *.wisc.edu
 cms.allow host *.vanderbilt.edu
+
+# Turn off for now due to the infinite loop bug.
+#xrootd.redirect cms-xrd-global.cern.ch:1094 ? /store
 
