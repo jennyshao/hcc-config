@@ -29,14 +29,14 @@ SYSTEM_PERIODIC_HOLD_REASON = strcat("Job in status ", JobStatus, " put on hold 
 # and anything trying to run more than 10 times
 SYSTEM_PERIODIC_REMOVE = \
    (JobStatus == 5 && CurrentTime - EnteredCurrentStatus > 3600*6) || \
-   (JobStatus == 2 && CurrentTime - EnteredCurrentStatus > 3600*24*3) || \
+   (JobStatus == 2 && CurrentTime - EnteredCurrentStatus > 3600*24*4) || \
    (JobStatus == 5 && JobRunCount >= 10) || \
    (JobStatus == 5 && HoldReasonCode =?= 14 && HoldReasonSubCode =?= 2)
 
 # Record why the job was removed
 SYSTEM_PERIODIC_REMOVE_REASON = strcat("Job removed by SYSTEM_PERIODIC_REMOVE due to ", \
    ifThenElse((JobStatus == 5 && CurrentTime - EnteredCurrentStatus > 3600*6), "being in hold state for 6 hours", \
-   ifThenElse((JobStatus == 2 && CurrentTime - EnteredCurrentStatus > 3600*24*3), "runtime of longer than 72 hours", \
+   ifThenElse((JobStatus == 2 && CurrentTime - EnteredCurrentStatus > 3600*24*4), "runtime of longer than 96 hours", \
    ifThenElse((JobStatus == 5 && JobRunCount >= 10), "more than 10 restarts", \
               "input files missing"))), ".")
 
@@ -104,10 +104,7 @@ DAEMON_LIST = $(DAEMON_LIST), SLEEPERSCHEDD
 # JobRouter, thy name is legion...
 #
 
-# Do not enable this for now - EditInPlace
-# doesn't work right now.  -BB, Aug 15
-# Gonna be cool when it does work!
-#DAEMON_LIST = $(DAEMON_LIST) JOB_ROUTER
+DAEMON_LIST = $(DAEMON_LIST) JOB_ROUTER
 
 JOB_ROUTER_ENTRIES = \
    [ \
