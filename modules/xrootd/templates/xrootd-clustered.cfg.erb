@@ -53,5 +53,6 @@ cms.delay startup 10
 cms.fxhold 60s
 
 xrd.report xrootd.t2.ucsd.edu:9931 every 30s all sync
-xrootd.monitor all auth flush 30s mbuff 1472 window 5s dest files io info user xrootd.t2.ucsd.edu:9930
+# xrootd.monitor all auth flush 30s mbuff 1472 window 5s dest files io info user xrootd.t2.ucsd.edu:9930
+xrootd.monitor all auth flush io 30s ident 5m mbuff 2048 window 5s dest files io info user xrootd.t2.ucsd.edu:9930
 
