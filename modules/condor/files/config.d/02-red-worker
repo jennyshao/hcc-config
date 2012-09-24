@@ -107,3 +107,12 @@ DAEMON_LIST = $(DAEMON_LIST), SLEEPERSTARTD
 # Added by BB, June 13, 2012
 MEMORY = 1.2 * $(DETECTED_MEMORY)
 
+#Node health checks -- Carl Lundstedt
+#Do basic node checks and suspend STARTD if failure
+
+STARTD_CRON_JOBLIST = $(STARTD_CRON_JOBLIST) mounts
+STARTD_CRON_MOUNTS_EXECUTABLE = /usr/share/condor/node_health.pl
+STARTD_CRON_MOUNTS_PERIOD = 600s
+STARTD_CRON_MOUNTS_MODE = Periodic
+SUSPEND = (MOUNTS_OK =!= TRUE)
+CONTINUE = (MOUNTS_OK =?=TRUE)

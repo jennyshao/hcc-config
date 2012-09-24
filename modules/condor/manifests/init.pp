@@ -248,6 +248,15 @@ class condor {
 		require => [ Package["condor"], File["/usr/local/bin"], ],
 	}
 
+	file { "/usr/share/condor/node_health.pl":
+		ensure => present,
+		owner  => "condor", group => "root", mode => 755,
+		source => "puppet:///modules/condor/node_health.pl",
+		require => [ Package["condor"], File["/usr/local/bin"], ],
+	}
+
+	$condor_roles = hiera('condor_roles')
+	notice($condor_roles)
 
 }
 
