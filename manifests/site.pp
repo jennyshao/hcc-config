@@ -19,3 +19,6 @@ import "roles/*.pp"
 
 # general settings for the standard types
 Exec { path => "/usr/bin:/usr/sbin:/bin:/sbin" }
+
+# default node for external clasifier
+node default { }
