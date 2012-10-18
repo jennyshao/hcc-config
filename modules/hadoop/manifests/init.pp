@@ -189,6 +189,15 @@ class hadoop {
 			require => File["hdfs-log-rotate"],
 		}
 	} # isHDFSDatanode
+  #Limits.conf for name node.  Needed for other?
 
+  if $isHDFSname{
+	file { "limits.conf":
+		path => '/etc/security/limits.conf',
+	   owner => "root", group => "root", mode => 0644,
+	   source => "puppet:///modules/hadoop/limits-name.conf",
+		require => Package["hadoop"],
+   }
+   }
 }
 
