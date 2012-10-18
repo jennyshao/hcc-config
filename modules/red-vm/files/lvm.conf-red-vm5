@@ -320,7 +320,7 @@ global {
     # Type 3 uses built-in clustered locking.
     # Type 4 uses read-only locking which forbids any operations that might 
     # change metadata.
-    locking_type = 1
+    locking_type = 3
 
     # Set to 0 to fail when a lock request cannot be satisfied immediately.
     wait_for_locks = 1
@@ -336,7 +336,7 @@ global {
     # to 1 an attempt will be made to use local file-based locking (type 1).
     # If this succeeds, only commands against local volume groups will proceed.
     # Volume Groups marked as clustered will be ignored.
-    fallback_to_local_locking = 1
+    fallback_to_local_locking = 0
 
     # Local non-LV directory that holds file-based locks while commands are
     # in progress.  A directory like /tmp that may get wiped on reboot is OK.
