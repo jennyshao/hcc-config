@@ -4,6 +4,7 @@ node 'red-test.unl.edu' inherits red-public {
 	$role = "red-srm"
 #	include tester
 	include general
+	include cgroups
 
 }
 
@@ -12,8 +13,10 @@ node 'hcc-mon.unl.edu' inherits red-public {
 }
 
 node 'hcc-ganglia.unl.edu' inherits red-public {
+	$sshExtraAdmins = [ 'acaprez', ]
+	$sudoExtraAdmins = [ 'acaprez', ]
+	$yum_extrarepo = [ 'epel', 'nebraska', 'nginx' ]
 	include general
-	$yum_extrarepo = [ 'epel', 'nebraska' ]
 	include yum
 }
 
@@ -23,9 +26,37 @@ node 'red-net1.unl.edu', 'red-net2.unl.edu' inherits red-private {
 }
 
 node 'hcc-crabserver.unl.edu' inherits red-public {
-	$sshExtraAdmins = [ 'belforte' ]
-	$sudoExtraAdmins = [ 'belforte' ]
+	$sshExtraAdmins = [ 'belforte', 'letts', 'spadhi', 'crab', ]
+	$sudoExtraAdmins = [ 'belforte', 'letts' ]
+#	$users_ldap_servers = [ 'hcc-ldap03.unl.edu' ]
+	$users_ldap_servers = [ 'red-ldap1.unl.edu', 'red-ldap2.unl.edu' ]
+
 	include general
+
+	mount { "/home":
+		device  => "t3-nfs:/home",
+		fstype  => "nfs4",
+		ensure  => mounted,
+		options => "rw,noatime,hard,intr,rsize=32768,wsize=32768",
+		atboot  => true,
+	}
+}
+
+node 'hcc-factoryv3.unl.edu', 'hcc-frontendv3.unl.edu' inherits red-public {
+	$sshExtraAdmins = [ 'aguru', 'acaprez', 'dweitzel' ]
+	$sudoExtraAdmins = [ 'aguru', 'acaprez', 'dweitzel' ]
+	include general
+   include hostcert
+   include osg-ca-certs
+   include fetch-crl
+
+	mount { "/home":
+		device  => "t3-nfs:/home",
+		fstype  => "nfs4",
+		ensure  => mounted,
+		options => "rw,noatime,hard,intr,rsize=32768,wsize=32768",
+		atboot  => true,
+	}
 }
 
 node 'hcc-uniquant.unl.edu' inherits red-public {
@@ -89,22 +120,37 @@ node 'red-mon.unl.edu' inherits red-public {
 
 }
 
+node 'xrootd.unl.edu' inherits red-public {
+	$sshExtraAdmins = [ 'aguru' ]
+	$sudoExtraAdmins = [ 'aguru' ]
+	$mountsHDFS = true
+	include general
+	include xrootd
+}
+
+node 'xrootd-itb.unl.edu' inherits red-public {
+	$sshExtraAdmins = [ 'aguru', 'zzhang' ]
+	$sudoExtraAdmins = [ 'aguru', 'zzhang' ]
+	$mountsHDFS = true
+	include general
+}
+
 node 'glidein.unl.edu' inherits red-public {
+	$sshExtraAdmins = [ 'acaprez', 'aguru', 'jwang', 'dweitzel', 'bbockelm' ]
+	$sudoExtraAdmins = [ 'acaprez', 'aguru', 'tharvill', 'jthiltge', 'jsamuels', 'jwang', 'dweitzel', 'bbockelm' ]
 	$pakitiTag = "T2_US_Nebraska"
 	# general discluded intentionally
 	include hosts
 }
 
-node 'osg-test4.unl.edu' inherits red-public {
+node 'hcc-gridnfs.red.hcc.unl.edu' inherits red-private {
+	include general
+}
+
+node 't2.unl.edu' inherits red-public {
 	$sshExtraAdmins = [ 'acaprez', 'aguru', 'jwang', 'dweitzel', 'bbockelm' ]
 	$sudoExtraAdmins = [ 'acaprez', 'aguru', 'tharvill', 'jthiltge', 'jsamuels', 'jwang', 'dweitzel', 'bbockelm' ]
 
-	include general
-	include nrpe
-	include ganglia
-}
-
-node 'hcc-gridnfs.red.hcc.unl.edu' inherits red-private {
 	include general
 }
 
@@ -134,7 +180,9 @@ node 't3.unl.edu' inherits red-public {
    $yum_extrarepo = [ 'epel', 'nebraska', 'osg' ]
 
 	# ldap override so users can change password
-	$users_ldap_servers = [ "hcc-ldap03.unl.edu" ]
+	$users_ldap_servers = [ 'red-ldap1.unl.edu', 'red-ldap2.unl.edu' ]
+#	$users_ldap_servers = [ "hcc-ldap01.unl.edu", "hcc-ldap03.unl.edu" ]
+#	$users_ldap_servers = [ "hcc-ldap01.unl.edu" ]
 
 	include general
 
@@ -176,14 +224,24 @@ node 't3.unl.edu' inherits red-public {
 
 node 'red-ldap1.unl.edu', 'red-ldap2.unl.edu' inherits red-public {
 	include general
+	include nrpe
 }
 
 node 'red-fdt.unl.edu' inherits red-public {
+	$isFDT = true
+	$sshExtraAdmins = [ 'zdenek' ]
+   $sudoExtraAdmins = [ 'zdenek' ]
+	include general
+}
+
+node 'hcc-cache1.unl.edu', 'hcc-cache2.unl.edu' inherits red-public {
 	include general
 }
 
 node 'hadoop-name.red.hcc.unl.edu' inherits red-private {
+	$isHDFSname = true
 	include general
+	include nrpe
 	include hadoop
 }
 
@@ -200,6 +258,14 @@ node 'rcf-gratia.unl.edu' inherits red-public {
 
 	include general
 	include ganglia
+
+	mount { "/home":
+		device  => "t3-nfs:/home",
+		fstype  => "nfs4",
+		ensure  => mounted,
+		options => "rw,noatime,hard,intr,rsize=32768,wsize=32768",
+		atboot  => true,
+	}
 
 }
 

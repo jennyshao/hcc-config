@@ -1,7 +1,6 @@
 ### red vm hosts
 
-node /red-vm[1,2].red.hcc.unl.edu/ inherits red-private {
-	$yum_extrarepo = [ "nebraska", "epel" ]
+node /red-vm[1,2,3].red.hcc.unl.edu/ inherits red-private {
 	$role = "red-vm"
 	include general
 }
