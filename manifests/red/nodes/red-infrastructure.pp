@@ -180,9 +180,7 @@ node 't3.unl.edu' inherits red-public {
    $yum_extrarepo = [ 'epel', 'nebraska', 'osg' ]
 
 	# ldap override so users can change password
-	$users_ldap_servers = [ 'red-ldap1.unl.edu', 'red-ldap2.unl.edu' ]
-#	$users_ldap_servers = [ "hcc-ldap01.unl.edu", "hcc-ldap03.unl.edu" ]
-#	$users_ldap_servers = [ "hcc-ldap01.unl.edu" ]
+	$users_ldap_servers = [ "hcc-ldap01.unl.edu", "hcc-ldap03.unl.edu" ]
 
 	include general
 
