@@ -307,5 +307,5 @@ uri <% users_ldap_servers.each do |ldap| %>ldap://<%= ldap %> <% end %>
 <% if users_ldap_ssl == "yes" && operatingsystem != "Ubuntu" -%>
 ssl start_tls
 tls_cacertfile <%= users_ldap_cacert %>
-tls_checkpeer yes
+#tls_checkpeer yes
 <% end -%>
