@@ -195,6 +195,7 @@ class chroot (
    file { "chroot_var_tmp":
       path    => "${chroot_root}/var/tmp",
       mode    => "1777", owner => "root", group => "root",
+      seltype => "tmp_t",
       ensure  => directory,
       require => File["chroot_var"],
    }  
@@ -507,7 +508,7 @@ class chroot (
 	# use existence of /chroot directory to determine if the chroot environment
 	# has been setup yet
 	exec { "chroot_initial_cmd":
-		command   => "chroot-tool create && chroot-tool install acl attr authconfig bc bind-utils bzip2 cyrus-sasl-plain nss_ldap.i386 lsof libcgroup quota rhel-instnum cpuspeed dos2unix m2crypto sssd nc prctl redhat-lsb setarch time tree unix2dos unzip wget which zip zlib glibc-devel && chroot-tool secure",
+		command   => "chroot-tool create && chroot-tool install acl attr authconfig bc bind-utils bzip2 cyrus-sasl-plain nss_ldap.i386 lsof libcgroup quota rhel-instnum cpuspeed dos2unix m2crypto sssd nc prctl redhat-lsb setarch time tree unix2dos unzip wget which zip zlib glibc-devel perl-Compress-Zlib && chroot-tool secure",
 		onlyif    => "test ! -d ${chroot_root}",
 		require   => [File["chroot_tool_cfg"], File["chroot_tool_yum_conf"]],
 		provider  => "shell",
