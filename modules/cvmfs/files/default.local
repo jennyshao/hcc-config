@@ -8,4 +8,6 @@ export CMS_LOCAL_SITE=/etc/cvmfs/SITECONF
 #   $mountpoint is set by mount.cvmfs
 #   We use it in the path to the cache, replacing "/" with "_", and dropping
 #   the leading "/"
-CVMFS_CACHE_BASE=$CVMFS_CACHE_BASE/`dirname ${mountpoint#/} | tr / _`
+if [ -n "$mountpoint" ]; then
+    CVMFS_CACHE_BASE=$CVMFS_CACHE_BASE/`dirname ${mountpoint#/} | tr / _`
+fi
