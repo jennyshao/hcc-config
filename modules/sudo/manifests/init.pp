@@ -15,6 +15,15 @@ class sudo {
 		}
 	}
 
+	if $isFDT {
+		file {"/etc/sudoers.d/sudo-fdt":
+		ensure =>present,
+		owner => "root", group => "root", mode => "0440",
+		source => "puppet:///modules/sudo/sudo-fdt",
+		require => File["/etc/sudoers.d"],
+}}
+
+
 	file { "/etc/sudoers.d":
 		ensure => directory,
 		owner  => "root", group => "root", mode => 0750,
