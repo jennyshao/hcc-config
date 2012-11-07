@@ -46,4 +46,10 @@ class nrpe {
 		require => Package["nagios-plugins-all"],
 	}
 
+	file { "check_mountpoints":
+		path => "/usr/lib64/nagios/plugins/check_mountpoints",
+		owner => "root", group => "root", mode => 755,
+		source => "puppet:///modules/nrpe/check_mountpoints",
+		require => Package["nagios-plugins-all"],
+	}
 }
