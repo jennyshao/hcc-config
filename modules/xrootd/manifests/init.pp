@@ -57,7 +57,7 @@ class xrootd {
 		path    => "/etc/xrootd/xrootd-clustered.cfg",
 		owner   => "root", group => "root", mode => 644,
 		require => Package["xrootd-server.x86_64"],
-		content => template("xrootd/xrootd-clustered.cfg.erb"),
+		content => inline_template(file("/etc/puppet/modules/xrootd/templates/xrootd-clustered-$hostname.cfg.erb", "/etc/puppet/modules/xrootd/templates/xrootd-clustered.cfg.erb")),
 	}
 
 	file { "storage.xml":
