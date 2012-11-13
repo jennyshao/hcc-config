@@ -1,8 +1,8 @@
  <site-local-config>
  <site name="T2_US_Nebraska">
     <event-data>
-      <catalog url="trivialcatalog_file://cvmfs/cms.cern.ch/SITECONF/T2_US_Nebraska/PhEDEx/storage.xml?protocol=direct"/>
-      <catalog url="trivialcatalog_file://cvmfs/cms.cern.ch/SITECONF/T2_US_Nebraska/PhEDEx/storage.xml?protocol=xrootd"/>
+      <catalog url="trivialcatalog_file://etc/cvmfs/SITECONF/PhEDEx/storage.xml?protocol=direct"/>
+      <catalog url="trivialcatalog_file://etc/cvmfs/SITECONF/PhEDEx/storage.xml?protocol=xrootd"/>
     </event-data>
     <source-config>
       <cache-temp-dir name=".:$TMPDIR:$CONDOR_SCRATCH_DIR"/>
@@ -13,9 +13,9 @@
     </source-config>
 
     <local-stage-out>
-      <command value="hadoop" />
+      <command value="srmv2-lcg" />
       <!--<option value="-debug=true" />-->
-      <catalog url="trivialcatalog_file://cvmfs/cms.cern.ch/SITECONF/T2_US_Nebraska/PhEDEx/storage.xml?protocol=hadoop"/>
+      <catalog url="trivialcatalog_file://etc/cvmfs/SITECONF/PhEDEx/storage.xml?protocol=hadoop"/>
       <se-name value="srm.unl.edu" />
     </local-stage-out>
     <fallback-stage-out>

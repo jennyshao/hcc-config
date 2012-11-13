@@ -102,6 +102,22 @@ class cvmfs {
       require => File["JobConfig_dir"],
    }
 
+   file { "PhEDEx_dir":
+      path    => "/etc/cvmfs/SITECONF/PhEDEx",
+      mode    => "0644", owner => "root", group => "root",
+      recurse => true,
+      ensure  => directory,
+      require => File["SITECONF_dir"],
+   }
+
+   file { "PhEDEx_storage.xml":
+      path    => "/etc/cvmfs/SITECONF/PhEDEx/storage.xml",
+      source  => "puppet:///modules/cvmfs/PhEDEx_storage.xml",
+      mode    => "0644", owner => "root", group => "root",
+      ensure  => present,
+      require => File["PhEDEx_dir"],
+   }
+
 ## Use FNAL stratum one
 ##
    file { "FNAL_stratum_one":
