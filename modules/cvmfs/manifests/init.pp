@@ -66,6 +66,28 @@ class cvmfs {
       require => Package["cvmfs"],
    }
 
+## Files for talking to OSG's CVMFS.
+##
+   file { "osg_pubkey":
+      path    => "/etc/cvmfs/keys/oasis.opensciencegrid.org.pub",
+      mode    => "0644",
+      owner   => "root",
+      group   => "root",
+      source  => "puppet:///modules/cvmfs/oasis.opensciencegrid.org.pub",
+      ensure  => present,
+      require => Package["cvmfs"],
+   }
+
+   file { "osg_conf":
+      path    => "/etc/cvmfs/config.d/oasis.opensciencegrid.org.conf",
+      mode    => "0644",
+      owner   => "root",
+      group   => "root",
+      source  => "puppet:///modules/cvmfs/oasis.opensciencegrid.org.conf",
+      ensure  => present,
+      require => Package["cvmfs"],
+   }
+
 	file { "default.local":
 		path    => "${cvmfs::params::cvmfs_config_file}",
 		mode    => "0644",
