@@ -75,3 +75,6 @@ export HADOOP_PID_DIR=/var/run/hadoop
 
 # The scheduling priority for daemon processes.  See 'man nice'.
 # export HADOOP_NICENESS=10
+
+# Keeps VSZ down to something reasonable.  See HADOOP-7154
+export MALLOC_ARENA_MAX=${MALLOC_ARENA_MAX:-4}
