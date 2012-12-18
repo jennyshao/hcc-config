@@ -78,3 +78,8 @@ export HADOOP_PID_DIR=/var/run/hadoop
 
 # Keeps VSZ down to something reasonable.  See HADOOP-7154
 export MALLOC_ARENA_MAX=${MALLOC_ARENA_MAX:-4}
+
+# Increase the maximum number of processes per user greater than
+# the maximum number of threads HDFS is configured to use.
+ulimit -u 8192
+
