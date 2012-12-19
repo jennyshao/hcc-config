@@ -199,5 +199,12 @@ class hadoop {
 		require => Package["hadoop"],
    }
    }
+
+	file { "99-hdfs-limits.conf":
+		path => "/etc/security/limits.d/99-hdfs-limits.conf",
+		owner => "root", group => "root", mode => 0644,
+		source => "puppet:///modules/hadoop/99-hdfs-limits.conf",
+		require => Package["hadoop"],
+	}
 }
 
