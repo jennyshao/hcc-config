@@ -100,7 +100,7 @@ def main():
         syslog.syslog(syslog.LOG_ERR, "Killing gridftp processes %s" % ", ".join([str(i) for i in procs]))
     else:
         syslog.syslog(syslog.LOG_NOTICE, "GridFTP killer found no processes to kill.")
-    #kill_procs(procs)
+    kill_procs(procs)
 
 if __name__ == '__main__':
     main()

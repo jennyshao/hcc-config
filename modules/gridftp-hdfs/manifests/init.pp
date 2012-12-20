@@ -15,7 +15,7 @@ class gridftp-hdfs {
 
 	package { "osg-gridftp-hdfs.x86_64": ensure => present, }
 	package { "gratia-probe-gridftp-transfer": ensure => latest, }
-	package { "sysklogd": ensure => present, }
+#	package { "sysklogd": ensure => present, }
 	package { "arptables_jf": ensure => present, }
 
 	service { "globus-gridftp-server":
@@ -27,13 +27,13 @@ class gridftp-hdfs {
 		subscribe  => File["gridftp.conf"],
 	}
 
-	service { "syslog":
-		name       => "syslog",
-		ensure     => running,
-		enable     => true,
-		hasrestart => true,
-		subscribe  => File["gridftp-syslog.conf"],
-	}
+#	service { "syslog":
+#		name       => "syslog",
+#		ensure     => running,
+#		enable     => true,
+#		hasrestart => true,
+#		subscribe  => File["gridftp-syslog.conf"],
+#	}
 
 	service { "gratia-probes-cron":
 		name       => "gratia-probes-cron",
@@ -44,12 +44,12 @@ class gridftp-hdfs {
 		subscribe  => File["gridftp-transfer-ProbeConfig"],
 	}
 
-	file { "gridftp-syslog.conf":
-		path    => "/etc/syslog.conf",
-		owner   => "root", group => "root", mode => 644,
-		source  => "puppet:///modules/gridftp-hdfs/gridftp-syslog.conf",
-		require => Package["sysklogd"],
-	}
+#	file { "gridftp-syslog.conf":
+#		path    => "/etc/syslog.conf",
+#		owner   => "root", group => "root", mode => 644,
+#		source  => "puppet:///modules/gridftp-hdfs/gridftp-syslog.conf",
+#		require => Package["sysklogd"],
+#	}
 
 	file { "gridftp-transfer-ProbeConfig":
 		path    => "/etc/gratia/gridftp-transfer/ProbeConfig",
@@ -110,7 +110,7 @@ class gridftp-hdfs {
 	}
 
 
-	# runs gridftp_killer.py which should kill transfers over 12 hours old
+	# runs gridftp_killer.py every hour on the hour (this should be 12 hours)
 	cron { "gridftp_killer":
 		ensure  => present,
 		command => "/root/gridftp_killer.py",
