@@ -16,3 +16,14 @@ export LCMAPS_POLICY_NAME=osg_default
 DAEMON_COREFILE_LIMIT=unlimited
 export DAEMON_COREFILE_LIMIT
 
+# On start, try to pre-create cgroups
+if [ "$1" = "start" ] ; then
+	N=`condor_config_val NUM_SLOTS 2>/dev/null`
+
+	if [ $? -eq 0 ]; then
+		for i in `seq 1 $N` ; do
+			DIR=/condor/condor_var_lib_condor_execute_slot1_${i}@${HOSTNAME}
+			cgcreate -g blkio,cpu,cpuacct,freezer,memory:$DIR
+		done
+	fi
+fi
