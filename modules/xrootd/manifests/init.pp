@@ -53,6 +53,13 @@ class xrootd {
 		subscribe => [File["xrootd-clustered.cfg"], File["storage.xml"], File["lcmaps.cfg"], File["Authfile"]],
 	}
 
+	file { "xrootd-hdfs":
+		path    => "/etc/sysconfig/xrootd-hdfs",
+		owner   => "root", group => "root", mode => 644,
+      require => Package["xrootd-server.x86_64"],
+      source  => "puppet:///modules/xrootd/xrootd-hdfs",
+   }
+
 	file { "xrootd-clustered.cfg":
 		path    => "/etc/xrootd/xrootd-clustered.cfg",
 		owner   => "root", group => "root", mode => 644,
