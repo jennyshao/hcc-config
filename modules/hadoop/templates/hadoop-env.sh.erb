@@ -9,7 +9,7 @@
 
 # Set Hadoop-specific environment variables here.
 
-export HADOOP_CONF_DIR=/etc/hadoop-0.20/conf
+#export HADOOP_CONF_DIR=/etc/hadoop-0.20/conf
 
 # The only required environment variable is JAVA_HOME.  All others are
 # optional.  When running a distributed configuration it is best to
@@ -43,7 +43,7 @@ export HADOOP_JMX_OPTS=""
 # Command specific options appended to HADOOP_OPTS when specified
 export HADOOP_NAMENODE_OPTS="-Xmx14336m $HADOOP_JMX_OPTS $HADOOP_NAMENODE_OPTS"
 export HADOOP_SECONDARYNAMENODE_OPTS="-Xmx14336m $HADOOP_JMX_OPTS $HADOOP_SECONDARYNAMENODE_OPTS"
-export HADOOP_DATANODE_OPTS="-Xmx512m $HADOOP_JMX_OPTS $HADOOP_DATANODE_OPTS"
+export HADOOP_DATANODE_OPTS="-Xmx1536m $HADOOP_JMX_OPTS $HADOOP_DATANODE_OPTS"
 export HADOOP_BALANCER_OPTS="$HADOOP_BALANCER_OPTS"
 export HADOOP_JOBTRACKER_OPTS="$HADOOP_JMX_OPTS $HADOOP_JOBTRACKER_OPTS"
 # export HADOOP_TASKTRACKER_OPTS=
@@ -68,7 +68,7 @@ export HADOOP_JOBTRACKER_OPTS="$HADOOP_JMX_OPTS $HADOOP_JOBTRACKER_OPTS"
 # export HADOOP_SLAVE_SLEEP=0.1
 
 # The directory where pid files are stored. /tmp by default.
-export HADOOP_PID_DIR=/var/run/hadoop
+#export HADOOP_PID_DIR=/var/run/hadoop
 
 # A string representing this instance of hadoop. $USER by default.
 # export HADOOP_IDENT_STRING=$USER

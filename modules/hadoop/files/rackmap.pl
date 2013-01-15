@@ -24,7 +24,7 @@ $ipaddr = $address;
 }
 
 
-open MAPFILE, "/etc/hadoop-0.20/conf/rack_mapfile.txt" or die "error on open: $!";
+open MAPFILE, "/etc/hadoop/conf/rack_mapfile.txt" or die "error on open: $!";
 while(<MAPFILE>){
 	if ($_ !~ "\#" && $_ !~ /^$/ ){
 	@lines = split(' ' , $_);
