@@ -43,4 +43,13 @@ class autofs {
 		ensure  => present,
 	}
 
+	file { "/etc/sysconfig/autofs":
+		mode    => 644,
+		owner   => "root",
+		group   => "root",
+	   source => "puppet:///modules/autofs/autofs.verbose",	
+		require => Package[autofs],
+		notify  => Service[autofs],
+		ensure  => present,
+	}
 }

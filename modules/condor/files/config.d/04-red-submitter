@@ -93,9 +93,9 @@ SCHEDD.SLEEPER.SCHEDD_ADDRESS_FILE = $(SLEEPERSCHEDD_SPOOL)/.schedd_address
 SCHEDD.SLEEPER.SCHEDD_DAEMON_AD_FILE = $(SLEEPERSCHEDD_SPOOL)/.schedd_classad
 SCHEDD.SLEEPER.HISTORY = $(SLEEPERSCHEDD_SPOOL)/history
 SCHEDD.SLEEPER.QMF_STOREFILE = $(LOG)/sleeper/.schedd_storefile
-SCHEDD.SLEEPER.FLOCK_TO = red-condor.unl.edu:9619
-SCHEDD.SLEEPER.FLOCK_NEGOTIATOR_HOSTS = red-condor.unl.edu:9619
-SCHEDD.SLEEPER.FLOCK_COLLECTOR_HOSTS = red-condor.unl.edu:9619
+SCHEDD.SLEEPER.FLOCK_TO = foo.hcc.unl.edu
+SCHEDD.SLEEPER.FLOCK_NEGOTIATOR_HOSTS = foo.hcc.unl.edu
+SCHEDD.SLEEPER.FLOCK_COLLECTOR_HOSTS = foo.hcc.unl.edu
 SCHEDD.SLEEPER.QUEUE_SUPER_USER_MAY_IMPERSONATE = .*
 VALID_SPOOL_FILES = $(VALID_SPOOL_FILES), sleeper
 DAEMON_LIST = $(DAEMON_LIST), SLEEPERSCHEDD
@@ -127,7 +127,7 @@ JOB_ROUTER_ENTRIES = \
      copy_RequestMemory = "OriginalRequestMemory"; \
      eval_set_RequestMemory = ifThenElse(regexp("cms\.", ifThenElse(isUndefined(AccountingGroup), "", AccountingGroup)) && OriginalRequestMemory < 2500, 2500, \
                               ifThenElse(OriginalRequestMemory < 1900, 1900, OriginalRequestMemory)); \
-     set_IsT2Overflow = ((CurrentTime - QDate) > 60 * 60 * 24) && (IsT3User == false); \
+     set_IsT2Overflow = ((CurrentTime - QDate) > 60 * 60 * 24) && (IsT3User == false);  \ 
      name = "Local_Transform"; \
    ]
 

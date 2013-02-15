@@ -277,13 +277,13 @@ class chroot (
    # See comment below on why this is not a bind mount 
    mount { "chroot_mount_hadoop":
       name     => "${chroot_root}/mnt/hadoop",
-      device  => "hdfs",
+      device  => "hadoop-fuse-dfs",
       fstype  => "fuse",
       ensure  => mounted,
       options => "server=hadoop-name,port=9000,rdbuffer=32768,allow_other",
       atboot  => true,
       remounts => false,
-      require => [ File["chroot_hadoop"], File["/etc/hadoop-0.20/conf.red/hdfs-site.xml"], File["/usr/bin/hadoop-fuse-dfs"], ],
+      require => [ File["chroot_hadoop"], File["/etc/hadoop/conf.red/hdfs-site.xml"], ],
    }
 
 ## Files for making CMS CVMFS work.
@@ -318,6 +318,21 @@ class chroot (
       ensure  => present,
       require => File["chroot_JobConfig_dir"],
    }  
+   file { "chroot_PhEDEx_dir":
+      path    => "${chroot_root}/etc/cvmfs/SITECONF/PhEDEx",
+      mode    => "0644", owner => "root", group => "root",
+      recurse => true,
+      ensure  => directory,
+      require => File["SITECONF_dir"],
+   }
+
+   file { "chroot_PhEDEx_storage.xml":
+      path    => "${chroot_root}/etc/cvmfs/SITECONF/PhEDEx/storage.xml",
+      source  => "puppet:///modules/cvmfs/PhEDEx_storage.xml",
+      mode    => "0644", owner => "root", group => "root",
+      ensure  => present,
+      require => File["PhEDEx_dir"],
+   }
 
 ## OSG_APP, OSG_DATA, oh my!
 ##

@@ -72,7 +72,7 @@ nrpe_group=nrpe
 #
 # NOTE: This option is ignored if NRPE is running under either inetd or xinetd
 
-allowed_hosts=127.0.0.1,red-mon.unl.edu,172.16.200.3
+allowed_hosts=127.0.0.1,red-mon.unl.edu,172.16.200.3,hcc-jchen.unl.edu
  
 
 
@@ -233,14 +233,14 @@ command[check_condor_startd]=/usr/lib64/nagios/plugins/check_procs -w 1:2 -c 0:2
 
 
 ### HADOOP CHECKS
-command[check_hadoop_namenode]=/usr/lib64/nagios/plugins/check_procs -w 2:2 -c 1:3 -a "org.apache.hadoop.hdfs.server.namenode.NameNode"
-command[check_hadoop_secondarynamenode]=/usr/lib64/nagios/plugins/check_procs -w 2:2 -c 1:3 -a "org.apache.hadoop.hdfs.server.namenode.SecondaryNameNode"
+command[check_hadoop_namenode]=/usr/lib64/nagios/plugins/check_procs -w 1:1 -c 0:2 -a "org.apache.hadoop.hdfs.server.namenode.NameNode"
+command[check_hadoop_secondarynamenode]=/usr/lib64/nagios/plugins/check_procs -w 1:1 -c 0:2 -a "org.apache.hadoop.hdfs.server.namenode.SecondaryNameNode"
 command[check_hadoop_balancer]=/usr/lib64/nagios/plugins/check_file_age -w 7200 -c 216000 -f /var/log/hadoop/hadoop-root-balancer-hadoop-name.out
-command[check_hadoop_datanode]=/usr/lib64/nagios/plugins/check_procs -w 2:2 -c 1:3 -a "org.apache.hadoop.hdfs.server.datanode.DataNode"
-command[check_hadoop_jobtracker]=/usr/lib64/nagios/plugins/check_procs -w 2:2 -c 1:3 -a "org.apache.hadoop.mapred.JobTracker"
-command[check_hadoop_tasktracker]=/usr/lib64/nagios/plugins/check_procs -w 2:2 -c 1:3 -a "org.apache.hadoop.mapred.TaskTracker"
-command[check_hadoop_fsimage_age]=/usr/lib64/nagios/plugins/check_file_age -w 1800 -c 3600 -f /hadoop-data1/scratch/dfs/name/current/fsimage
-command[check_hadoop_prev_checkpoint_age]=/usr/lib64/nagios/plugins/check_file_age -w 1800 -c 3600 -f /hadoop-data1/checkpoints/current/fsimage
+command[check_hadoop_datanode]=/usr/lib64/nagios/plugins/check_procs -w 1:1 -c 0:2 -a "org.apache.hadoop.hdfs.server.datanode.DataNode"
+command[check_hadoop_jobtracker]=/usr/lib64/nagios/plugins/check_procs -w 1:1 -c 0:2 -a "org.apache.hadoop.mapred.JobTracker"
+command[check_hadoop_tasktracker]=/usr/lib64/nagios/plugins/check_procs -w 1:1 -c 0:2 -a "org.apache.hadoop.mapred.TaskTracker"
+command[check_hadoop_fsimage_age]=/usr/lib64/nagios/plugins/check_file_age -w 1800 -c 3600 -f /hadoop-data1/scratch/dfs/name/current/seen_txid
+command[check_hadoop_prev_checkpoint_age]=/usr/lib64/nagios/plugins/check_file_age -w 1800 -c 3600 -f /hadoop-data1/checkpoints/current/VERSION
 command[check_hadoop_mounted]=/usr/lib64/nagios/plugins/check_file_age -w 0 -c 0 -f /mnt/hadoop/hello_world
 command[check_fuse_dfs_memory]=/usr/lib64/nagios/plugins/check_procs -w 2097152 -m RSS -C fuse_dfs
 
@@ -273,3 +273,4 @@ command[check_megaraid_sas]=/usr/bin/sudo /usr/lib64/nagios/plugins/check_megara
 command[check_disk]=/usr/lib64/nagios/plugins/check_disk -w $ARG1$ -c $ARG2$ -r $ARG3$
 #command[check_procs]=/usr/lib64/nagios/plugins/check_procs -w $ARG1$ -c $ARG2$ -s $ARG3$
 command[check_mounts]=/usr/lib64/nagios/plugins/check_mountpoints
+command[check_sssd]=/usr/lib64/nagios/plugins/check_sssd

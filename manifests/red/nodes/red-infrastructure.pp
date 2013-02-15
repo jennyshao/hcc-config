@@ -12,6 +12,15 @@ node 'hcc-mon.unl.edu' inherits red-public {
 	include general
 }
 
+node 'phedex.unl.edu' inherits red-public {
+	$mountsHDFS = true
+   $isPHEDEX = true   
+	include general
+	include ganglia
+	include hadoop
+	include nrpe
+}
+
 node 'hcc-ganglia.unl.edu' inherits red-public {
 	$sshExtraAdmins = [ 'acaprez', ]
 	$sudoExtraAdmins = [ 'acaprez', ]
@@ -26,8 +35,8 @@ node 'red-net1.unl.edu', 'red-net2.unl.edu' inherits red-private {
 }
 
 node 'hcc-crabserver.unl.edu' inherits red-public {
-	$sshExtraAdmins = [ 'belforte', 'letts', 'spadhi', 'crab', ]
-	$sudoExtraAdmins = [ 'belforte', 'letts' ]
+	$sshExtraAdmins = [ 'belforte', 'letts', 'spadhi', 'crab', 'lolass' ]
+	$sudoExtraAdmins = [ 'belforte', 'letts', 'crab', 'lolass' ]
 #	$users_ldap_servers = [ 'hcc-ldap03.unl.edu' ]
 	$users_ldap_servers = [ 'red-ldap1.unl.edu', 'red-ldap2.unl.edu' ]
 
@@ -95,6 +104,7 @@ node 'red-squid1.unl.edu', 'red-squid2.unl.edu' inherits red-public {
 node 'hcc-voms.unl.edu' inherits red-public {
 	include general
 	include ganglia
+	include nrpe
 }
 
 node 'red-condor.unl.edu' inherits red-public {
@@ -106,7 +116,8 @@ node 'red-condor.unl.edu' inherits red-public {
 
 node 'red-mon.unl.edu' inherits red-public {
 
-	$sshExtraAdmins = [ 'dweitzel', 'aguru', 'acaprez' ]
+	$sshExtraAdmins = [ 'dweitzel', 'aguru', 'acaprez', ]
+	$sudoExtraAdmins = [ 'dweitzel', 'aguru', 'acaprez', ]
    $pakitiTag = "T2_US_Nebraska"
 	$yum_extrarepo = [ 'epel', 'nebraska', 'osg' ]
 
@@ -121,7 +132,7 @@ node 'red-mon.unl.edu' inherits red-public {
 }
 
 node 'xrootd.unl.edu' inherits red-public {
-	$sshExtraAdmins = [ 'aguru' ]
+	$sshExtraAdmins = [ 'aguru', ]
 	$sudoExtraAdmins = [ 'aguru' ]
 	$mountsHDFS = true
 	include general
@@ -129,8 +140,8 @@ node 'xrootd.unl.edu' inherits red-public {
 }
 
 node 'xrootd-itb.unl.edu' inherits red-public {
-	$sshExtraAdmins = [ 'aguru', 'zzhang' ]
-	$sudoExtraAdmins = [ 'aguru', 'zzhang' ]
+	$sshExtraAdmins = [ 'aguru', 'zzhang', ]
+	$sudoExtraAdmins = [ 'aguru', 'zzhang', ]
 	$mountsHDFS = true
 	include general
 }
@@ -157,6 +168,7 @@ node 't2.unl.edu' inherits red-public {
 node 't3-nfs.red.hcc.unl.edu' inherits red-private {
 
 	include general
+	include hadoop
 	include nfs::server
 
 	# t3 home storage is mounted on /export so link to allow local logins
@@ -225,6 +237,11 @@ node 'red-ldap1.unl.edu', 'red-ldap2.unl.edu' inherits red-public {
 	include nrpe
 }
 
+node 'red-auth.unl.edu' inherits red-public {
+	include general
+	include osg-ca-certs
+}
+
 node 'red-fdt.unl.edu' inherits red-public {
 	$isFDT = true
 	$sshExtraAdmins = [ 'zdenek' ]
@@ -247,6 +264,14 @@ node 'hadoop-tracker.red.hcc.unl.edu' inherits red-private {
 	include general
 	include nrpe
 	include hadoop
+
+	mount { "/mnt/fsimage":
+		device  => "t3-nfs:/fsimage",
+		fstype  => "nfs4",
+		ensure  => mounted,
+		options => "rw,noatime,hard,intr,rsize=32768,wsize=32768",
+		atboot  => true,
+	}
 }
 
 node 'rcf-gratia.unl.edu' inherits red-public {
@@ -265,5 +290,12 @@ node 'rcf-gratia.unl.edu' inherits red-public {
 		atboot  => true,
 	}
 
+}
+
+node 'hcc-lsf.unl.edu' inherits red-public {
+	$sshExtraAdmins = [ 'dweitzel' ]
+	$sudoExtraAdmins = [ 'dweitzel' ]
+	include general
+	include ganglia
 }
 

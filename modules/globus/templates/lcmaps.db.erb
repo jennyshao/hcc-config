@@ -48,10 +48,12 @@ path = lcmaps
 gumsclient = "lcmaps_gums_client.mod"
              "-resourcetype ce"
              "-actiontype execute-now"
-             "-capath /etc/grid-security/certificates"
-             "-cert   /etc/grid-security/hostcert.pem"
-             "-key    /etc/grid-security/hostkey.pem"
-             "--cert-owner root"
+
+# Commented out cert stuff to move to puppet CA certs on worker
+#             "-capath /etc/grid-security/certificates"
+#             "-cert   /etc/grid-security/hostcert.pem"
+#             "-key    /etc/grid-security/hostkey.pem"
+#             "--cert-owner root"
 # Change this URL to your GUMS server
              "--endpoint https://red-auth.unl.edu:8443/gums/services/GUMSXACMLAuthorizationServicePort"
 # Uncomment this to set a different expected host certificate name for server

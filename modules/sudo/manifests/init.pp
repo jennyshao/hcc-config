@@ -21,7 +21,16 @@ class sudo {
 		owner => "root", group => "root", mode => "0440",
 		source => "puppet:///modules/sudo/sudo-fdt",
 		require => File["/etc/sudoers.d"],
-}}
+	}}
+
+	if $isPHEDEX {
+		file {"/etc/sudoers.d/sudo-phedex":
+		ensure =>present,
+		owner => "root", group => "root", mode => "0440",
+		source => "puppet:///modules/sudo/sudo-phedex",
+		require => File["/etc/sudoers.d"],
+	}
+}
 
 
 	file { "/etc/sudoers.d":

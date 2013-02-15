@@ -16,7 +16,7 @@ DENY_DAEMON        = anonymous@*, unmapped@*
 
 # Defaults for HCC
 FRIENDLY_DAEMONS = *@daemon.unl.edu
-WORKER_NODES     = *@worker.unl.edu/172.16.1.*, *@worker.unl.edu/172.16.3.*, *@worker.unl.edu/172.16.*, *@worker.unl.edu/172.16.5.1
+WORKER_NODES     = *@worker.unl.edu/172.16.1.*, *@worker.unl.edu/172.16.3.*, *@worker.unl.edu/172.16.*, *@worker.unl.edu/*
 USERS            = *@unl.edu
 
 # Authz settings for each daemon.  Preferably, change the templates above

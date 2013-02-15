@@ -112,10 +112,10 @@ class gridftp-hdfs {
 
 	# runs gridftp_killer.py every hour on the hour (this should be 12 hours)
 	cron { "gridftp_killer":
-		ensure  => present,
+		ensure  => absent,
 		command => "/root/gridftp_killer.py",
 		user    => root,
-		minute  => 0,
+		minute  => 20,
 	}
 
 	# removes stale buffers after 14 hours on disk
@@ -125,6 +125,16 @@ class gridftp-hdfs {
 		user    => root,
 		minute  => 20,
 	}
-
+	
+	file { "data_interface":
+		path    => "/etc/gridftp.d/data_interface.conf",
+		owner   => "root", group => "root", mode => 644,
+		content => template("gridftp-hdfs/data_interface.erb"),
+	}
+	file { "gridftp_rc.local" :
+		path 	=> "/etc/rc.local",
+		owner	=> "root", group => "root", mode =>644,
+		source => "puppet:///modules/gridftp-hdfs/gridftp_rc.local",
+	}
 }
 

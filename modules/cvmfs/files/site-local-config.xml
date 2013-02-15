@@ -6,6 +6,7 @@
     </event-data>
     <source-config>
       <cache-temp-dir name=".:$TMPDIR:$CONDOR_SCRATCH_DIR"/>
+	   <statistics-destination name="dashboard62.cern.ch" />
       <cache-hint value="application-only"/>
       <read-hint value="auto-detect"/>
       <show-read-stats />
@@ -15,7 +16,7 @@
     <local-stage-out>
       <command value="srmv2-lcg" />
       <!--<option value="-debug=true" />-->
-      <catalog url="trivialcatalog_file://etc/cvmfs/SITECONF/PhEDEx/storage.xml?protocol=hadoop"/>
+      <catalog url="trivialcatalog_file://etc/cvmfs/SITECONF/PhEDEx/storage.xml?protocol=srmv2"/>
       <se-name value="srm.unl.edu" />
     </local-stage-out>
     <fallback-stage-out>

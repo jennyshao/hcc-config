@@ -27,5 +27,24 @@ class osg-ce {
 		atboot  => true,
 		require => File["/opt/osg/data"],
 	}
+    file { "cic-functions.sh":
+      path    => "/opt/osg/app/etc/cic-functions.sh",
+      source  => "puppet:///modules/osg-ce/cic-functions.sh",
+      mode    => "0644", owner => "cmssoft", group => "grid",
+      ensure  => present,
+      require => File["/opt/osg/app"],
+   }
+	file {"gip_updater.sh":
+		path	=> "/opt/osg/app/etc//gip_updater.sh",
+	   source => "puppet:///modules/osg-ce/gip_updater.sh",
+      mode   => "0774", owner => "cmssoft", group => "grid",
+	   ensure => present,
+	}
 
+	file {"gip_updater.cron":
+		path	=> "/etc/cron.d/gip_updater.cron",
+	   source => "puppet:///modules/osg-ce/gip_updater.cron",
+      mode   => "0644", owner => "root", group => "root",
+	   ensure => present,
+	}
 }

@@ -36,6 +36,11 @@ SCHEDD.FLOCKING.FLOCK_TO = glidein.unl.edu
 VALID_SPOOL_FILES = $(VALID_SPOOL_FILES), flocking
 DAEMON_LIST = $(DAEMON_LIST), FLOCKINGSCHEDD
 
+# Record the flocking schedd accounting separately from the rest of the T3.
+# This is because this schedd is dedicated for LHE work which we want to report
+# to the WLCG.
+SCHEDD.FLOCKING.PER_JOB_HISTORY_DIR = /var/lib/gratia/flocking
+
 # Skip DNS checks for GSI certs - Derek 9/26/12
 GSI_SKIP_HOST_CHECK=true
 

@@ -10,9 +10,7 @@
 		OSG: the client is now installed from RPMs
 		You shouldn't need to source a setup.sh anymore
 
-		CRAB: source /opt/CRAB/CRAB_2_8_3/crab.sh
-		The old /mnt/unl/CRAB area is a symlink to the above,
-		please update your scripts if needed
+		CRAB: source /opt/CRAB/CRAB_2_8_4_patch3/crab.sh
 
 		CMSSW: source /opt/osg/app/cmssoft/cms/cmsset_default.sh
 
@@ -22,5 +20,6 @@
    cmsRun or ROOT.
 
    Support email = cms-support@cse.unl.edu
+
 
 

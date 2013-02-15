@@ -52,4 +52,17 @@ class nrpe {
 		source => "puppet:///modules/nrpe/check_mountpoints",
 		require => Package["nagios-plugins-all"],
 	}
+	file { "check_sssd":
+		path => "/usr/lib64/nagios/plugins/check_sssd",
+		owner => "root", group => "root", mode => 755,
+		source => "puppet:///modules/nrpe/check_sssd",
+		require => Package["nagios-plugins-all"],
+	}
+	
+	file { "restart_sssd":
+		path => "/sbin/restart_sssd",
+		owner => "root", group => "root", mode => 4755,
+		source => "puppet:///modules/nrpe/restart_sssd",
+		require => Package["nagios-plugins-all"],
+	}
 }
