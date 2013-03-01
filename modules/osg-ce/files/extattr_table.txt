@@ -23,6 +23,8 @@ priority cms.other.prio
 cmsphedex cms.other.prio
 cmsprod cms.prod
 cms\/Role=production cms.prod
+cms\/Role=t1production cms.prod
+cms\/Role=pilot cms.other.user.us
 uscms cms.other.user.us
 cms cms.other.user.nonus
 .* other
