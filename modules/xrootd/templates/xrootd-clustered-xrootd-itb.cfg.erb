@@ -3,7 +3,7 @@
 #
 #	DO NOT EDIT - file is being maintained by puppet
 #
-#	this file specific to xrootd.unl.edu
+#	this file specific to xrootd-itb.unl.edu
 #
 ##############################################################################
 ##############################################################################
@@ -11,11 +11,25 @@
 
 # Port specifications; only the redirector needs to use a well-known port
 # "any" will cause rooted to bind to any available port.  Change as needed for firewalls.
-xrd.port 1094
 
-all.role manager
-all.manager meta any cms-xrd-global.cern.ch+ 1098
-all.manager xrootd.unl.edu:1213
+if named peer
+  all.role peer
+  all.manager peer xrootd.ba.infn.it:1213
+  all.manager meta xrootd-itb.unl.edu:1213
+  all.manager xrootd-itb.unl.edu:1215
+  xrd.port 1093
+  xrootd.redirect xrootd-itb.unl.edu:1094 all
+  xrootd.redirect xrootd-itb.unl.edu:1094 /
+else
+  xrd.port 1094
+  all.role manager if xrootd-itb.unl.edu
+  #all.manager meta any cms-xrd-global.cern.ch+ 1098
+  all.manager xrootd-itb.unl.edu:1213
+fi
+
+if exec cmsd && named peer
+  xrd.port 1215
+fi
 
 # Allow any path to be exported; this is further refined in the authfile.
 all.export /
@@ -42,27 +56,19 @@ acc.authdb /etc/xrootd/Authfile
 acc.audit deny grant
 
 # Security configuration
-#sec.protocol /usr/lib64 gsi -certdir:/etc/grid-security/certificates -cert:/etc/grid-security/xrd/xrdcert.pem -key:/etc/grid-security/xrd/xrdkey.pem
+#sec.protocol /usr/lib64 gsi -certdir:/etc/grid-security/certificates -cert:/etc/grid-security/xrd/xrdcert.pem -key:/etc/grid-security/xrd/xrdkey.pem -crl:3
 
 xrootd.seclib /usr/lib64/libXrdSec.so
 xrootd.fslib /usr/lib64/libXrdOfs.so
-#ofs.osslib /usr/lib64/libXrdHdfs.so
 all.adminpath /var/run/xrootd
 all.pidpath /var/run/xrootd
 
-#cms.delay startup 10 lookup 5 qdl 30 servers 1
-cms.delay startup 10 lookup 1 qdl 30 qdn 2 servers 1
-cms.fxhold 60s
-#cms.ping 30 log 10 usage 0
+cms.delay startup 10 lookup 1 qdl 30 qdn 2
+#cms.fxhold 60s
+cms.fxhold 1h
 cms.ping 30
-#cms.sched cpu 0 io 0 runq 100 pag 0 fuzz 15 maxload 20 refreset 3600
-cms.sched cpu 0 io 0 runq 0 pag 0 fuzz 100 refreset 3600
-
-xrd.sched mint 8 maxt 2048 avlt 512 idle 780
-
-xrd.report xrootd.t2.ucsd.edu:9931 every 30s all sync
-xrootd.monitor all auth flush 30s mbuff 1472 window 5s dest files io info redir user xrootd.t2.ucsd.edu:9930
-#xrootd.monitor all auth flush 30s mbuff 1472 window 5s dest files io info user hcc-group4.unl.edu:9930
+#cms.sched cpu 25 io 25 runq 25 pag 25 fuzz 15 maxload 10 refreset 3600
+cms.sched gsdflt 50
 
 cms.allow host *.ultralight.org
 cms.allow host *.mit.edu
@@ -74,6 +80,9 @@ cms.allow host *.ucsd.edu
 cms.allow host *.wisc.edu
 cms.allow host *.vanderbilt.edu
 
-# Turn off for now due to the infinite loop bug.
-xrootd.redirect cms-xrd-global.cern.ch:1094 ? /store
+if exec xrootd
+  xrd.report xrootd.unl.edu:3333 every 300s all
+  xrootd.monitor all flush 5s mbuff 1k window 1s dest files io info user xrootd.unl.edu:3334
+fi
 
+xrootd.redirect cms-xrd-global.cern.ch:1094 ? /store

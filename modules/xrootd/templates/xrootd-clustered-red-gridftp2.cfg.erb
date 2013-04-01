@@ -1,0 +1,69 @@
+##############################################################################
+##############################################################################
+#
+#	DO NOT EDIT - file is being maintained by puppet
+#
+##############################################################################
+##############################################################################
+
+
+# Port specifications; only the redirector needs to use a well-known port
+# "any" will cause rooted to bind to any available port.  Change as needed for firewalls.
+xrd.port 1094
+
+# The roles this server will play.
+all.role server
+all.role manager if xrootd.unl.edu
+
+# The known managers
+all.manager srm.unl.edu:1213
+
+# Allow any path to be exported; this is further refined in the authfile.
+all.export / nostage
+
+# Hosts allowed to use this xrootd cluster
+cms.allow host *
+
+### Standard directives
+# Simple sites probably don't need to touch these.
+# Logging verbosity
+xrootd.trace emsg login stall redirect
+ofs.trace none
+xrd.trace conn
+cms.trace all
+
+# Integrate with CMS TFC, placed in /etc/storage.xml
+oss.namelib /usr/lib64/libXrdCmsTfc.so file:/etc/xrootd/storage.xml?protocol=hadoop
+
+# Turn on authorization
+ofs.authorize 1
+acc.authdb /etc/xrootd/Authfile
+acc.audit deny grant
+
+# Security configuration
+sec.protocol /usr/lib64 gsi -certdir:/etc/grid-security/certificates -cert:/etc/grid-security/xrd/xrdcert.pem -key:/etc/grid-security/xrd/xrdkey.pem -crl:1 -authzfun:libXrdLcmaps.so -authzfunparms:--osg,--lcmapscfg,/etc/xrootd/lcmaps.cfg,--loglevel,0|useglobals -gmapopt:10 -gmapto:0
+
+xrootd.seclib /usr/lib64/libXrdSec.so
+xrootd.fslib /usr/lib64/libXrdOfs.so
+ofs.osslib /usr/lib64/libXrdHdfs.so
+all.adminpath /var/run/xrootd
+all.pidpath /var/run/xrootd
+
+cms.delay startup 10
+cms.fxhold 60s
+
+xrd.report xrootd.t2.ucsd.edu:9931 every 30s all sync
+# xrootd.monitor all auth flush 30s mbuff 1472 window 5s dest files io info user xrootd.t2.ucsd.edu:9930
+#xrootd.monitor all auth flush io 30s ident 5m mbuff 2048 window 5s dest files io info user xrootd.t2.ucsd.edu:9930
+
+# Added by BB, 18 Feb 2013.  Add IOV messages to Matevz's specially-instrumented collector.
+xrootd.monitor all auth flush io 60s ident 5m mbuff 8k rbuff 4k rnums 3 window 10s dest files io info user redir xrootd.t2.ucsd.edu:9930 dest files iov info user xrootd.t2.ucsd.edu:9932
+
+# Experimental throttling directives.
+# Only meaningful if the server is running from the nebraska-testing repo.
+# - BB, 2013-01-07
+xrootd.fslib ? /usr/lib64/libXrdThrottle.so
+throttle.throttle data 25M concurrency 10
+throttle.loadshed host xrootd.unl.edu port 1094 frequency 10
+throttle.trace loadshed ioload
+

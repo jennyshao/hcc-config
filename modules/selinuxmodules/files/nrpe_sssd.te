@@ -1,0 +1,54 @@
+
+module nrpe_sssd 1.0;
+
+require {
+	type proc_net_t;
+	type mount_t;
+	type sssd_exec_t;
+	type var_lock_t;
+	type sssd_var_lib_t;
+	type sudo_exec_t;
+	type sssd_initrc_exec_t;
+	type nrpe_t;
+	type consoletype_exec_t;
+	class file { execute read lock create ioctl execute_no_trans write getattr open };
+	class unix_stream_socket connectto;
+	class capability { sys_ptrace audit_write };
+	class key { write setattr };
+	class netlink_audit_socket { nlmsg_relay create };
+	class sock_file { create unlink setattr };
+	class lnk_file { read create unlink };
+	class dir { write search remove_name add_name };
+}
+
+#============= mount_t ==============
+allow mount_t nrpe_t:unix_stream_socket connectto;
+
+#============= nrpe_t ==============
+allow nrpe_t consoletype_exec_t:file { read execute open getattr execute_no_trans };
+allow nrpe_t proc_net_t:file { read getattr open };
+allow nrpe_t self:capability { sys_ptrace audit_write };
+allow nrpe_t self:key { write setattr };
+allow nrpe_t self:netlink_audit_socket { nlmsg_relay create };
+allow nrpe_t self:unix_stream_socket connectto;
+allow nrpe_t sssd_exec_t:file { read getattr open execute execute_no_trans };
+allow nrpe_t sssd_initrc_exec_t:file { execute getattr read open ioctl execute_no_trans };
+#!!!! The source type 'nrpe_t' can write to a 'dir' of the following types:
+# var_run_t, nrpe_var_run_t, root_t
+
+allow nrpe_t sssd_var_lib_t:dir { write remove_name add_name };
+#!!!! The source type 'nrpe_t' can write to a 'file' of the following types:
+# nrpe_var_run_t, root_t
+
+allow nrpe_t sssd_var_lib_t:file { read write getattr open lock };
+allow nrpe_t sssd_var_lib_t:lnk_file { read create unlink };
+allow nrpe_t sssd_var_lib_t:sock_file { create unlink setattr };
+allow nrpe_t sudo_exec_t:file { read execute open execute_no_trans };
+#!!!! The source type 'nrpe_t' can write to a 'dir' of the following types:
+# var_run_t, nrpe_var_run_t, root_t
+
+allow nrpe_t var_lock_t:dir { write search add_name };
+#!!!! The source type 'nrpe_t' can write to a 'file' of the following types:
+# nrpe_var_run_t, root_t
+
+allow nrpe_t var_lock_t:file { write create open };
