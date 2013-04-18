@@ -13,23 +13,23 @@ plugins=1
 # repos
 [core-0]
 name=core-0
-baseurl=http://172.16.200.1/cobbler/ks_mirror/SL-5.7-x86_64/SL
+baseurl=http://hcc-mirror.unl.edu/scientific-linux/5x/x86_64/SL
 enabled=1
 gpgcheck=0
 priority=1
 
 
-[sl57-x86_64-security]
+[sl5x-x86_64-security]
 name=sl57-x86_64-security
-baseurl=http://172.16.200.1/cobbler/repo_mirror/sl57-x86_64-security
+baseurl=http://hcc-mirror.unl.edu/scientific-linux/5x/x86_64/updates/security
 enabled=1
 priority=99
 gpgcheck=0
 
 
-[sl57-x86_64-fastbugs]
+[sl5x-x86_64-fastbugs]
 name=sl57-x86_64-fastbugs
-baseurl=http://172.16.200.1/cobbler/repo_mirror/sl57-x86_64-fastbugs
+baseurl=http://hcc-mirror.unl.edu/scientific-linux/5x/x86_64/updates/fastbugs
 enabled=0
 priority=99
 gpgcheck=0
@@ -37,7 +37,7 @@ gpgcheck=0
 
 [osg-testing]
 name=osg-testing
-baseurl=http://172.16.200.1/cobbler/repo_mirror/osg-testing
+baseurl=http://t2.unl.edu/store/osg/3.0/el5/osg-testing/x86_64
 enabled=0
 priority=98
 gpgcheck=0
@@ -45,7 +45,7 @@ gpgcheck=0
 
 [osg-release]
 name=osg-release
-baseurl=http://172.16.200.1/cobbler/repo_mirror/osg-release
+baseurl=http://t2.unl.edu/store/osg/3.0/el5/osg-release/x86_64
 enabled=1
 priority=98
 gpgcheck=0
@@ -53,7 +53,7 @@ gpgcheck=0
 
 [osg-development]
 name=osg-development
-baseurl=http://172.16.200.1/cobbler/repo_mirror/osg-development
+baseurl=http://t2.unl.edu/store/osg/3.0/el5/osg-development/x86_64
 enabled=0
 priority=98
 gpgcheck=0
@@ -61,7 +61,7 @@ gpgcheck=0
 
 [nebraska]
 name=nebraska
-baseurl=http://172.16.200.1/cobbler/repo_mirror/nebraska
+baseurl=http://t2.unl.edu/store/repos/nebraska/5/nebraska/x86_64
 enabled=1
 priority=9
 gpgcheck=0
@@ -77,15 +77,15 @@ gpgcheck=0
 
 [el-5-x86_64-testing]
 name=el-5-x86_64-testing
-baseurl=http://172.16.200.1/cobbler/repo_mirror/el-5-x86_64-testing
-enabled=1
+baseurl=http://hcc-mirror.unl.edu/fedora/epel/testing/5/x86_64
+enabled=0
 priority=99
 gpgcheck=0
 
 
 [el-5-x86_64-epel]
 name=el-5-x86_64-epel
-baseurl=http://172.16.200.1/cobbler/repo_mirror/el-5-x86_64-epel
+baseurl=http://hcc-mirror.unl.edu/fedora/epel/5/x86_64
 enabled=1
 priority=99
 gpgcheck=0
