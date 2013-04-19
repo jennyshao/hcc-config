@@ -1,35 +1,82 @@
 #!/usr/bin/python
+# vim: tabstop=8 expandtab shiftwidth=4 softtabstop=4
 
-import string
-import sys
+import os, sys
 
-fstab_content=open('/etc/fstab','r')
-mountlist = list()
-i=0
-exitstatus=1
-mounted=False
-mountstate='Mounts not OK'
+def parse_mtab(fin):
+    """Parse an mtab, returning a dict of dicts"""
+    mtab = {}
 
+    # mntent struct from mntent.h
+    mntent = [ 'fsname', 'dir', 'type', 'opts', 'freq', 'passno' ]
 
-for line in fstab_content:
- if '#' not in line and len(line) > 2 and 'nfs' in line:
-	(fstabfs,fstabmountpt,fstabtype,fstaboptions,fstabdump,fstabpass)=line.strip().split()
-	procmounts_content=open('/proc/mounts','r')
-        for line in procmounts_content:
-		((procfs,procmountpt,proctype,procoptions,procdump,procpass))=line.strip().split()
-		if fstabtype == 'nfs' and proctype == 'nfs':
-			if fstabmountpt == procmountpt:
-				mounted=True
-	procmounts_content.close()
-	if mounted:
-		exitstatus=0
-		mountstate='Mounts OK'
-	else:
-		exitstatus=1
-		mountstate="Mounts not OK"
-		print mountstate
-		sys.exit(exitstatus)
-	mounted=False
+    for line in fin:
+        line = line.strip()
+        if line.startswith('#'):
+            continue
 
-print mountstate
-sys.exit(exitstatus)
+        # Make a dict with the values of the row
+        row = dict(zip(mntent, line.split()))
+
+        if len(mntent) != len(row):
+            continue
+
+        # Types to ignore
+        if row['type'] in ['swap']:
+            continue
+
+        # Store mount options as a list
+        row['opts'] = row['opts'].split(',')
+
+        # And store, keyed by dir
+        mtab[ row['dir'] ] = row
+
+    return mtab
+
+######################################################################
+######################################################################
+
+# Check bind mounts?
+check_bind = False
+
+mtab  = parse_mtab(open('/proc/mounts', 'r'))
+fstab = parse_mtab(open('/etc/fstab',   'r'))
+
+warnings = []
+errors   = []
+
+for mnt_dir, entry in fstab.iteritems():
+    # Do we care about bind mounts?
+    if not check_bind and 'bind' in entry['opts']:
+        continue
+
+    # Is it mounted
+    if mnt_dir not in mtab:
+        warnings.append("%s not mounted" % mnt_dir)
+        continue
+
+    # Is an NFS entry actually mounted via NFS?
+    if entry['type'] == 'nfs' and mtab[mnt_dir]['type'] != 'nfs':
+        warnings.append("%s should be NFS mount" % mnt_dir)
+
+    # Can it be stat()ed?
+    try:
+        # stat throws an error when drive is offline
+        os.stat(entry['dir'])
+    except OSError:
+        warnings.append("%s offline" % mnt_dir)
+
+# Status output
+out = ""
+if len(errors) == 0 and len(warnings) == 0:
+    out += "Mounts OK"
+    ret = 0
+if len(warnings):
+    out += "Mount warnings: " + ", ".join(warnings) + ". "
+    ret = 1
+if len(errors):
+    out = "Mount errors: "   + ", ".join(errors) + ". " + out
+    ret = 2
+
+print out
+sys.exit(ret)

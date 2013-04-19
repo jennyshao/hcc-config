@@ -49,6 +49,7 @@ class nrpe {
 	file { "check_mountpoints":
 		path => "/usr/lib64/nagios/plugins/check_mountpoints",
 		owner => "root", group => "root", mode => 755,
+		seltype => "nagios_checkdisk_plugin_exec_t",
 		source => "puppet:///modules/nrpe/check_mountpoints",
 		require => Package["nagios-plugins-all"],
 	}
@@ -58,11 +59,19 @@ class nrpe {
 		source => "puppet:///modules/nrpe/check_sssd",
 		require => Package["nagios-plugins-all"],
 	}
-	
-	file { "restart_sssd":
-		path => "/sbin/restart_sssd",
-		owner => "root", group => "root", mode => 4755,
-		source => "puppet:///modules/nrpe/restart_sssd",
+	file { "check_node_health":
+		path => "/usr/lib64/nagios/plugins/check_node_health",
+		owner => "root", group => "root", mode => 755,
+		source => "puppet:///modules/nrpe/check_node_health",
 		require => Package["nagios-plugins-all"],
 	}
+
+# breaks non-worker things, really gotta unravel all this at some point
+# no idea why, nor time to look today \o/     - garhan
+#
+	class { "selinuxmodules::fcontext":
+				context => "nagios_unconfined_plugin_exec_t",
+				pathname => "/usr/lib64/nagios/plugins/check_sssd",
+			}
+	
 }
