@@ -22,6 +22,7 @@ class role_red-worker-el6 {
    include nrpe
    include sudo
    include updatedb
+	include selinuxmodules
 
    # must hard mount OSGAPP and OSGDATA to make RSV probes happy
    # automounting will not show correct permissions

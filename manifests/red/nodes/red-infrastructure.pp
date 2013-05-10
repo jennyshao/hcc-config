@@ -1,13 +1,5 @@
 ### red infrastructure nodes (single nodes, groups go in their own .pp file)
 
-node 'red-test.unl.edu' inherits red-public {
-	$role = "red-srm"
-#	include tester
-	include general
-	include cgroups
-
-}
-
 node 'hcc-mon.unl.edu' inherits red-public {
 	include general
 }
@@ -15,6 +7,24 @@ node 'hcc-mon.unl.edu' inherits red-public {
 node 'phedex.unl.edu' inherits red-public {
 	$mountsHDFS = true
    $isPHEDEX = true   
+	include general
+	include ganglia
+	include hadoop
+	include nrpe
+}
+
+node 'brian-test.unl.edu' inherits red-public {
+	$mountsHDFS = true
+	include general
+	include ganglia
+	include hadoop
+	include nrpe
+}
+
+node 'hcc-derek.unl.edu' inherits red-public {
+	$sshExtraAdmins = [ 'dweitzel' ]
+	$sudoExtraAdmins = [ 'dweitzel' ]
+	$mountsHDFS = true
 	include general
 	include ganglia
 	include hadoop
@@ -37,7 +47,6 @@ node 'red-net1.unl.edu', 'red-net2.unl.edu' inherits red-private {
 node 'hcc-crabserver.unl.edu' inherits red-public {
 	$sshExtraAdmins = [ 'belforte', 'letts', 'spadhi', 'crab', 'lolass' ]
 	$sudoExtraAdmins = [ 'belforte', 'letts', 'crab', 'lolass' ]
-#	$users_ldap_servers = [ 'hcc-ldap03.unl.edu' ]
 	$users_ldap_servers = [ 'red-ldap1.unl.edu', 'red-ldap2.unl.edu' ]
 
 	include general
@@ -52,8 +61,8 @@ node 'hcc-crabserver.unl.edu' inherits red-public {
 }
 
 node 'hcc-factoryv3.unl.edu', 'hcc-frontendv3.unl.edu' inherits red-public {
-	$sshExtraAdmins = [ 'aguru', 'acaprez', 'dweitzel' ]
-	$sudoExtraAdmins = [ 'aguru', 'acaprez', 'dweitzel' ]
+	$sshExtraAdmins = [ 'acaprez', 'dweitzel' ]
+	$sudoExtraAdmins = [ 'acaprez', 'dweitzel' ]
 	include general
    include hostcert
    include osg-ca-certs
@@ -69,8 +78,8 @@ node 'hcc-factoryv3.unl.edu', 'hcc-frontendv3.unl.edu' inherits red-public {
 }
 
 node 'hcc-uniquant.unl.edu' inherits red-public {
-	$sshExtraAdmins = [ 'acaprez', 'aguru', 'dweitzel' ]
-	$sudoExtraAdmins = [ 'acaprez', 'aguru', 'dweitzel' ]
+	$sshExtraAdmins = [ 'acaprez', 'dweitzel' ]
+	$sudoExtraAdmins = [ 'acaprez', 'dweitzel' ]
 
 	include general
 
@@ -84,8 +93,8 @@ node 'hcc-uniquant.unl.edu' inherits red-public {
 }
 
 node 'red-web.unl.edu' inherits red-public {
-	$sshExtraAdmins = [ 'acaprez', 'aguru', 'jwang', 'dweitzel', 'bbockelm' ]
-	$sudoExtraAdmins = [ 'acaprez', 'aguru', 'tharvill', 'jthiltge', 'jsamuels', 'jwang', 'dweitzel', 'bbockelm' ]
+	$sshExtraAdmins = [ 'acaprez', 'jwang', 'dweitzel', 'bbockelm' ]
+	$sudoExtraAdmins = [ 'acaprez', 'tharvill', 'jthiltge', 'jsamuels', 'jwang', 'dweitzel', 'bbockelm' ]
 	include general
 }
 
@@ -116,8 +125,8 @@ node 'red-condor.unl.edu' inherits red-public {
 
 node 'red-mon.unl.edu' inherits red-public {
 
-	$sshExtraAdmins = [ 'dweitzel', 'aguru', 'acaprez', ]
-	$sudoExtraAdmins = [ 'dweitzel', 'aguru', 'acaprez', ]
+	$sshExtraAdmins = [ 'dweitzel', 'acaprez', ]
+	$sudoExtraAdmins = [ 'dweitzel', 'acaprez', ]
    $pakitiTag = "T2_US_Nebraska"
 	$yum_extrarepo = [ 'epel', 'nebraska', 'osg' ]
 
@@ -132,23 +141,21 @@ node 'red-mon.unl.edu' inherits red-public {
 }
 
 node 'xrootd.unl.edu' inherits red-public {
-	$sshExtraAdmins = [ 'aguru', ]
-	$sudoExtraAdmins = [ 'aguru' ]
 	$mountsHDFS = true
 	include general
 	include xrootd
 }
 
 node 'xrootd-itb.unl.edu' inherits red-public {
-	$sshExtraAdmins = [ 'aguru', 'zzhang', ]
-	$sudoExtraAdmins = [ 'aguru', 'zzhang', ]
+	$sshExtraAdmins = [ 'zzhang', ]
+	$sudoExtraAdmins = [ 'zzhang', ]
 	$mountsHDFS = true
 	include general
 }
 
 node 'glidein.unl.edu' inherits red-public {
-	$sshExtraAdmins = [ 'acaprez', 'aguru', 'jwang', 'dweitzel', 'bbockelm' ]
-	$sudoExtraAdmins = [ 'acaprez', 'aguru', 'tharvill', 'jthiltge', 'jsamuels', 'jwang', 'dweitzel', 'bbockelm' ]
+	$sshExtraAdmins = [ 'acaprez', 'jwang', 'dweitzel', 'bbockelm' ]
+	$sudoExtraAdmins = [ 'acaprez', 'tharvill', 'jthiltge', 'jsamuels', 'jwang', 'dweitzel', 'bbockelm' ]
 	$pakitiTag = "T2_US_Nebraska"
 	# general discluded intentionally
 	include hosts
@@ -159,8 +166,8 @@ node 'hcc-gridnfs.red.hcc.unl.edu' inherits red-private {
 }
 
 node 't2.unl.edu' inherits red-public {
-	$sshExtraAdmins = [ 'acaprez', 'aguru', 'jwang', 'dweitzel', 'bbockelm' ]
-	$sudoExtraAdmins = [ 'acaprez', 'aguru', 'tharvill', 'jthiltge', 'jsamuels', 'jwang', 'dweitzel', 'bbockelm' ]
+	$sshExtraAdmins = [ 'acaprez', 'jwang', 'dweitzel', 'bbockelm' ]
+	$sudoExtraAdmins = [ 'acaprez', 'tharvill', 'jthiltge', 'jsamuels', 'jwang', 'dweitzel', 'bbockelm' ]
 
 	include general
 }
@@ -276,8 +283,8 @@ node 'hadoop-tracker.red.hcc.unl.edu' inherits red-private {
 
 node 'rcf-gratia.unl.edu' inherits red-public {
 
-	$sshExtraAdmins = [ 'acaprez', 'aguru', 'jwang', 'dweitzel', 'bbockelm' ]
-	$sudoExtraAdmins = [ 'acaprez', 'aguru', 'tharvill', 'jthiltge', 'jsamuels', 'jwang', 'dweitzel', 'bbockelm' ]
+	$sshExtraAdmins = [ 'acaprez', 'jwang', 'dweitzel', 'bbockelm', 'wbhurst' ]
+	$sudoExtraAdmins = [ 'acaprez', 'tharvill', 'jthiltge', 'jsamuels', 'jwang', 'dweitzel', 'bbockelm', 'wbhurst' ]
 
 	include general
 	include ganglia
@@ -294,8 +301,35 @@ node 'rcf-gratia.unl.edu' inherits red-public {
 
 node 'hcc-lsf.unl.edu' inherits red-public {
 	$sshExtraAdmins = [ 'dweitzel' ]
-	$sudoExtraAdmins = [ 'dweitzel' ]
+	$sudoExtraAdmins = [ 'dweitzel', 'jthiltge' ]
 	include general
 	include ganglia
 }
 
+node 'hcc-andrew.unl.edu' inherits red-public {
+	$sshExtraAdmins = [ 'akoerner', 'bjacobitz' ]
+	$sudoExtraAdmins = [ 'akoerner' ]
+	include general
+	include ganglia
+}
+
+node 'hcc-jenny.unl.edu' inherits red-public {
+	$sshExtraAdmins = [ 'jennyshao' ]
+	$sudoExtraAdmins = [ 'jennyshao' ]
+	include general
+	include ganglia
+}
+
+node 'hcc-kartik.unl.edu' inherits red-public {
+	$sshExtraAdmins = [ 'kartik' ]
+	$sudoExtraAdmins = [ 'kartik' ]
+	include general
+	include ganglia
+}
+
+node 'hcc-scavenger.unl.edu' inherits red-public {
+	$sshExtraAdmins = [ 'dweitzel' ]
+	$sudoExtraAdmins = [ 'dweitzel' ]
+	include general
+	include ganglia
+}
