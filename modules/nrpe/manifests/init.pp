@@ -69,6 +69,13 @@ class nrpe {
 		require => Package["nagios-plugins-all"],
 	}
 
+	file { "check_puppet":
+		path => "/usr/lib64/nagios/plugins/check_puppet",
+		owner => "root", group => "root", mode => 755,
+		source => "puppet:///modules/nrpe/check_puppet",
+		require => Package["nagios-plugins-all"],
+	}
+
 # breaks non-worker things, really gotta unravel all this at some point
 # no idea why, nor time to look today \o/     - garhan
 #

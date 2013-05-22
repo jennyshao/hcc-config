@@ -258,7 +258,7 @@ command[check_squid_running]=/usr/lib64/nagios/plugins/check_procs -w 1:1 -c 0:2
 command[check_red_mounts]=/usr/bin/sudo /opt/kickstart/nagios/check_red_mounts
 command[check_nfs04_mounted]=/usr/lib64/nagios/plugins/check_file_age -w 0 -c 0 -f /mnt/nfs04/opt
 command[check_megaraid_sas]=/usr/bin/sudo /usr/lib64/nagios/plugins/check_megaraid_sas -m 2 -o 50
-
+command[check_puppet]=/usr/lib64/nagios/plugins/check_puppet
 
 
 
@@ -274,3 +274,4 @@ command[check_disk]=/usr/lib64/nagios/plugins/check_disk -w $ARG1$ -c $ARG2$ -r 
 #command[check_procs]=/usr/lib64/nagios/plugins/check_procs -w $ARG1$ -c $ARG2$ -s $ARG3$
 command[check_mounts]=/usr/lib64/nagios/plugins/check_mountpoints
 command[check_sssd]=/usr/lib64/nagios/plugins/check_sssd
+command[check_node_health]=/usr/lib64/nagios/plugins/check_node_health

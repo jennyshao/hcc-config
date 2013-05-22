@@ -1,0 +1,43 @@
+#!/bin/bash
+
+# Nagios exit status
+STATE_OK=0
+STATE_WARNING=1
+STATE_CRITICAL=2
+STATE_UNKNOWN=3
+
+# Warn if puppet data is over 8h old, critical if over 24h (in minutes)
+# Note: If puppet interval is decreased, increase time window
+LAST_RUN_WARN=480
+LAST_RUN_CRIT=1440
+
+# Get the last run timestamp
+LAST_RUN=`date -r /var/lib/puppet/state/last_run_summary.yaml +'%F %T'`
+if [ $? != "0" ] ; then
+	LAST_RUN='none'
+fi
+
+# Has puppet run in $LAST_RUN_CRIT minutes?
+if test -z `find "/var/lib/puppet/state/state.yaml" -mmin -${LAST_RUN_CRIT} 2> /dev/null`
+then
+	echo "Puppet is not running (last run: $LAST_RUN)"
+	exit $STATE_CRITICAL
+fi
+
+# Has puppet run in $LAST_RUN_WARN minutes?
+if test -z `find "/var/lib/puppet/state/state.yaml" -mmin -${LAST_RUN_WARN} 2> /dev/null`
+then
+	echo "Puppet is not running (last run: $LAST_RUN)"
+	exit $STATE_WARNING
+fi
+
+# Check if a puppet run was successful (zero failures)
+grep -q 'failed: 0' /var/lib/puppet/state/last_run_summary.yaml
+
+if [ $? != "0" ] ; then
+	echo "Puppet run failed (last run: $LAST_RUN)"
+	exit $STATE_WARNING
+fi
+
+echo "Puppet OK (last run: $LAST_RUN)"
+exit $STATE_OK
