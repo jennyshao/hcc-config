@@ -1,0 +1,14 @@
+#!/usr/bin/perl -w
+
+my $exit=system("id uscmsPool1111 &> /dev/null");
+if ($exit == 0)
+	{
+	print "LDAP/NSS lookup OK\n";
+	} 
+else 
+	{
+	print "LDAP/NSS lookup failed\n";
+	#`/usr/bin/sudo /etc/init.d/sssd restart &> /dev/null`;
+	exit 2;
+	}
+exit 0;

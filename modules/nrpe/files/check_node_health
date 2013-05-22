@@ -1,0 +1,15 @@
+#!/usr/bin/perl -w
+
+
+my $node_test_result = `/usr/share/condor/node_health.pl`;
+
+if ($node_test_result =~ TRUE)
+        {
+        print "Node Health Checks OK\n";
+		  exit 0;
+        } 
+else 
+        {
+        print "CRITICAL: Node check fails";
+		  exit 2;
+        }
