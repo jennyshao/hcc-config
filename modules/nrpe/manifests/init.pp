@@ -35,7 +35,10 @@ class nrpe {
 	file { "check_host_cert":
 		path => "/usr/lib64/nagios/plugins/check_host_cert",
 		owner => "root", group => "root", mode => 755,
-		source => "puppet:///modules/nrpe/check_host_cert",
+		source => $lsbmajdistrelease ? {
+			5       => "puppet:///modules/nrpe/check_host_cert.el5",
+			default => "puppet:///modules/nrpe/check_host_cert",
+		},
 		require => Package["nagios-plugins-all"],
 	}
 
