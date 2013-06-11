@@ -26,7 +26,7 @@ export GLOBUS_LOCATION=/usr
 export GLITE_LOCAL_COPY_RETRY_COUNT=2
 export GLITE_LOCAL_COPY_RETRY_FIRST_WAIT=120
 
-export OSG_APP=/opt/osg/app
+export OSG_APP=/cvmfs/oasis.opensciencegrid.org
 export OSG_DATA=/opt/osg/data
 
 export http_proxy=red-squid1.unl.edu:3128
