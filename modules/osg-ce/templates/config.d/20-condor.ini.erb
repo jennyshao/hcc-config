@@ -31,3 +31,6 @@ job_contact = <%= fqdn %>/jobmanager-condor
 ; The util_contact should give the contact string for the default jobmanager
 ; on this CE (e.g. host.name/jobmanager)
 util_contact = <%= fqdn %>/jobmanager
+
+; hack to do advertise 48 hour queues in BDII
+max_wall = 5760

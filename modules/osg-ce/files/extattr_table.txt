@@ -16,15 +16,16 @@ atlas other
 ligo  other
 # pilot jobs going to prio by accident, force into cms.other.user.us
 # cmsprio cms.other.prio
-cmsprio cms.other.user.us
+cms\/Role=production cms.prod
+cms\/Role=t1production cms.prod
+cms\/Role=pilot cms.wlcgpledge.pilot
+cmsprio cms.other.prio
 cmssoft cms.other.prio
 priorityuser cms.other.prio
 priority cms.other.prio
 cmsphedex cms.other.prio
 cmsprod cms.prod
-cms\/Role=production cms.prod
-cms\/Role=t1production cms.prod
-cms\/Role=pilot cms.other.user.us
-uscms cms.other.user.us
-cms cms.other.user.nonus
+uscms cms.other.us
+cms cms.wlcgpledge.other
 .* other
+

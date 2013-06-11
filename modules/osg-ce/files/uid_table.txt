@@ -15,21 +15,22 @@
 # 10419 LessImportantWork
 # uscms02 TestGroup
 # uscms02 group_testgroup
+cmsprod076 cms.prod
 uscms01 cms.lcgadmin
-knowlton cms.other.user.t3
-malbouis cms.other.user.t3
-bloom cms.other.user.t3
-jbutt cms.other.user.t3
-jorcutt cms.other.user.t3
-kellerjd cms.other.user.t3
-cfangmeier cms.other.user.t3
-wilken	cms.other.user.t3
+knowlton cms.other.t3
+malbouis cms.other.t3
+bloom cms.other.t3
+jbutt cms.other.t3
+jorcutt cms.other.t3
+kellerjd cms.other.t3
+cfangmeier cms.other.t3
+wilken	cms.other.t3
 cmsphedex cms.lcgadmin
 lcgadmin cms.lcgadmin
 uscmsPool1396 cms.lcgadmin
 hcc other.hcc
 osgedu other.osgedu
-osg	other.osgedu
+osg	other
 cmsprio001   cms.other.prio
 cmsprio002   cms.other.prio
 cmsprio003   cms.other.prio
