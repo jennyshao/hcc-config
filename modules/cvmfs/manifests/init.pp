@@ -44,6 +44,17 @@ class cvmfs {
 		shell => '/sbin/nologin',
 	}
 
+## Run daily fsck
+##
+   file { '/etc/cron.daily/cvmfs_fsck_all':
+      mode    => "0755",
+      owner   => "root",
+      group   => "root",
+      source  => "puppet:///modules/cvmfs/cvmfs_fsck_all",
+      ensure  => present,
+      require => Package["cvmfs"],
+   }
+
 ## Files for talking to UW's CVMFS.
 ##
    file { "wisc_pubkey":
