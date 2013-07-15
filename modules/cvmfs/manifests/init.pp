@@ -109,6 +109,19 @@ class cvmfs {
 		ensure  => present,
 	}
 
+### Files for talking to CERN Belle
+# FIXME: Should edit domain.d/cern.ch to only include mirrors that host all
+#        CVMFS repos, then create config.d/cms.cern.ch.conf with additional
+#        mirror URLs.
+   file { "/etc/cvmfs/config.d/belle.cern.ch.conf":
+      mode    => "0644",
+      owner   => "root",
+      group   => "root",
+      source  => "puppet:///modules/cvmfs/belle.cern.ch.conf",
+      ensure  => present,
+      require => Package["cvmfs"],
+   }
+
 ## Files for making CMS CVMFS work.
 ##
    file { "SITECONF_dir":
