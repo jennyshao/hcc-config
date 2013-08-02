@@ -61,6 +61,7 @@ class nrpe {
 		owner => "root", group => "root", mode => 755,
 		source => "puppet:///modules/nrpe/check_sssd",
 		require => Package["nagios-plugins-all"],
+      seltype => 'nagios_unconfined_plugin_exec_t',
 	}
 	file { "check_node_health":
 		path => "/usr/lib64/nagios/plugins/check_node_health",
@@ -72,6 +73,8 @@ class nrpe {
 	file { "check_puppet":
 		path => "/usr/lib64/nagios/plugins/check_puppet",
 		owner => "root", group => "root", mode => 755,
+		# Cannot read puppet files otherwise
+		seltype => "nagios_unconfined_plugin_exec_t",
 		source => "puppet:///modules/nrpe/check_puppet",
 		require => Package["nagios-plugins-all"],
 	}
@@ -79,9 +82,16 @@ class nrpe {
 # breaks non-worker things, really gotta unravel all this at some point
 # no idea why, nor time to look today \o/     - garhan
 #
-	class { "selinuxmodules::fcontext":
-				context => "nagios_unconfined_plugin_exec_t",
-				pathname => "/usr/lib64/nagios/plugins/check_sssd",
-			}
+# It's b/c that context doesn't exist on RHEL5.  What to do...what to do....
+
+#	class { "selinuxmodules::fcontext":
+#				context => "nagios_exec_t",
+#				pathname => "/usr/lib64/nagios/plugins/check_sssd",
+#			}
+	
+#	class { "selinuxmodules::fcontext":
+#				context => "nagios_unconfined_plugin_exec_t",
+#				pathname => "/usr/lib64/nagios/plugins/check_sssd",
+#			}
 	
 }
