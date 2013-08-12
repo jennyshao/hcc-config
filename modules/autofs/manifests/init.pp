@@ -5,9 +5,11 @@
 #
 class autofs {
 
-   include chroot::params
+   include chroot5::params
 
 	package { autofs: name => "autofs", ensure => present }
+
+	$auto_master = '/etc/auto.master'
 
 	service { "autofs":
 		name       => "autofs",
@@ -16,22 +18,21 @@ class autofs {
 		hasrestart => true,
 		hasstatus  => true,
 		require    => Package["autofs"],
-		subscribe  => File["autofs.master"],
+		subscribe  => File[$auto_master],
 	}
 
-	file { "autofs.master":
-		path    => "/etc/auto.master",
-		mode    => 644,
-		owner   => "root",
-		group   => "root",
+	concat { $auto_master:
+		owner   => 'root',
+		group   => 'root',
+		mode    => '0644',
+   }
 
-		# allow host specific files
+	concat::fragment { 'auto_master_base':
+		target  => $auto_master,
 		content => inline_template(file("/etc/puppet/modules/autofs/templates/auto.master-$hostname.erb", "/etc/puppet/modules/autofs/templates/auto.master.erb")),
-
-		require => Package[autofs],
-		ensure  => present,
+		order   => 01
 	}
-
+		
 	file { "autofs.red":
 		path    => "/etc/auto.red",
 		mode    => 644,
@@ -52,4 +53,15 @@ class autofs {
 		notify  => Service[autofs],
 		ensure  => present,
 	}
+}
+
+# used by other modules to append lines to /etc/auto.master
+define autofs::add_map($map, $mountpoint, $options='') {
+
+	concat::fragment { "autofs::mount :${mountpoint}:${map}":
+		target  => '/etc/auto.master',
+		content => "$mountpoint $map $options\n",
+		order   => 10,
+   }
+
 }
