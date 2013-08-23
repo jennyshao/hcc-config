@@ -55,12 +55,12 @@ for i in `find ${CVMFS_CACHE_BASE} -name txn` ; do
 		CLEAR_CACHE=1
 	fi
 
-	# Verify SQLite
-	sqlite3 "${DIR}/cvmfscatalog.cache" "PRAGMA integrity_check;" &> /dev/null
-	if [ $? -ne 0 ]; then
-		log "Deleting damaged SQLite database at ${DIR}"
-		rm "${DIR}/cvmfscatalog.cache"
-	fi
+	# Verify SQLite (does not work for cvmfs 2.1)
+	#sqlite3 "${DIR}/cvmfscatalog.cache" "PRAGMA integrity_check;" &> /dev/null
+	#if [ $? -ne 0 ]; then
+	#	log "Deleting damaged SQLite database at ${DIR}"
+	#	rm "${DIR}/cvmfscatalog.cache"
+	#fi
 done
 
 # If cvmfs_fsck found a damaged file in a mounted FS, clear the VM cache
