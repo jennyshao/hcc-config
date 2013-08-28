@@ -1,5 +1,3 @@
-
 [chroot]
-root_dir = <%= scope.lookupvar('chroot::params::chroot_root') %>
-yum_conf = /etc/chroot-tool/yum.conf
-
+root_dir = <%= @root_dir %>
+yum_conf = /etc/chroot-tool/yum-<%= @name %>.conf

@@ -1,0 +1,18 @@
+
+  chroot::root { 'sl5':
+    version   => 4,
+    yum       => 'puppet:///common/yum-sl5.conf',
+    rpms      => 'acl attr bind-utils cyrus-sasl-plain lsof libcgroup quota rhel-instnum cpuspeed dos2unix m2crypto sssd nc prctl setarch tree unix2dos unzip wget zip zlib glibc-devel perl-Compress-Zlib',
+    rpms_suid => 'osg-wn-client HEP_OSlibs_SL5 glexec lcmaps-plugins-condor-update lcmaps-plugins-process-tracking lcmaps-plugins-mount-under-scratch',
+  }
+
+  chroot::root { 'sl6':
+    version => 3,
+    yum     => 'puppet:///common/yum-sl6.conf',
+    rpms      => 'acl attr bind-utils cyrus-sasl-plain lsof libcgroup quota rhel-instnum cpuspeed dos2unix m2crypto sssd nc prctl setarch tree unix2dos unzip wget zip zlib glibc-devel perl-Compress-Zlib',
+    rpms_suid => 'osg-wn-client glexec lcmaps-plugins-condor-update lcmaps-plugins-process-tracking lcmaps-plugins-mount-under-scratch',
+  }
+
+  Can also use if you don't want to keep the yum config outside the module
+    yum     => 'puppet:///modules/chroot/yum-sl6.conf',
+
