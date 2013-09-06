@@ -6,7 +6,7 @@
     </event-data>
     <source-config>
       <cache-temp-dir name=".:$TMPDIR:$CONDOR_SCRATCH_DIR"/>
-	   <statistics-destination name="dashboard62.cern.ch" />
+	   <statistics-destination name="cms-udpmon-collector.cern.ch:9331" />
       <cache-hint value="application-only"/>
       <read-hint value="auto-detect"/>
       <show-read-stats />
@@ -21,7 +21,7 @@
     </local-stage-out>
     <fallback-stage-out>
       <se-name value="srm-dcache.rcac.purdue.edu"/>
-      <lfn-prefix value="srm://srm-dcache.rcac.purdue.edu:8443/srm/managerv2?SFN=/"/>
+      <lfn-prefix value="srm://srm-dcache.rcac.purdue.edu:8443/srm/v2/server?SFN=/mnt/hadoop/"/>
       <command value="srmv2"/>
       <option value="-debug"/>
     </fallback-stage-out>

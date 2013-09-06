@@ -192,15 +192,15 @@ class cvmfs {
       require => [User["cvmfs"], Group["cvmfs"], Package["cvmfs"]],
    }
 
-	service { "cvmfs":
-		name       => "${cvmfs::params::cvmfs_service_name}",
-		ensure     => running,
-		enable     => true,
-		hasrestart => true,
-		hasstatus  => true,
-		require    => [Package["cvmfs"], File["default.local"], File["fuse.conf"], File["cvmfs_cache"]],
-		subscribe  => File["${cvmfs::params::cvmfs_config_file}"],
-	}
+#	service { "cvmfs":
+#		name       => "${cvmfs::params::cvmfs_service_name}",
+#		ensure     => running,
+#		enable     => true,
+#		hasrestart => true,
+#		hasstatus  => true,
+#		require    => [Package["cvmfs"], File["default.local"], File["fuse.conf"], File["cvmfs_cache"]],
+#		subscribe  => File["${cvmfs::params::cvmfs_config_file}"],
+#	}
 
 }
 
