@@ -114,11 +114,30 @@ MODIFY_REQUEST_EXPR_REQUESTMEMORY = quantize(RequestMemory,100)
 
 #Node health checks -- Carl Lundstedt
 #Do basic node checks and suspend STARTD if failure
+# Check every 5 minutes for suspend/preemption 
 
-STARTD_CRON_JOBLIST = $(STARTD_CRON_JOBLIST) mounts
+STARTD_CRON_JOBLIST = $(STARTD_CRON_JOBLIST) MOUNTS
 STARTD_CRON_MOUNTS_EXECUTABLE = /usr/share/condor/node_health.pl
-STARTD_CRON_MOUNTS_PERIOD = 600s
+STARTD_CRON_MOUNTS_PERIOD = 300s
 STARTD_CRON_MOUNTS_MODE = Periodic
-SUSPEND = (MOUNTS_OK =!= TRUE)
-CONTINUE = (MOUNTS_OK =?=TRUE)
+SUSPEND = (MOUNTS_OK =!= TRUE) || $(SUSPEND)
 
+#Don't start jobs if the node_health script fails.
+START = (MOUNTS_OK =?= TRUE) && $(START)
+
+#If any jobs are suspended continue them if the mounts
+# go good.
+CONTINUE = (MOUNTS_OK =?=TRUE) && $(CONTINUE)
+
+#If job goes into Suspend state, premempt after 10 minutes
+
+MINUTE          = 60
+ActivityTimer   = (CurrentTime - EnteredCurrentActivity)
+MaxSuspendTime          = 10 * $(MINUTE)
+
+PREEMPT = (( Activity == "Suspended") && \
+			($(ActivityTimer) > $(MaxSuspendTime))) \
+			|| $(PREEMPT)
+MAXJOBRETIREMENTTIME = 0
+MachineMaxVacateTime = 10 *$(MINUTE) 
+#

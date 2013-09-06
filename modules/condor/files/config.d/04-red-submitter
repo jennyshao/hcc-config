@@ -112,7 +112,7 @@ JOB_ROUTER_ENTRIES = \
      EditJobInPlace = true; \
      /* JobRouter chokes if this is not set, although it's obviously meaningless. */ \
      GridResource = "condor local local"; \
-     eval_set_IsT3User = regexp("cms.other.user.t3.*", ifThenElse(isUndefined(AccountingGroup), "", AccountingGroup)); \
+     eval_set_IsT3User = regexp("cms.other.t3.*", ifThenElse(isUndefined(AccountingGroup), "", AccountingGroup)); \
      /* Append extra requirements. */ \
      copy_Requirements = "OriginalRequirements"; \
      set_Requirements = (my.OriginalRequirements) && (my.HasLocalCustomizations =?= true) && (target.IS_GLIDEIN=!=TRUE || target.GLIDECLIENT_Group=?="T2Overflow"); \
@@ -126,12 +126,22 @@ JOB_ROUTER_ENTRIES = \
      eval_set_RequestDisk = ifThenElse(OriginalRequestDisk > 10240, OriginalRequestDisk, 10240); \
      copy_RequestMemory = "OriginalRequestMemory"; \
      eval_set_RequestMemory = ifThenElse(regexp("cms\.", ifThenElse(isUndefined(AccountingGroup), "", AccountingGroup)) && OriginalRequestMemory < 2500, 2500, \
-                              ifThenElse(OriginalRequestMemory < 1900, 1900, OriginalRequestMemory)); \
-     set_IsT2Overflow = ((CurrentTime - QDate) > 60 * 60 * 24) && (IsT3User == false);  \ 
+                              ifThenElse(OriginalRequestMemory < 2500, 2500, OriginalRequestMemory)); \
+#     set_IsT2Overflow = ((CurrentTime - QDate) > 60 * 60 * 24) && (IsT3User == false);  \ 
+     set_IsT2Overflow = FALSE;
      name = "Local_Transform"; \
    ]
 
 JOB_ROUTER_DEFAULTS =  []
 
 JOB_ROUTER_SOURCE_JOB_CONSTRAINT = true
+
+# Additional statistics for Ganglia
+STATISTICS_TO_PUBLISH = TRANSFER:2
+
+# Keep the audit log
+SCHEDD_AUDIT_LOG = $(LOG)/AuditLog
+SCHEDD_DEBUG = D_AUDIT
+MAX_SCHEDD_AUDIT_LOG = 1d
+MAX_NUM_SCHEDD_AUDIT_LOG = 90
 

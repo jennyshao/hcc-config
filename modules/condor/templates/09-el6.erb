@@ -1,5 +1,5 @@
 
-NAMED_CHROOT = SL5=<%= scope.lookupvar('chroot::params::chroot_root') %> SL6=/
+NAMED_CHROOT = SL5=<%= scope.lookupvar('chroot5::params::chroot_root') %> SL6=/
 
 #START = ($(START)) && (TARGET.RequestedChroot =!= UNDEFINED)
 
@@ -9,7 +9,10 @@ SLOT_TYPE_1=100%
 SLOT_TYPE_1_PARTITIONABLE=TRUE
 NUM_SLOTS_TYPE_1=1
 
+# MEMORY_LIMIT was renamed CGROUP_MEMORY_LIMIT_POLICY during 7.9 series
+# We can remove the below line once the last 7.9 starter goes away.
 MEMORY_LIMIT=hard
+CGROUP_MEMORY_LIMIT_POLICY=hard
 
 CREATE_CORE_FILES=True
 ABORT_ON_EXCEPTION=True

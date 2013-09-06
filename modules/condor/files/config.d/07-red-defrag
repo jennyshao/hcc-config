@@ -17,7 +17,7 @@ DEFRAG_INTERVAL = 3600
 
 # At most, start one machine draining per two hours; have no more than three
 # concurrent draining jobs.
-DEFRAG_DRAINING_MACHINES_PER_HOUR = 0.5
+DEFRAG_DRAINING_MACHINES_PER_HOUR = 1
 DEFRAG_MAX_CONCURRENT_DRAINING = 3
 
 # After draining, the nodes will likely become re-partitioned by large memory
@@ -30,4 +30,5 @@ DEFRAG_MAX_WHOLE_MACHINES = 20
 # Prevents us from draining off a full machine since we know we need
 # at most 8 cores.
 DEFRAG_WHOLE_MACHINE_EXPR = ((Cpus == TotalCpus) || (Cpus >= 8)) && Offline=!=True
+DEFRAG_REQUIREMENTS = PartitionableSlot && (Offline=!=True) && (State =!= "Owner")
 

@@ -1,8 +1,10 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -w
 
-$out = `/usr/lib64/nagios/plugins/check_mountpoints`;
-if($out =~ "not" ) 
-	{print "MOUNTS_OK = FALSE\n";}
-else
-	{print "MOUNTS_OK = TRUE\n";}
-
+my $probe_status;
+my $status = TRUE;
+@files = </etc/condor/node_tests.d/*>;
+foreach $file (@files) {
+    $probe_status = `$file`;
+    if ($probe_status =~ "FALSE") {$status = FALSE;}
+}
+print "MOUNTS_OK = $status \n";

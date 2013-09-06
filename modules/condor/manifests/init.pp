@@ -25,11 +25,14 @@ class condor {
 
 	include hostcert
 	include hadoop
-   include chroot::params # To fill in the 09-el6 template.
+   include chroot5::params # To fill in the 09-el6 template.
 
-	package { condor: name => "condor.x86_64", ensure => installed }
+	package { condor: name => "condor.x86_64", ensure => latest }
 	package { condor-vm-gahp: name => "condor-vm-gahp.x86_64", ensure => installed }
-	package { condor-qmf: name => "condor-qmf.x86_64", ensure => installed }
+	package { condor-python: name => "condor-python.x86_64", ensure => installed }
+   # QMF contrib is dead.  This package is no longer distributed and we must purge it
+   # to be able to upgrade HTCondor.
+	package { condor-qmf: name => "condor-qmf.x86_64", ensure => purged }
 
 	# NOTE: this ensure condor isn't set to run on reboot but does not necessiarly start it
    service { "condor":
@@ -117,6 +120,13 @@ class condor {
 			source => "puppet:///modules/condor/config.d/02-red-worker",
 			require => Package["condor"],
 		}
+
+      file { "/etc/condor/config.d/09-pilot-ads":
+         ensure => present,
+         owner  => "root", group => "root", mode => 644,
+         source => "puppet:///modules/condor/config.d/09-pilot-ads",
+         require => Package["condor"],
+      }
 
       file { "/etc/condor/qpid_passfile_worker":
          ensure => present,
@@ -232,6 +242,14 @@ class condor {
 		require => [ Package["condor"], File["/usr/local/bin"], ],
 	}
 
+   # Pilot integration hook
+   file { "/usr/local/bin/pilot_update_hook.py":
+      ensure => present,
+      owner  => "root", group => "root", mode => 755,
+      source => "puppet:///modules/condor/pilot_update_hook.py",
+      require => [ Package["condor"], File["/usr/local/bin"], ],
+   }
+
 	# srm-plugin
 	file { "/usr/local/bin/srm-plugin":
 		ensure => present,
@@ -247,7 +265,16 @@ class condor {
 		source => "puppet:///modules/condor/vm-nfs-plugin",
 		require => [ Package["condor"], File["/usr/local/bin"], ],
 	}
-
+   file { "/etc/condor/node_tests.d":
+      ensure => directory,
+      owner  => "root", group => "root", mode => "0755",
+   }
+	file { "/etc/condor/node_tests.d/mounts.pl":
+		ensure => present,
+		owner => "condor", group => "root", mode => 755,
+		source => "puppet:///modules/condor/node_tests.d/mounts.pl",
+		require => [ Package["condor"],],
+	}
 	file { "/usr/share/condor/node_health.pl":
 		ensure => present,
 		owner  => "condor", group => "root", mode => 755,
