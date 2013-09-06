@@ -92,7 +92,8 @@ node 'red-d16n1', 'red-d16n2', 'red-d16n3', 'red-d16n4', 'red-d16n5', 'red-d16n6
    include general
 }
 
-node 'red-d18n1', 'red-d18n2', 'red-d18n3', 'red-d18n4', 'red-d18n5', 'red-d18n6', 'red-d18n7', 'red-d18n8', 'red-d18n9', 'red-d18n10', 'red-d18n11', 'red-d18n12', 'red-d18n13', 'red-d18n14', 'red-d18n15', 'red-d18n16', 'red-d18n17', 'red-d18n18', 'red-d18n19', 'red-d18n20', 'red-d18n21', 'red-d18n22', 'red-d18n23', 'red-d18n24', 'red-d18n25', 'red-d18n26', 'red-d18n27', 'red-d18n28', 'red-d18n29', 'red-d18n30', 'red-d18n31', 'red-d18n32', 'red-d18n33', 'red-d18n34', 'red-d18n35', 'red-d18n36' inherits red-private {
+#node 'red-d18n1', 'red-d18n2', 'red-d18n3', 'red-d18n4', 'red-d18n5', 'red-d18n6', 'red-d18n7', 'red-d18n8', 'red-d18n9', 'red-d18n10', 'red-d18n11', 'red-d18n12', 'red-d18n13', 'red-d18n14', 'red-d18n15', 'red-d18n16', 'red-d18n17', 'red-d18n18', 'red-d18n19', 'red-d18n20', 'red-d18n21', 'red-d18n22', 'red-d18n23', 'red-d18n24', 'red-d18n25', 'red-d18n26', 'red-d18n27', 'red-d18n28', 'red-d18n29', 'red-d18n30', 'red-d18n31', 'red-d18n32', 'red-d18n33', 'red-d18n34', 'red-d18n35', 'red-d18n36' inherits red-private {
+node 'red-d18n1', 'red-d18n3', 'red-d18n4', 'red-d18n5', 'red-d18n6', 'red-d18n7', 'red-d18n8', 'red-d18n9', 'red-d18n10', 'red-d18n11', 'red-d18n12', 'red-d18n13', 'red-d18n14', 'red-d18n15', 'red-d18n16', 'red-d18n17', 'red-d18n18', 'red-d18n19', 'red-d18n20', 'red-d18n21', 'red-d18n22', 'red-d18n23', 'red-d18n24', 'red-d18n25', 'red-d18n26', 'red-d18n27', 'red-d18n28', 'red-d18n29', 'red-d18n30', 'red-d18n31', 'red-d18n32', 'red-d18n33', 'red-d18n34', 'red-d18n35', 'red-d18n36' inherits red-private {
 	$role = "red-worker-el6"
    $condorCustom09 = "el6"
    $isHDFSDatanode = true
