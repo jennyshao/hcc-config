@@ -1,0 +1,4 @@
+
+STARTER_JOB_HOOK_KEYWORD=PILOTAD
+PILOTAD_HOOK_UPDATE_JOB_INFO=/usr/local/bin/pilot_update_hook.py
+

@@ -1,0 +1,19 @@
+##############################################################################
+##############################################################################
+#
+#  DO NOT EDIT - file is being maintained by puppet
+#
+##############################################################################
+##############################################################################
+
+# QMF plugins for Condor daemons -
+# We want to override these explicitly here.
+# When Condor upgrades, it overwrites our QMF file and restarts the daemons.
+# Some time later, puppet corrects it, but it is too late - the daemons already
+# restarted.
+MASTER.PLUGINS = 
+COLLECTOR.PLUGINS = 
+NEGOTIATOR.PLUGINS = 
+SCHEDD.PLUGINS = 
+STARTD.PLUGINS = 
+
