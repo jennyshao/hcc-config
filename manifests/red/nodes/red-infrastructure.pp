@@ -7,6 +7,8 @@ node 'hcc-mon.unl.edu' inherits red-public {
 node 'phedex.unl.edu' inherits red-public {
 	$mountsHDFS = true
    $isPHEDEX = true   
+	$sshExtraAdmins = [ 'barrefors', ]
+	$sudoExtraAdmins = [ 'barrefors', ]
 	include general
 	include ganglia
 	include hadoop
@@ -32,7 +34,7 @@ node 'hcc-derek.unl.edu' inherits red-public {
 }
 
 node 'hcc-ganglia.unl.edu' inherits red-public {
-	$sshExtraAdmins = [ 'acaprez', ]
+	$sshExtraAdmins = [ 'acaprez', 'zzhang' ]
 	$sudoExtraAdmins = [ 'acaprez', ]
 	$yum_extrarepo = [ 'epel', 'nebraska', 'nginx' ]
 	include general
@@ -101,6 +103,7 @@ node 'red-web.unl.edu' inherits red-public {
 node 'red-dir1.unl.edu', 'red-dir2.unl.edu' inherits red-public {
 	include general
 	include ganglia
+	include nrpe
 	include lvs
 }
 
@@ -121,6 +124,7 @@ node 'red-condor.unl.edu' inherits red-public {
 	$role = "red-collector"
 	include general
 	include ganglia
+	include nrpe
 }
 
 node 'red-mon.unl.edu' inherits red-public {
@@ -132,12 +136,6 @@ node 'red-mon.unl.edu' inherits red-public {
 
 	include general
 
-   include hostcert
-   include osg-ca-certs
-   include fetch-crl
-   include pakiti
-	include nrpe
-
 }
 
 node 'xrootd.unl.edu' inherits red-public {
@@ -147,8 +145,8 @@ node 'xrootd.unl.edu' inherits red-public {
 }
 
 node 'xrootd-itb.unl.edu' inherits red-public {
-	$sshExtraAdmins = [ 'zzhang', ]
-	$sudoExtraAdmins = [ 'zzhang', ]
+	$sshExtraAdmins = [ 'zzhang', 'barrefors', ]
+	$sudoExtraAdmins = [ 'zzhang', 'barrefors', ]
 	$mountsHDFS = true
 	include general
 }
@@ -199,7 +197,7 @@ node 't3.unl.edu' inherits red-public {
    $yum_extrarepo = [ 'epel', 'nebraska', 'osg' ]
 
 	# ldap override so users can change password
-	$users_ldap_servers = [ "hcc-ldap01.unl.edu", "hcc-ldap03.unl.edu" ]
+	$users_ldap_servers = [ "hcc-ldap01.unl.edu", "hcc-ldap04.unl.edu" ]
 
 	include general
 
@@ -246,6 +244,7 @@ node 'red-ldap1.unl.edu', 'red-ldap2.unl.edu' inherits red-public {
 
 node 'red-auth.unl.edu' inherits red-public {
 	include general
+	include nrpe
 	include osg-ca-certs
 }
 
@@ -320,9 +319,30 @@ node 'hcc-jenny.unl.edu' inherits red-public {
 	include ganglia
 }
 
+node 'hcc-jingchao.unl.edu' inherits red-public {
+	$sshExtraAdmins = [ 'jingchao' ]
+	$sudoExtraAdmins = [ 'jingchao' ]
+	include general
+	include ganglia
+}
+
+node 'hcc-web.unl.edu' inherits red-public {
+	$sshExtraAdmins = [ 'acaprez' ]
+	$sudoExtraAdmins = [ 'acaprez' ]
+	include general
+	include ganglia
+}
+
 node 'hcc-kartik.unl.edu' inherits red-public {
 	$sshExtraAdmins = [ 'kartik' ]
 	$sudoExtraAdmins = [ 'kartik' ]
+	include general
+	include ganglia
+}
+
+node 'hcc-bjorn.unl.edu' inherits red-public {
+	$sshExtraAdmins = [ 'barrefors' ]
+	$sudoExtraAdmins = [ 'barrefors' ]
 	include general
 	include ganglia
 }
