@@ -497,7 +497,7 @@ sub submit
 
         ##################################
         # Local T3 user check for Nebraska
-        $rc = print SCRIPT_FILE "+IsT3User = TRUE\n" if $group eq "cms.other.user.t3";
+        $rc = print SCRIPT_FILE "+IsT3User = TRUE\n" if $group eq "cms.other.t3";
         if (!$rc)
         {
             return $self->respond_with_failure_extension(
@@ -623,7 +623,7 @@ sub submit
         }
     } else
     {
-        my $memory_request = "1900";
+        my $memory_request = "2500";
         if($group =~ m/cms/x) {$memory_request="2500"};
         $rc = print SCRIPT_FILE "request_memory=" . $memory_request . "\n";
         if (!$rc)
@@ -634,7 +634,7 @@ sub submit
         }
     }
     if ( $overflowEnabled ) {
-    #$rc = print SCRIPT_FILE "+IsT2Overflow=( ((CurrentTime - QDate) > 60 * 60 * 24)) && (regexp(\"cms\\.other\\.user\\.t3.*\", AccountingGroup) == FALSE)\n";
+    #$rc = print SCRIPT_FILE "+IsT2Overflow=( ((CurrentTime - QDate) > 60 * 60 * 24)) && (regexp(\"cms\\.other\\.t3.*\", AccountingGroup) == FALSE)\n";
     $rc = print SCRIPT_FILE "+IsT2Overflow=FALSE\n";
     if (!$rc)
         {
