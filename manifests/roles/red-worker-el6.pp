@@ -15,7 +15,7 @@ class role_red-worker-el6 {
    include osg-wn-client
    include glexec
    include cvmfs
-	include chroot
+	include chroot5
    include osg-ca-certs
    include hadoop
    include cgroups
