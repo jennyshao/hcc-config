@@ -1,4 +1,4 @@
-serial_no = 76
+serial_no = 99
 primary = 129.93.239.133
 service = lvs
 backup_active = 1
@@ -11,6 +11,8 @@ network = direct
 debug_level = NONE
 monitor_links = 1
 syncdaemon = 1
+syncd_iface = em1
+syncd_id = 251
 virtual red_gridftp_pool {
      active = 1
      address = 129.93.239.157 em1:1
@@ -28,7 +30,7 @@ virtual red_gridftp_pool {
      server red-gridftp1.unl.edu {
          address = 129.93.239.184
          active = 1
-         weight = 1
+         weight = 3
      }
      server red-gridftp2.unl.edu {
          address = 129.93.239.171
@@ -82,6 +84,31 @@ virtual red_gridftp_pool {
      }
      server red-gridftp12.unl.edu {
          address = 129.93.239.180
+         active = 1
+         weight = 1
+     }
+}
+virtual red_squid_pool {
+     active = 1
+     address = 129.93.239.137 em1:2
+     vip_nmask = 255.255.255.192
+     port = 3128
+     send = "GET / HTTP/1.0\r\n\r\n"
+     expect = "HTTP"
+     use_regex = 0
+     load_monitor = none
+     scheduler = wlc
+     protocol = tcp
+     timeout = 6
+     reentry = 15
+     quiesce_server = 0
+     server red-squid1.unl.edu {
+         address = 129.93.239.135
+         active = 1
+         weight = 1
+     }
+     server red-squid2.unl.edu {
+         address = 129.93.239.151
          active = 1
          weight = 1
      }
