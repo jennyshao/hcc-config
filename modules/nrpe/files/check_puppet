@@ -12,7 +12,7 @@ LAST_RUN_WARN=480
 LAST_RUN_CRIT=1440
 
 # Get the last run timestamp
-LAST_RUN=`date -r /var/lib/puppet/state/last_run_summary.yaml +'%F %T'`
+LAST_RUN=`date -r /var/lib/puppet/state/state.yaml +'%F %T'`
 if [ $? != "0" ] ; then
 	LAST_RUN='none'
 fi

@@ -39,4 +39,5 @@ define myselmod()
 } 
 
 myselmod {"nrpe_sssd.te": } 
+myselmod {"node_health.te":}
 }

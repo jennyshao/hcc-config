@@ -72,6 +72,13 @@ class openssh {
 		user => "root",
     }
 
+    ssh_authorized_key { "root@redtro.red.hcc.unl.edu":
+		ensure => "present",
+		type => "ssh-rsa",
+      key => "AAAAB3NzaC1yc2EAAAADAQABAAABAQC8HHX5UzHWEWRp+gDp/vPstyAK64UmSMHpzemgBYIbFJXLSJtHEGd3aQ35gSpfhIJxUGj/kqNAG+2mrOdJlIBZBvgT4rD0Me3gyr1GUcZYKlCfe+uNjCbVXO0qageoZ/wgbsJsLqRw+cf8JmnUPu0ttGZA+zEAn3iTdVldTOqd7/b8JYCMV6oMMxkbE0BVyQqT5y5ZHX+7wqBMeljUJtCoxTuT5/trAc/8+eYqKfIC8HuLcevHR86CamNFy9yb2n7GsbQEM4/VJmlnexoaWjPW9iydsm9ImRYi8R8hGZk0bY8NI1nRIKN/uOlnQgliGQghecHki0Tiygjd0xVs598L",
+		user => "root",
+    }
+
     if $puppi == "yes" { include openssh::puppi }
     if $backup == "yes" { include openssh::backup }
     if $monitor == "yes" { include openssh::monitor }

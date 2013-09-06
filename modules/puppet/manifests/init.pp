@@ -20,7 +20,7 @@ class puppet {
     # Basic Package - Service - Configuration file management is done on sub classess client and server
     package { puppet:
         name   => "${puppet::params::packagename}",
-        ensure => present,
+        ensure => latest,
     }
 
     service { puppet:
