@@ -34,6 +34,7 @@ GROUP_NAMES = \
 				  cms.other.pilot, \
 			     cms.other.us, \
               other, \
+              other.special, \
               other.hcc
 
 # --- condor group priorities ---
@@ -67,7 +68,8 @@ GROUP_QUOTA_DYNAMIC_cms.wlcgpledge.pilot = .9
 GROUP_QUOTA_DYNAMIC_cms.wlcgpledge.other = .1
 
 # Other children
-GROUP_QUOTA_DYNAMIC_other.hcc = 1
+GROUP_QUOTA_DYNAMIC_other.special = .5
+GROUP_QUOTA_DYNAMIC_other.hcc = .5
 
 GROUP_ACCEPT_SURPLUS = True
 
