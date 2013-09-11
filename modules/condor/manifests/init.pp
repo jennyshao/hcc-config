@@ -150,6 +150,21 @@ class condor {
             }
          }
 
+         "red-d8n2": {
+            file { "/etc/condor/config.d/09-el6":
+               ensure  => present,
+               owner   => "root", group => "root", mode => 644,
+               content => template("condor/09-el6.erb"),
+               require => Package["condor"],
+            }
+            file { "/etc/condor/config.d/09-${condorCustom09}":
+               ensure  => present,
+               owner   => "root", group => "root", mode => 644,
+               source => "puppet:///modules/condor/config.d/09-${condorCustom09}",
+               require => Package["condor"],
+            }
+         }
+
          default: {
 			   file { "/etc/condor/config.d/09-${condorCustom09}":
    				ensure => present,
