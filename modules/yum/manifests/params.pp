@@ -7,10 +7,10 @@ class yum::params {
 		default    => "off",
 	}
 
-	# default to epel, nebraska, and osg
+	# default to epel, hcc, and osg
 	# override in node def if we don't want one
 	$extrarepo = $yum_extrarepo ? {
-		""      => [ 'epel', 'nebraska', 'osg' ],
+		""      => [ 'epel', 'hcc', 'osg' ],
 		default => $yum_extrarepo,
 	}
 
